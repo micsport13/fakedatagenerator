@@ -1,3 +1,5 @@
+package Entities;
+
 public enum Constraint {
     NOT_NULL,
     UNIQUE,
