@@ -1,4 +1,4 @@
-package Entities;
+package Data;
 
 public enum Constraint {
     NOT_NULL,

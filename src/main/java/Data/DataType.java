@@ -1,4 +1,4 @@
-package Entities;
+package Data;
 
 public enum DataType {
     VARCHAR(String.class),
