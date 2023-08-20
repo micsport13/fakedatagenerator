@@ -3,42 +3,29 @@ package Entities;
 
 import Data.Column;
 import Data.Constraint;
+import Data.Exceptions.MismatchedDataTypeException;
+import Data.Exceptions.NotNullConstraintException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class Entity {
-    protected final List<Column> columns = new ArrayList<>();
-    protected Map<Column, Object> columnValueMapping = new HashMap<>();
+    protected Set<Column> columns = new LinkedHashSet<>();
+    protected Map<Column, Object> columnValueMapping = new LinkedHashMap<>();
 
-    protected Entity(Map<String, Object> values) {
-        this.setColumns();
+    protected Entity(Set<Column> columns, Map<String, Object> values) {
+        this.setColumns(columns);
         this.setValues(values);
     }
-    protected static boolean isValid(Column column, Object value) {
-        if (value == null) {
-            boolean b = !(column.getConstraint().contains(Constraint.NOT_NULL)||column.getConstraint().contains(Constraint.PRIMARY_KEY));
-            throw new RuntimeException("Value cannot be null for column: " + column.name);
-        }
-        if (value.getClass() != column.getDataType().getAssociatedClass()){
-            throw new RuntimeException("Value is of type " + value.getClass().getSimpleName() + " and column is of type " + column.getDataType().getAssociatedClass().getSimpleName());
-        };
-        return true;
-    }
-
-    protected abstract void setColumns();
-
-    public List<Column> getColumns() {
+    public Set<Column> getColumns() {
         return columns;
     }
-
     public Map<Column, Object> getColumnValueMapping() {
         return columnValueMapping;
     }
+    protected abstract void setColumns(Set<Column> columnList);
+
     protected void setValues(Map<String, Object> values) {
-        for (Column column: this.columns) {
+        for (Column column : this.columns) {
             if (isValid(column, values.get(column.name))) {
                 this.columnValueMapping.put(column, values.get(column.name));
             } else {
@@ -47,6 +34,28 @@ public abstract class Entity {
                 throw new IllegalArgumentException("Invalid value for column " + column.name);
             }
         }
+    }
+
+    protected static boolean isValid(Column column, Object value) {
+        if (value == null) {
+            boolean b = !(column.getConstraint().contains(Constraint.NOT_NULL) || column.getConstraint().contains(Constraint.PRIMARY_KEY));
+            throw new NotNullConstraintException("Value cannot be null for column: " + column.name);
+        }
+        if (value.getClass() != column.getDataType().getAssociatedClass()) {
+            throw new MismatchedDataTypeException("Value is of type " + value.getClass().getSimpleName() + " and column is of type " + column.getDataType().getAssociatedClass().getSimpleName());
+        }
+        return true;
+    }
+
+
+    public String toRecord() {
+        StringBuilder string = new StringBuilder();
+        for (Column column : this.columns) {
+            Object value = this.columnValueMapping.get(column);
+            string.append(value).append(",");
+        }
+        string.deleteCharAt(string.length() - 1);
+        return string.toString();
     }
 
     @Override
