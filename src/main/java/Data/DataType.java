@@ -1,11 +1,13 @@
 package Data;
 
+import java.time.ZonedDateTime;
+
 public enum DataType {
-    VARCHAR(String.class),
-    INT(Integer.class),
     BOOLEAN(Boolean.class),
+    DATETIME2(ZonedDateTime.class),
     FLOAT(Float.class),
-    DATETIME2(String.class);
+    INT(Integer.class),
+    VARCHAR(String.class);
 
     private final Class<?> associatedClass;
 
