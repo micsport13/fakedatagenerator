@@ -1,27 +1,30 @@
-import Data.Column;
-import Entities.*;
+import Entities.Member;
 import com.github.javafaker.Faker;
 
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataGenerator {
     public static void main(String[] args) {
-        EntityFactory<License> licenseFactory = new LicenseFactory();
-        EntityFactory<Member> memberFactory = new MemberFactory();
         Faker faker = new Faker();
-        License[] licenses = new License[10000];
+        List<Member> members = new ArrayList<>();
         long start = System.nanoTime();
-        for (int i=0; i<10;i++) {
-            licenses[i] = licenseFactory.createEntity(new LinkedHashMap<>(Map.of("id", i, "int", faker.random().nextInt(100))));
+        for (int i = 1; i <= 1_000_000; i++) {
+            members.add(new Member.Builder().withColumnValue("Id", i)
+                                .withColumnValue("FirstName", faker.name()
+                                        .firstName())
+                                .withColumnValue("Email", faker.internet()
+                                        .emailAddress())
+                                .withColumnValue("LastName", faker.name()
+                                        .lastName())
+                                .withColumnValue("Phone", faker.phoneNumber()
+                                        .phoneNumber())
+                                .build());
         }
-        for (License license : licenses) {
-            System.out.println(license.toRecord());
+        for (Member member : members) {
+            System.out.println(member.toRecord());
         }
-
+        long stop = System.nanoTime();
+        System.out.println("Time elapsed: " + (stop - start) / 1_000_000 + " milliseconds");
     }
 }
