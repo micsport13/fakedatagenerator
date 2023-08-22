@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class Column {
+    public final String entityName;
     public final String name;
     private final DataType dataType;
     private final Set<Constraint> constraints;
@@ -16,6 +17,7 @@ public class Column {
 
     private Column(ColumnBuilder columnBuilder) {
         this.dataType = columnBuilder.dataType;
+        this.entityName = columnBuilder.entityName;
         this.name = columnBuilder.name;
         this.constraints = new HashSet<>(columnBuilder.constraints);
         this.linkedColumn = columnBuilder.linkedColumn;
@@ -70,6 +72,7 @@ public class Column {
     }
 
     public static class ColumnBuilder {
+        private final String entityName;
         private final String name;
         private final DataType dataType;
         private final Set<Constraint> constraints = new HashSet<>();
@@ -78,14 +81,15 @@ public class Column {
         /**
          * Required parameters for a column
          *
-         * @param name     Name of the column
-         * @param dataType Data type of the column
+         * @param name       Name of the column
+         * @param entityName Name of the object to which the column belongs
+         * @param dataType   Data type of the column
          */
-        public ColumnBuilder(String name, DataType dataType) {
+        public ColumnBuilder(String name, String entityName, DataType dataType) {
             this.name = name;
+            this.entityName = entityName;
             this.dataType = dataType;
         }
-
 
         public ColumnBuilder withUniqueConstraint() {
             this.constraints.add(Constraint.UNIQUE);
@@ -110,9 +114,20 @@ public class Column {
             this.linkedColumn = foreignKeyValueMap;
             return this;
         }
-
         public Column build() {
             return new Column(this);
         }
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Column column)) {
+            return false;
+        }
+        return this.name.equals(column.name) && this.dataType.equals(column.dataType);
+    }
+    @Override
+    public int hashCode() {
+        return this.name.hashCode() * this.constraints.hashCode() * this.dataType.hashCode();
     }
 }

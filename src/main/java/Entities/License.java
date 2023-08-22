@@ -3,9 +3,6 @@ package Entities;
 import Data.Column;
 import Data.DataType;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class License extends Entity {
@@ -21,8 +18,10 @@ public class License extends Entity {
     public static class Builder extends EntityBuilder<Builder, License> {
 
         public Builder() {
-            columnList.add(new Column.ColumnBuilder("Id", DataType.INT).withPrimaryKeyConstraint().build());
-            columnList.add(new Column.ColumnBuilder("Name", DataType.VARCHAR).build());
+            super();
+            String entityName = "License";
+            columnList.add(new Column.ColumnBuilder("Id", entityName, DataType.INT).withPrimaryKeyConstraint().build());
+            columnList.add(new Column.ColumnBuilder("Name", entityName, DataType.VARCHAR).build());
         }
         public Builder(Set<Column> columnList) {
             super(columnList);

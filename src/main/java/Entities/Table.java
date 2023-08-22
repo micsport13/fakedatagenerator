@@ -7,6 +7,7 @@ import Data.Exceptions.InvalidPrimaryKeyException;
 import Data.Exceptions.InvalidUniquessException;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class Table<T extends Entity> {
     private final Map<Column, Set<Object>> primaryKeys = new HashMap<>();
@@ -14,17 +15,28 @@ public class Table<T extends Entity> {
     private final Map<Column, Set<Object>> uniqueKeys = new HashMap<>();
     private final List<T> entities = new ArrayList<>();
 
-    public boolean isValidEntity(Member entity) {
+    public List<T> getEntities() {
+        return entities;
+    }
+
+    public void add(T entity) {
+        if (isValidEntity(entity)) {
+            entities.add(entity);
+            updateKeySets(entity);
+        }
+    }
+
+    public boolean isValidEntity(T entity) {
         for (Map.Entry<Column, Object> entry : entity.getColumnValueMapping().entrySet()){
             if (entry.getKey().getConstraints() != null) {
-                if (entry.getKey().getConstraints().contains(Constraint.PRIMARY_KEY) && this.primaryKeys.contains(entry.getValue())) {
+                if (entry.getKey().getConstraints().contains(Constraint.PRIMARY_KEY) && this.primaryKeys.containsValue(Set.of(entry.getValue()))) {
                     throw new InvalidPrimaryKeyException("Contains a value that violates primary key constraint");
                 }
-                if (entry.getKey().getConstraints().contains(Constraint.UNIQUE) && this.uniqueKeys.contains(entry.getValue())) {
-                    throw new InvalidUniquessException("Contains a value that violates unique key constraint");
+                if (entry.getKey().getConstraints().contains(Constraint.UNIQUE) && this.uniqueKeys.containsValue(Set.of(entry.getValue()))) {
+                    throw new InvalidUniquessException(entity.getClass().getSimpleName() + " contains a value that violates unique key constraint of column: " + entry.getKey().name);
                 }
                 if (entry.getKey().getConstraints().contains(Constraint.FOREIGN_KEY) && !this.foreignKeys.get(entry.getKey()).contains(entry.getValue())) {
-                    throw new InvalidForeignKeyException("Contains a value that violates foreign key constraint");
+                    throw new InvalidForeignKeyException(entity.getClass().getSimpleName() + " contains a value that violates foreign key constraint of column: " + entry.getKey().name);
                 }
             }
         }
@@ -35,15 +47,17 @@ public class Table<T extends Entity> {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    private void updateKeySets(Member member) {
-        for (Column column : member.getColumns()) {
+    private void updateKeySets(T entity) {
+        Set<Column> columns = entity.getColumns();
+        Map<Column, Object> columnValueMapping = entity.getColumnValueMapping();
+        for (Column column : columns) {
             if (column.getConstraints() != null) {
-                Object columnValue = member.getColumnValueMapping().get(column);
+                Object columnValue = columnValueMapping.get(column);
                 if (column.getConstraints().contains(Constraint.PRIMARY_KEY)) {
-                    primaryKeys.add(columnValue);
+                    this.primaryKeys.put(column, Set.of(columnValueMapping.get(column)));
                 }
                 if (column.getConstraints().contains(Constraint.UNIQUE)) {
-                    uniqueKeys.add(columnValue);
+                    this.uniqueKeys.put(column, Set.of(columnValue));
                 }
             }
         }
@@ -61,4 +75,5 @@ public class Table<T extends Entity> {
     public Map<Column, Set<Object>> getUniqueKeys() {
         return uniqueKeys;
     }
+
 }

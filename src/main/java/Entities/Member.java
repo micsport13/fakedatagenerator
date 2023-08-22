@@ -3,9 +3,6 @@ package Entities;
 import Data.Column;
 import Data.DataType;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 public final class Member extends Entity {
@@ -23,13 +20,14 @@ public final class Member extends Entity {
          */
         public Builder() {
             super();
-            columnList.add(new Column.ColumnBuilder("Id", DataType.INT).withPrimaryKeyConstraint().build());
-            columnList.add(new Column.ColumnBuilder("FirstName", DataType.VARCHAR).build());
-            columnList.add(new Column.ColumnBuilder("LastName", DataType.VARCHAR).build());
-            columnList.add(new Column.ColumnBuilder("Email", DataType.VARCHAR).build());
-            columnList.add(new Column.ColumnBuilder("Phone", DataType.VARCHAR).build());
-            columnList.add(new Column.ColumnBuilder("CreatedAt", DataType.DATETIME2).build());
-            columnList.add(new Column.ColumnBuilder("UpdatedAt", DataType.DATETIME2).build());
+            String entityName = "Member";
+            columnList.add(new Column.ColumnBuilder("Id", entityName, DataType.INT).withPrimaryKeyConstraint().build());
+            columnList.add(new Column.ColumnBuilder("FirstName", entityName, DataType.VARCHAR).build());
+            columnList.add(new Column.ColumnBuilder("LastName", entityName, DataType.VARCHAR).build());
+            columnList.add(new Column.ColumnBuilder("Email", entityName, DataType.VARCHAR).withUniqueConstraint().build());
+            columnList.add(new Column.ColumnBuilder("Phone", entityName, DataType.VARCHAR).withUniqueConstraint().build());
+            columnList.add(new Column.ColumnBuilder("CreatedAt", entityName, DataType.DATETIME2).build());
+            columnList.add(new Column.ColumnBuilder("UpdatedAt", entityName, DataType.DATETIME2).build());
         }
 
         /**
