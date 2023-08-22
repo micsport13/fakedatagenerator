@@ -2,9 +2,6 @@ package Entities;
 
 
 import Data.Column;
-import Data.Constraint;
-import Data.Exceptions.MismatchedDataTypeException;
-import Data.Exceptions.NotNullConstraintException;
 
 import java.util.*;
 
@@ -12,39 +9,63 @@ public abstract class Entity {
     protected Set<Column> columns = new LinkedHashSet<>();
     protected Map<Column, Object> columnValueMapping = new LinkedHashMap<>();
 
-    protected Entity(Set<Column> columns, Map<String, Object> values) {
-        this.setColumns(columns);
-        this.setValues(values);
+    protected Entity(EntityBuilder<?,?> builder) {
+        this.columns = builder.columnList;
+        this.columnValueMapping = builder.columnValueMapping;
+    }
+
+    protected abstract static class EntityBuilder<T extends EntityBuilder<T,S>, S extends Entity> {
+        protected final Set<Column> columnList = new LinkedHashSet<>();
+        protected Map<Column, Object> columnValueMapping = new LinkedHashMap<>();
+
+        protected EntityBuilder() {
+        }
+        protected EntityBuilder(Set<Column> columnList) {
+            this.columnList.addAll(columnList);
+        }
+
+
+        public T addColumn(Column column) {
+            self().columnList.add(column);
+            return self();
+        }
+
+        public T withColumnValue(String columnName, Object value) {
+            if (!isValidColumn(columnName)) {
+                throw new IllegalArgumentException(columnName + " does not exist for the " + self().getClass().getSimpleName() + " entity.");
+            }
+            if (Objects.requireNonNull(getColumnByName(columnName)).isValid(value)) {
+                self().columnValueMapping.put(getColumnByName(columnName), value);
+            }
+            return self();
+        }
+        private boolean isValidColumn(String columnName) {
+            for (Column column : self().columnList) {
+                if (column.name.equals(columnName)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        private Column getColumnByName(String columnName) {
+            for (Column column : self().columnList) {
+                if (column.name.equals(columnName)) {
+                    return column;
+                }
+            }
+            return null;
+        }
+
+        abstract S build();
+        protected abstract T self();
     }
     public Set<Column> getColumns() {
         return columns;
     }
+
+
     public Map<Column, Object> getColumnValueMapping() {
         return columnValueMapping;
-    }
-    protected abstract void setColumns(Set<Column> columnList);
-
-    protected void setValues(Map<String, Object> values) {
-        for (Column column : this.columns) {
-            if (isValid(column, values.get(column.name))) {
-                this.columnValueMapping.put(column, values.get(column.name));
-            } else {
-                System.out.println(column);
-                System.out.println("Value provided: " + values.get(column.name));
-                throw new IllegalArgumentException("Invalid value for column " + column.name);
-            }
-        }
-    }
-
-    protected static boolean isValid(Column column, Object value) {
-        if (value == null) {
-            boolean b = !(column.getConstraint().contains(Constraint.NOT_NULL) || column.getConstraint().contains(Constraint.PRIMARY_KEY));
-            throw new NotNullConstraintException("Value cannot be null for column: " + column.name);
-        }
-        if (value.getClass() != column.getDataType().getAssociatedClass()) {
-            throw new MismatchedDataTypeException("Value is of type " + value.getClass().getSimpleName() + " and column is of type " + column.getDataType().getAssociatedClass().getSimpleName());
-        }
-        return true;
     }
 
 
@@ -52,11 +73,14 @@ public abstract class Entity {
         StringBuilder string = new StringBuilder();
         for (Column column : this.columns) {
             Object value = this.columnValueMapping.get(column);
-            string.append(value).append(",");
+            string.append(value)
+                    .append(",");
         }
         string.deleteCharAt(string.length() - 1);
         return string.toString();
     }
+
+
 
     @Override
     public String toString() {
