@@ -11,6 +11,7 @@ public enum DataType {
 
     private final Class<?> associatedClass;
 
+
     DataType(Class<?> associatedClass) {
         this.associatedClass = associatedClass;
     }

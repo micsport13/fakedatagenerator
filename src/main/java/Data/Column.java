@@ -1,75 +1,118 @@
 package Data;
 
 import Data.Exceptions.InvalidForeignKeyException;
+import Data.Exceptions.MismatchedDataTypeException;
+import Data.Exceptions.NotNullConstraintException;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class Column {
+    public final String name;
     private final DataType dataType;
     private final Set<Constraint> constraints;
-    public final String name;
-    public Column linkedColumn = null;
+    public Map<Column, Object> linkedColumn = null; // Should come from a collection of entities
 
-    public Column(ColumnBuilder columnBuilder) {
+    private Column(ColumnBuilder columnBuilder) {
         this.dataType = columnBuilder.dataType;
         this.name = columnBuilder.name;
         this.constraints = new HashSet<>(columnBuilder.constraints);
         this.linkedColumn = columnBuilder.linkedColumn;
     }
 
-    public static class ColumnBuilder {
-        private final String name;
-        private final DataType dataType;
-        private final Set<Constraint> constraints = new HashSet<>();
-        private Column linkedColumn;
-        ColumnBuilder(String name, DataType dataType) {
-            this.name = name;
-            this.dataType = dataType;
-        }
-        public Column build() {
-            return new Column(this);
-        }
-        public ColumnBuilder withUniqueConstraint() {
-            this.constraints.add(Constraint.UNIQUE);
-            return this;
-        }
-        public ColumnBuilder withNotNullConstraint() {
-            this.constraints.add(Constraint.NOT_NULL);
-            return this;
-        }
-        public ColumnBuilder withPrimaryKeyConstraint() {
-            this.constraints.add(Constraint.PRIMARY_KEY);
-            return this;
-        }
-        public ColumnBuilder withForeignKeyConstraint(Column linkedColumn) {
-            if (linkedColumn == null) {
-                throw new InvalidForeignKeyException("Linked column cannot be null");
-            }
-            this.constraints.add(Constraint.FOREIGN_KEY);
-            this.linkedColumn = linkedColumn;
-            return this;
-        }
-    }
-
     public DataType getDataType() {
         return dataType;
     }
 
-    public Set<Constraint> getConstraint() {
+    public Set<Constraint> getConstraints() {
         return constraints;
     }
+
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder("Column: " + this.name + "\nData Type: " + this.dataType);
-        if (this.constraints == null) {
+        if (this.constraints.isEmpty()) {
             string.append("\nConstraints: None");
-        }
-        else {
+        } else {
             for (Constraint constraint : this.constraints) {
-                string.append("\nConstraint: ").append(constraint);
+                string.append("\nConstraint: ")
+                        .append(constraint);
             }
         }
         return string.toString();
+    }
+
+    public boolean isValid(Object value) {
+        if (value == null) {
+            boolean b = !(this.getConstraints()
+                    .contains(Constraint.NOT_NULL) || this.getConstraints()
+                    .contains(Constraint.PRIMARY_KEY));
+            throw new NotNullConstraintException("Value cannot be null for column: " + this.name);
+        }
+        if (this.constraints.contains(Constraint.FOREIGN_KEY)) {
+            for (Map.Entry<Column, Object> entry : this.linkedColumn.entrySet()) {
+                if (entry.getValue()
+                        .equals(value)) {
+                    return true;
+                }
+            }
+            throw new InvalidForeignKeyException("Value does not exist in the foreign key column");
+        }
+        if (value.getClass() != this.getDataType()
+                .getAssociatedClass()) {
+            throw new MismatchedDataTypeException("Value is of type " + value.getClass()
+                    .getSimpleName() + " and column is of type " + this.getDataType()
+                    .getAssociatedClass()
+                    .getSimpleName());
+        }
+        return true;
+    }
+
+    public static class ColumnBuilder {
+        private final String name;
+        private final DataType dataType;
+        private final Set<Constraint> constraints = new HashSet<>();
+        private Map<Column, Object> linkedColumn = null;
+
+        /**
+         * Required parameters for a column
+         *
+         * @param name     Name of the column
+         * @param dataType Data type of the column
+         */
+        public ColumnBuilder(String name, DataType dataType) {
+            this.name = name;
+            this.dataType = dataType;
+        }
+
+
+        public ColumnBuilder withUniqueConstraint() {
+            this.constraints.add(Constraint.UNIQUE);
+            return this;
+        }
+
+        public ColumnBuilder withNotNullConstraint() {
+            this.constraints.add(Constraint.NOT_NULL);
+            return this;
+        }
+
+        public ColumnBuilder withPrimaryKeyConstraint() {
+            this.constraints.add(Constraint.PRIMARY_KEY);
+            return this;
+        }
+
+        public ColumnBuilder withForeignKeyConstraint(Map<Column, Object> foreignKeyValueMap) {
+            if (foreignKeyValueMap == null) {
+                throw new InvalidForeignKeyException("Foreign Key values must have values");
+            }
+            this.constraints.add(Constraint.FOREIGN_KEY);
+            this.linkedColumn = foreignKeyValueMap;
+            return this;
+        }
+
+        public Column build() {
+            return new Column(this);
+        }
     }
 }
