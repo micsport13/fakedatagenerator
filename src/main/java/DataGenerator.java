@@ -3,8 +3,10 @@ import Entities.Member;
 import Entities.Table;
 import com.github.javafaker.Faker;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.Set;
 
 public class DataGenerator {
     public static void main(String[] args) {
@@ -12,7 +14,7 @@ public class DataGenerator {
         Table<Member> members = new Table<>();
         Table<License> licenses = new Table<>();
         long start = System.nanoTime();
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 1; i++) {
             members.add(new Member.Builder().withColumnValue("Id", i)
                                 .withColumnValue("FirstName", faker.name()
                                         .firstName())
@@ -21,9 +23,8 @@ public class DataGenerator {
                                 .withColumnValue("Email", faker.internet()
                                         .emailAddress())
                                 .withColumnValue("Phone", faker.phoneNumber().phoneNumber())
-                                .build());
-            licenses.add(new License.Builder().withColumnValue("Id", i)
-                                .withColumnValue("Name", faker.company().name())
+                                .withColumnValue("CreatedAt", ZonedDateTime.now(ZoneOffset.UTC))
+                                .withColumnValue("UpdatedAt", ZonedDateTime.now(ZoneOffset.UTC))
                                 .build());
         }
         for (Member member : members.getEntities()) {
