@@ -1,8 +1,6 @@
 package Data;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.time.temporal.Temporal;
 
 public enum DataType {
     BOOLEAN(Boolean.class),

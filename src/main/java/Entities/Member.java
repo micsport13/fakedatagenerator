@@ -1,6 +1,6 @@
 package Entities;
 
-import Data.Column;
+import Data.Column.Column;
 import Data.DataType;
 
 import java.util.Set;
@@ -21,13 +21,6 @@ public final class Member extends Entity {
         public Builder() {
             super();
             String entityName = "Member";
-            columnList.add(new Column.ColumnBuilder("Id", entityName, DataType.INT).withPrimaryKeyConstraint().build());
-            columnList.add(new Column.ColumnBuilder("FirstName", entityName, DataType.VARCHAR).build());
-            columnList.add(new Column.ColumnBuilder("LastName", entityName, DataType.VARCHAR).build());
-            columnList.add(new Column.ColumnBuilder("Email", entityName, DataType.VARCHAR).withUniqueConstraint().build());
-            columnList.add(new Column.ColumnBuilder("Phone", entityName, DataType.VARCHAR).withUniqueConstraint().build());
-            columnList.add(new Column.ColumnBuilder("CreatedAt", entityName, DataType.DATETIME2).build());
-            columnList.add(new Column.ColumnBuilder("UpdatedAt", entityName, DataType.DATETIME2).build());
         }
 
         /**

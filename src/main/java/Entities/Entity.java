@@ -1,7 +1,7 @@
 package Entities;
 
 
-import Data.Column;
+import Data.Column.Column;
 
 import java.util.*;
 
@@ -41,7 +41,7 @@ public abstract class Entity {
         }
         private boolean isValidColumn(String columnName) {
             for (Column column : self().columnList) {
-                if (column.name.equals(columnName)) {
+                if (column.getName().equals(columnName)) {
                     return true;
                 }
             }
@@ -49,7 +49,7 @@ public abstract class Entity {
         }
         private Column getColumnByName(String columnName) {
             for (Column column : self().columnList) {
-                if (column.name.equals(columnName)) {
+                if (column.getName().equals(columnName)) {
                     return column;
                 }
             }

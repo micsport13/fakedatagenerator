@@ -1,6 +1,6 @@
 package Entities;
 
-import Data.Column;
+import Data.Column.Column;
 import Data.DataType;
 
 import java.util.Set;
@@ -20,8 +20,6 @@ public class License extends Entity {
         public Builder() {
             super();
             String entityName = "License";
-            columnList.add(new Column.ColumnBuilder("Id", entityName, DataType.INT).withPrimaryKeyConstraint().build());
-            columnList.add(new Column.ColumnBuilder("Name", entityName, DataType.VARCHAR).build());
         }
         public Builder(Set<Column> columnList) {
             super(columnList);

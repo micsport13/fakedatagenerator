@@ -4,39 +4,37 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EntityTest {
-
-
+class TableTest {
 
     @Test
-    void isValid() {
+    void getEntities() {
     }
 
     @Test
-    void getColumns() {
+    void add() {
     }
 
     @Test
-    void getColumnValueMapping() {
+    void getName() {
     }
 
     @Test
-    void setValues() {
+    void getTableConstraints() {
     }
 
     @Test
-    void testGetColumns() {
+    void isValidEntity() {
     }
 
     @Test
-    void testGetColumnValueMapping() {
+    void addForeignKeyValue() {
     }
 
     @Test
-    void toRecord() {
+    void getTableValues() {
     }
 
     @Test
-    void testToString() {
+    void getColumnByName() {
     }
 }
