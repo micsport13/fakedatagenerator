@@ -1,6 +1,7 @@
 package Data.Column;
 
 import Data.DataType;
+import Data.Exceptions.CheckConstraintException;
 import Data.Exceptions.MismatchedDataTypeException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,9 +39,28 @@ class ColumnTest {
     }
     @Test
     public void valueBelowMinimumCheckConstraintThrowsException() {
+        CheckConstraint checkConstraint = new CheckConstraint.CheckConstraintBuilder().withMinimumValue(0.0).withMaximumValue(Integer.MAX_VALUE).build();
         Assertions.assertThrows(CheckConstraintException.class, () -> {
-            column.addConstraint(new CheckConstraint(0, Integer.MAX_VALUE));
+            column.addConstraint(checkConstraint);
             column.isValid(-1);
         });
+    }
+    @Test
+    public void valueAboveMaximumCheckConstraintThrowsException() {
+        CheckConstraint checkConstraint = new CheckConstraint.CheckConstraintBuilder().withMinimumValue(0.0).withMaximumValue(10).build();
+        Assertions.assertThrows(CheckConstraintException.class, () -> {
+            column.addConstraint(checkConstraint);
+            column.isValid(11);
+    });
+    }
+    @Test
+    public void valueAtMinimumCheckConstraintThrowsNoException() {
+        CheckConstraint checkConstraint = new CheckConstraint.CheckConstraintBuilder().withMinimumValue(0).withMaximumValue(Integer.MAX_VALUE).build();
+        assertTrue(checkConstraint.isValid(-.05));
+    }
+    @Test
+    public void valueAtMaximumCheckConstraintThrowsNoException() {
+        CheckConstraint checkConstraint = new CheckConstraint.CheckConstraintBuilder().withMinimumValue(0).withMaximumValue(10).build();
+        assertTrue(checkConstraint.isValid(10));
     }
 }

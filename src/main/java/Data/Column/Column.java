@@ -4,15 +4,13 @@ import Data.Constraint;
 import Data.DataType;
 import Data.Exceptions.MismatchedDataTypeException;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class Column {
     private String name;
     private final DataType dataType;
     private Set<ColumnConstraint> constraints;
+    private List<Object> values = new ArrayList<>();
 
     public Column(String columnName, DataType dataType) {
         this.name = columnName;
@@ -46,7 +44,12 @@ public class Column {
     public void addConstraint(ColumnConstraint columnConstraint) {
         this.constraints.add(columnConstraint);
     }
-
+    public void addValue(Object object) {
+        if (object.getClass() != this.dataType.getAssociatedClass()) {
+            throw new MismatchedDataTypeException("Object is of type " + object.getClass().getSimpleName() + " and column requires " + this.dataType.getAssociatedClass());
+        }
+        this.values.add(object);
+    }
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder("Column: " + this.name + "\nData Type: " + this.dataType);
