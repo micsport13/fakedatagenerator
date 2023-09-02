@@ -1,8 +1,15 @@
 package Data.Column;
 
+import Data.Exceptions.NotNullConstraintException;
+
 public class NotNullConstraint implements ColumnConstraint{
     @Override
     public boolean isValid(Object value) {
-        return value != null;
+        if (value == null) {
+            throw new NotNullConstraintException("Value cannot be null");
+        }
+        else {
+            return true;
+        }
     }
 }

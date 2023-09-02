@@ -4,7 +4,9 @@ import Data.Column.Column;
 import Entities.Entity;
 import Entities.Table;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class ForeignKeyConstraint implements TableConstraint{
     private final Map<Column, Set<Object>> foreignColumn;

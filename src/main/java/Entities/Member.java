@@ -1,7 +1,6 @@
 package Entities;
 
 import Data.Column.Column;
-import Data.DataType;
 
 import java.util.Set;
 

@@ -1,20 +1,19 @@
 package Data;
 
+import Data.Column.Column;
+import Data.Exceptions.MismatchedDataTypeException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ColumnTest {
-
     @Test
-    void getDataType() {
+    public void addValueWithCorrectDataTypeThrowsNoException() {
+        Column column = new Column("id", DataType.INT);
+        Assertions.assertDoesNotThrow(() -> column.addValue(1));
     }
-
     @Test
-    void getConstraint() {
-    }
-
-    @Test
-    void testToString() {
+    public void addValueWithIncorrectDataTypeThrowsDataTypeException() {
+        Column column = new Column("id", DataType.INT);
+        Assertions.assertThrows(MismatchedDataTypeException.class, () -> column.addValue("1"));
     }
 }
