@@ -81,7 +81,6 @@ public class Column {
             case DATETIME2 -> this.isValidDateTime2(value);
             case DATETIMEOFFSET -> this.isValidDateTimeOffset(value);
             case FLOAT -> this.isValidFloat(value);
-            default -> throw new IllegalArgumentException("Data type not supported");
         };
 
     }
