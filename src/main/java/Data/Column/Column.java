@@ -4,7 +4,6 @@ import Data.Constraint;
 import Data.DataType;
 import Data.Exceptions.MismatchedDataTypeException;
 
-import java.text.ParseException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -134,7 +133,9 @@ public class Column {
         if (value instanceof Integer) {
             return true;
         }
-        return value instanceof Double;
+        else {
+            throw new MismatchedDataTypeException("Value must be an integer for this column");
+        }
     }
     private boolean isValidString(Object value) {
         return value instanceof String;

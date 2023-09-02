@@ -4,7 +4,7 @@ import Data.DataType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 public class Datetime2ColumnClassTest {
@@ -20,6 +20,11 @@ public class Datetime2ColumnClassTest {
     @Test
     public void validInputOfZonedDateTimeThrowsNoException() {
         ZonedDateTime zonedDateTime = ZonedDateTime.now();
+        datetime2Column.isValid(zonedDateTime);
+    }
+    @Test
+    public void validInputOfParameterizedZonedDateTimeThrowsNoException() {
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(2023,1,1,0,0,0,0, ZoneId.of("UTC"));
         datetime2Column.isValid(zonedDateTime);
     }
 }

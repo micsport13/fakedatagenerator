@@ -1,7 +1,6 @@
 package Data.Column;
 
 import Data.DataType;
-import Data.Exceptions.CheckConstraintException;
 import Data.Exceptions.MismatchedDataTypeException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
