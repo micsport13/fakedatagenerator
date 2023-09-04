@@ -1,4 +1,4 @@
-package Data.Table;
+package Data.TableConstraints;
 
 class PrimaryKeyConstraintTest {
 

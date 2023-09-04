@@ -1,9 +1,6 @@
 package Data.Column;
 
 import Data.DataType;
-import Data.Exceptions.MismatchedDataTypeException;
-import Data.Table.UniqueConstraint;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package Data.Table;
+package Data.TableConstraints;
 
 import org.junit.jupiter.api.Test;
 

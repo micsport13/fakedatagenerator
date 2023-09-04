@@ -1,6 +1,5 @@
-package Data.Table;
+package Data.TableConstraints;
 
-import Data.Column.Column;
 import Data.Exceptions.UniqueConstraintException;
 
 import java.util.HashSet;

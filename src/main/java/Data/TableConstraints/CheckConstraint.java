@@ -1,4 +1,4 @@
-package Data.Table;
+package Data.TableConstraints;
 
 public class CheckConstraint {
 }

@@ -1,15 +1,9 @@
-package Data.Table;
+package Data.TableConstraints;
 
-import Data.Column.Column;
-import Data.DataType;
 import Data.Exceptions.UniqueConstraintException;
-import Entities.Entity;
-import Entities.Table;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

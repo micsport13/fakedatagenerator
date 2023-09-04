@@ -6,7 +6,7 @@ import Data.Column.Column;
 import java.util.*;
 
 public abstract class Entity {
-    protected Set<Column> columns = new LinkedHashSet<>();
+    protected Set<Column> columns = new LinkedHashSet<>(); // TODO: Remove this object because the columnValue keyset is the same
     protected Map<Column, Object> columnValueMapping = new LinkedHashMap<>();
 
     protected Entity(EntityBuilder<?,?> builder) {
@@ -80,7 +80,14 @@ public abstract class Entity {
         return string.toString();
     }
 
-
+    public Column getColumnByName(String columnName) {
+        for (Column column : this.columns) {
+            if (Objects.equals(columnName, column.getName())) {
+                return column;
+            }
+        }
+        throw new IllegalArgumentException("Table column with name " + columnName + " does not exist.");
+    }
 
     @Override
     public String toString() {

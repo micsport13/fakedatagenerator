@@ -1,6 +1,7 @@
 package Entities;
 
 import Data.Column.Column;
+import Data.DataType;
 
 import java.util.Set;
 
@@ -18,8 +19,7 @@ public final class Member extends Entity {
          * If you want to specify your own columns, use the other constructor
          */
         public Builder() {
-            super();
-            String entityName = "Member";
+            this.columnList.addAll(Set.of(new Column("id", DataType.INT), new Column("name", DataType.VARCHAR)));
         }
 
         /**
@@ -28,6 +28,7 @@ public final class Member extends Entity {
          */
         public Builder(Set<Column> columnList) {
             super(columnList);
+
         }
 
         @Override
