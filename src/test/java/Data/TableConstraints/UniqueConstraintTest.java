@@ -17,20 +17,12 @@ class UniqueConstraintTest {
 
     @Test
     public void addUniqueValueIsValid() {
-        Assertions.assertDoesNotThrow(() -> this.uniqueConstraint.addValue(1));
+        Assertions.assertDoesNotThrow(() -> this.uniqueConstraint.isValid(1));
     }
     @Test
     public void addExistingValueThrowsUniqueConstraintException() {
-        this.uniqueConstraint.addValue(1);
-        Assertions.assertThrows(UniqueConstraintException.class, () -> this.uniqueConstraint.addValue(1));
-    }
-    @Test
-    public void addMultipleUniqueValuesThrowsNoException() {
-        this.uniqueConstraint.addValues(1,2,3);
-    }
-    @Test
-    public void addMultipleSameValuesThrowsUniqueConstraintException() {
-        Assertions.assertThrows(UniqueConstraintException.class, () -> this.uniqueConstraint.addValues(1,2,1));
+        this.uniqueConstraint.isValid(1);
+        Assertions.assertThrows(UniqueConstraintException.class, () -> this.uniqueConstraint.isValid(1));
     }
 
 }

@@ -21,7 +21,7 @@ public class ColumnTest {
     }
     @Test
     public void addCheckConstraint() {
-        ColumnConstraint columnConstraint = new CheckConstraint.CheckConstraintBuilder().withRange(0,10).build();
+        ColumnConstraint columnConstraint = new ColumnCheckConstraint.CheckConstraintBuilder().withRange(0, 10).build();
         intColumn.addConstraint(columnConstraint);
         assertTrue(intColumn.getConstraints().contains(columnConstraint));
     }

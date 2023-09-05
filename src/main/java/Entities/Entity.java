@@ -5,42 +5,36 @@ import Data.Column.Column;
 
 import java.util.*;
 
-public abstract class Entity {
-    protected Set<Column> columns = new LinkedHashSet<>(); // TODO: Remove this object because the columnValue keyset is the same
-    protected Map<Column, Object> columnValueMapping = new LinkedHashMap<>();
+public class Entity {
+    private final Map<Column, Object> columnValueMapping;
 
-    protected Entity(EntityBuilder<?,?> builder) {
-        this.columns = builder.columnList;
+    private Entity(Builder builder) {
         this.columnValueMapping = builder.columnValueMapping;
     }
 
-    protected abstract static class EntityBuilder<T extends EntityBuilder<T,S>, S extends Entity> {
-        protected final Set<Column> columnList = new LinkedHashSet<>();
-        protected Map<Column, Object> columnValueMapping = new LinkedHashMap<>();
-
-        protected EntityBuilder() {
+    public static class Builder {
+        private final Map<Column, Object> columnValueMapping = new LinkedHashMap<>();
+        public Builder(Column... columnList) {
+            for (Column column : columnList) {
+                this.columnValueMapping.put(column, null);
+            }
         }
-        protected EntityBuilder(Set<Column> columnList) {
-            this.columnList.addAll(columnList);
-        }
-
-
-        public T addColumn(Column column) {
-            self().columnList.add(column);
-            return self();
+        public Builder addColumn(Column column) {
+           this.columnValueMapping.put(column, null);
+            return this;
         }
 
-        public T withColumnValue(String columnName, Object value) {
-            if (!isValidColumn(columnName)) {
-                throw new IllegalArgumentException(columnName + " does not exist for the " + self().getClass().getSimpleName() + " entity.");
+        public Builder withColumnValue(String columnName, Object value) {
+            if (!this.existsColumn(columnName)) {
+                throw new IllegalArgumentException(columnName + " does not exist for the " + this.getClass().getSimpleName() + " entity.");
             }
             if (Objects.requireNonNull(getColumnByName(columnName)).isValid(value)) {
-                self().columnValueMapping.put(getColumnByName(columnName), value);
+                this.columnValueMapping.put(getColumnByName(columnName), value);
             }
-            return self();
+            return this;
         }
-        private boolean isValidColumn(String columnName) {
-            for (Column column : self().columnList) {
+        private boolean existsColumn(String columnName) {
+            for (Column column : this.columnValueMapping.keySet()) {
                 if (column.getName().equals(columnName)) {
                     return true;
                 }
@@ -48,7 +42,7 @@ public abstract class Entity {
             return false;
         }
         private Column getColumnByName(String columnName) {
-            for (Column column : self().columnList) {
+            for (Column column : this.columnValueMapping.keySet()) {
                 if (column.getName().equals(columnName)) {
                     return column;
                 }
@@ -56,22 +50,30 @@ public abstract class Entity {
             return null;
         }
 
-        abstract S build();
-        protected abstract T self();
+        public Entity build() {
+            return new Entity(this);
+        };
     }
     public Set<Column> getColumns() {
-        return columns;
+        return new HashSet<>(this.columnValueMapping.keySet());
     }
 
 
     public Map<Column, Object> getColumnValueMapping() {
-        return columnValueMapping;
+        return new HashMap<>(this.columnValueMapping);
+    }
+    public void setColumnValue(String columnName, Object columnValue) {
+        for (Column column : this.columnValueMapping.keySet()) {
+            if (Objects.equals(columnName, column.getName())) {
+                this.columnValueMapping.put(column, columnValue);
+            }
+        }
     }
 
 
     public String toRecord() {
         StringBuilder string = new StringBuilder();
-        for (Column column : this.columns) {
+        for (Column column : this.columnValueMapping.keySet()) {
             Object value = this.columnValueMapping.get(column);
             string.append(value)
                     .append(",");
@@ -81,7 +83,7 @@ public abstract class Entity {
     }
 
     public Column getColumnByName(String columnName) {
-        for (Column column : this.columns) {
+        for (Column column : this.columnValueMapping.keySet()) {
             if (Objects.equals(columnName, column.getName())) {
                 return column;
             }

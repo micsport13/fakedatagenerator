@@ -2,43 +2,33 @@ package Entities;
 
 import Data.Column.Column;
 import Data.TableConstraints.TableConstraint;
-import Data.TableConstraints.UniqueConstraint;
 
 import java.util.*;
 
-public class Table<T extends Entity> {
+public class Table {
     private final String name;
-    private final Map<Column, Set<TableConstraint>> tableConstraints = new HashMap<>();
-    //private final Map<Column, Set<Object>> uniqueColumns = new HashMap<>();  TODO: Validate on insertion
-    private final List<T> entities = new ArrayList<>();
+    private final Map<Column, TableConstraint> tableConstraints = new HashMap<>();
+    private final List<Entity> entities = new ArrayList<>();
 
-    public Table (String name) {
+    public Table(String name) {
         this.name = name;
     }
-    public void addTableConstraint(Column column, TableConstraint... tableConstraints) {
-        this.tableConstraints.put(column, new HashSet<>());
-        for (TableConstraint constraint : Objects.requireNonNull(tableConstraints, "Table constraints cannot be null")) {
-            if (constraint instanceof UniqueConstraint) {
-                this.uniqueColumns.put(column, new HashSet<>());
-            } else {
-                this.tableConstraints.get(column).add(constraint);
-            }
+    public Table(String name, Entity entity) {
+        this.name = name;
+        for (Column column : entity.getColumns()) {
+            this.tableConstraints.put(column, null);
         }
     }
-    public List<T> getEntities() {
-        return entities;
+    public void addTableConstraint(Column column, TableConstraint tableConstraint) {
+        this.tableConstraints.put(column, Objects.requireNonNull(tableConstraint, "Table Constraint cannot be null"));
+    }
+    public List<Entity> getEntities() {
+        return new ArrayList<>(entities);
     }
 
-    public void add(T entity) {
+    public void add(Entity entity) {
         if (isValidEntity(entity)) {
             entities.add(entity);
-        }
-        if (!this.uniqueColumns.keySet().isEmpty()) {
-            for (Column column : this.uniqueColumns.keySet()) {
-                this.uniqueColumns.get(column)
-                        .add(entity.getColumnValueMapping()
-                                     .get(column));
-            }
         }
     }
 
@@ -46,27 +36,20 @@ public class Table<T extends Entity> {
         return name;
     }
 
-    public Map<Column, Set<TableConstraint>> getTableConstraints() {
-        return tableConstraints;
+    public Map<Column, TableConstraint> getTableConstraints() {
+        return new HashMap<>(tableConstraints);
     }
 
-    public boolean isValidEntity(T entity) {
-        for (Column column : this.uniqueColumns.keySet()) {
-            if (this.uniqueColumns.get(column).contains(entity.getColumnValueMapping().get(column))) {
-                throw new IllegalArgumentException("Column " + column.getName() + " must be unique in table " + this.name);
-            }
-        }
-        for (Column column : this.tableConstraints.keySet()) {
-            for (TableConstraint tableConstraint : this.tableConstraints.get(column)) {
-                if (!tableConstraint.isValid(entity.getColumnValueMapping().get(column))) {
-                    throw new IllegalArgumentException("Column " + column.getName() + " does not meet the constraint " + tableConstraint);
-                }
+    public boolean isValidEntity(Entity entity) {
+        for (Map.Entry<Column, TableConstraint> tableConstraints : this.tableConstraints.entrySet()) {
+            if (tableConstraints.getValue() != null) {
+                tableConstraints.getValue().isValid(entity.getColumnValueMapping().get(tableConstraints.getKey()));
             }
         }
         return true;
     }
 
-    public void addForeignKeyValue(Column column, Set<Object> value) {
+    public void addForeignKeyValue(Table foreignTable, Column foreignColumn, Set<Object> value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

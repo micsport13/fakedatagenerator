@@ -20,16 +20,21 @@ class IntColumnTest {
         assertTrue(intColumn.isValid(1));
     }
     @Test
-    public void stringObjectIsInvalid() {
-        Assertions.assertThrows(MismatchedDataTypeException.class, () -> {
+    public void convertibleStringToIntIsValid() {
+        Assertions.assertDoesNotThrow(() -> {
             intColumn.isValid("1");
         });
     }
     @Test
-    public void doubleObjectIsInvalid() {
-        Assertions.assertThrows(MismatchedDataTypeException.class, () -> {
+    public void convertibleDoubleIsValid() {
+        Assertions.assertDoesNotThrow(() -> {
             intColumn.isValid(1.0);
         });
     }
-
+    @Test
+    public void inconvertibleStringThrowsException() {
+        Assertions.assertThrows(MismatchedDataTypeException.class, () -> {
+            intColumn.isValid("Test");
+        });
+    }
 }

@@ -14,11 +14,15 @@ public class Datetime2ColumnClassTest {
         datetime2Column = new Column("datetime2", DataType.DATETIME2);
     }
     @Test
-    public void validInputThrowsNoException() {
+    public void stringWithNoTimeZoneThrowsNoException() {
         datetime2Column.isValid("2020-01-01T00:00:00.000Z");
     }
     @Test
-    public void validInputOfZonedDateTimeThrowsNoException() {
+    public void stringWithTimeZoneThrowsNoException() {
+        datetime2Column.isValid("2020-01-01T00:00:00.000+00:00");
+    }
+    @Test
+    public void dateTeimeThrowsNoException() {
         ZonedDateTime zonedDateTime = ZonedDateTime.now();
         datetime2Column.isValid(zonedDateTime);
     }

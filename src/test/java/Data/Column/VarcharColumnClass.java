@@ -2,6 +2,7 @@ package Data.Column;
 
 import Data.DataType;
 import Data.Exceptions.CheckConstraintException;
+import Data.Exceptions.MismatchedDataTypeException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,15 +14,10 @@ public class VarcharColumnClass {
         varcharColumn = new Column("varchar", DataType.VARCHAR);
     }
     @Test
-    public void valueInAcceptedValuesThrowsNoException() {
-        CheckConstraint checkConstraint = new CheckConstraint.CheckConstraintBuilder().withAcceptedValues("Test", "Test1").build();
-        varcharColumn.addConstraint(checkConstraint);
-        Assertions.assertDoesNotThrow(() -> varcharColumn.isValid("Test"));
+    public void nonStringValueThrowsMismatchedDataTypeException() {
+        Assertions.assertThrows(MismatchedDataTypeException.class, () -> {
+            varcharColumn.isValid(1);
+        });
     }
-    @Test
-    public void valueNotInAcceptedValuesThrowsException() {
-        CheckConstraint checkConstraint = new CheckConstraint.CheckConstraintBuilder().withAcceptedValues("Test", "Test1").build();
-        varcharColumn.addConstraint(checkConstraint);
-        Assertions.assertThrows(CheckConstraintException.class, () -> varcharColumn.isValid("Test3"));
-    }
+
 }

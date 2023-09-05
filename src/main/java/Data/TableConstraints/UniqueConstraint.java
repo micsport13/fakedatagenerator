@@ -6,28 +6,20 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class UniqueConstraint implements TableConstraint {
-    private final Set<Object> uniqueValues;
+    private final Set<Object> uniqueValues; // TODO: Figure out how to check Uniqueness and Primary Keys
 
     public UniqueConstraint() {
         this.uniqueValues = new HashSet<>();
     }
-    public void addValue(Object object) {
-        if (this.isValid(object)) {
-            this.uniqueValues.add(object);
-        }
-    }
-    public void addValues(Object... objects) {
-        for (Object object : objects) {
-            if (this.isValid(object)) {
-                this.uniqueValues.add(object);
-            }
-        }
+    private void addValue(Object value) {
+        this.uniqueValues.add(value);
     }
     @Override
     public boolean isValid(Object value) {
         if (this.uniqueValues.contains(value)){
             throw new UniqueConstraintException("Value already exists in the unique constraint");
         };
+        this.addValue(value);
         return true;
     }
 }

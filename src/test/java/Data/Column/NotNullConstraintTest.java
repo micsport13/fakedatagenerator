@@ -10,10 +10,10 @@ class NotNullConstraintTest {
 
     @Test
     public void nullInputThrowsNotNullConstraintException() {
-        Assertions.assertThrows(NotNullConstraintException.class, () -> testColumn.addValue(null));
+        Assertions.assertThrows(NotNullConstraintException.class, () -> testColumn.isValid(null));
     }
     @Test
     public void notNullInputThrowsNoException() {
-        Assertions.assertDoesNotThrow(() -> testColumn.addValue(1));
+        Assertions.assertDoesNotThrow(() -> testColumn.isValid(1));
     }
 }

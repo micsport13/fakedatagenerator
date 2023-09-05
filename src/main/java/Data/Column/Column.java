@@ -9,10 +9,9 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class Column {
-    private String name;
+    private final String name;
     private final DataType dataType;
-    private Set<ColumnConstraint> constraints;
-    private List<Object> values = new ArrayList<>();
+    private final Set<ColumnConstraint> constraints;
 
     public Column(String columnName, DataType dataType) {
         this.name = columnName;
@@ -29,7 +28,7 @@ public class Column {
     }
 
     public void setConstraints(Set<ColumnConstraint> constraints) {
-        this.constraints = constraints;
+        this.constraints.addAll(constraints);
     }
 
     public DataType getDataType() {
@@ -37,22 +36,11 @@ public class Column {
     }
 
     public Set<ColumnConstraint> getConstraints() {
-        return constraints;
+        return new HashSet<>(this.constraints);
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
     public void addConstraint(ColumnConstraint columnConstraint) {
         this.constraints.add(columnConstraint);
-    }
-    public void addValue(Object object) {
-        if (object != null && object.getClass() != this.dataType.getAssociatedClass()) {
-            throw new MismatchedDataTypeException("Object is of type " + object.getClass().getSimpleName() + " and column requires " + this.dataType.getAssociatedClass());
-        }
-        if (this.isValid(object)){
-            this.values.add(object);
-        }
     }
     @Override
     public String toString() {
@@ -86,7 +74,18 @@ public class Column {
     }
 
     private boolean isValidFloat(Object value) {
-        return true;
+        if (value instanceof Number) {
+            return true;
+        }
+        if (value instanceof String) {
+            try{
+                Double doubleValue = Double.parseDouble((String) value);
+                return true;
+            } catch (NumberFormatException e) {
+                throw new MismatchedDataTypeException("Value must be a floating point number or an integer for this column");
+            }
+        }
+        throw new MismatchedDataTypeException("Value must be a floating point number or an integer for this column");
     }
 
     private boolean isValidDateTimeOffset(Object value) {
@@ -106,12 +105,8 @@ public class Column {
             return true;
         }
         if (value instanceof String) {
-            try {
-                ZonedDateTime zonedDateTime = ZonedDateTime.parse((String) value);
-                return true;
-            } catch (DateTimeParseException e) {
-                throw new MismatchedDataTypeException("Date time string must be in the format of yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-            }
+            ZonedDateTime zonedDateTime = ZonedDateTime.parse((String) value);
+            return true;
         }
         throw new MismatchedDataTypeException("Value must be a ZonedDateTime or a String");
     }
@@ -129,15 +124,24 @@ public class Column {
         return true;
     }
     private boolean isValidInt(Object value) {
-        if (value instanceof Integer) {
+        if (value instanceof Number) {
             return true;
         }
-        else {
-            throw new MismatchedDataTypeException("Value must be an integer for this column");
+        else if (value instanceof String) {
+            try {
+                Integer integer = Integer.parseInt((String) value);
+            } catch (NumberFormatException e) {
+                throw new MismatchedDataTypeException("Value must be an integer for this column");
+            }
+            return true;
         }
+        throw new MismatchedDataTypeException("Value must be an integer for this column");
     }
     private boolean isValidString(Object value) {
-        return value instanceof String;
+        if (value instanceof Number) {
+            throw new MismatchedDataTypeException("Number values must be passed as strings rather than integers");
+        }
+        return true;
     }
 
     @Override

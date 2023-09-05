@@ -7,12 +7,12 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class CheckConstraint implements ColumnConstraint{
+public class ColumnCheckConstraint implements ColumnConstraint{
     private final Double min;
     private final Double max;
     private final Set<String> acceptedValues;
 
-    private CheckConstraint(CheckConstraintBuilder builder) {
+    private ColumnCheckConstraint(CheckConstraintBuilder builder) {
         this.min = builder.min;
         this.max = builder.max;
         this.acceptedValues = builder.acceptedValues;
@@ -78,28 +78,28 @@ public class CheckConstraint implements ColumnConstraint{
             return this;
         }
 
-        public CheckConstraint build() {
-            return new CheckConstraint(this);
+        public ColumnCheckConstraint build() {
+            return new ColumnCheckConstraint(this);
         }
     }
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
-        if (!(o instanceof CheckConstraint checkConstraint)) {
+        if (!(o instanceof ColumnCheckConstraint columnCheckConstraint)) {
             return false;
         }
-        if (this.min != null && this.max!= null && checkConstraint.min != null && checkConstraint.max != null) {
-            return this.min.equals(checkConstraint.min) && this.max.equals(checkConstraint.max);
+        if (this.min != null && this.max!= null && columnCheckConstraint.min != null && columnCheckConstraint.max != null) {
+            return this.min.equals(columnCheckConstraint.min) && this.max.equals(columnCheckConstraint.max);
         }
-        if (this.min != null && checkConstraint.min != null) {
-            if (!this.min.equals(checkConstraint.min)) {
+        if (this.min != null && columnCheckConstraint.min != null) {
+            if (!this.min.equals(columnCheckConstraint.min)) {
                 return false;
             }
         }
-        if (this.max != null && checkConstraint.max != null) {
-            return this.max.equals(checkConstraint.max);
+        if (this.max != null && columnCheckConstraint.max != null) {
+            return this.max.equals(columnCheckConstraint.max);
         }
-        return this.acceptedValues.equals(checkConstraint.acceptedValues);
+        return this.acceptedValues.equals(columnCheckConstraint.acceptedValues);
     }
     @Override
     public int hashCode() {

@@ -8,8 +8,6 @@ public class NotNullConstraint implements ColumnConstraint{
         if (value == null) {
             throw new NotNullConstraintException("Value cannot be null");
         }
-        else {
-            return true;
-        }
+        return true;
     }
 }
