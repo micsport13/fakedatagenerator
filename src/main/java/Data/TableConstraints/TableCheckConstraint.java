@@ -2,6 +2,9 @@ package Data.TableConstraints;
 
 import Data.Exceptions.CheckConstraintException;
 
+/**
+ * The type Table check constraint.
+ */
 public class TableCheckConstraint implements TableConstraint {
     // TODO: Figure out how to link other columns to this constraint
 

@@ -5,6 +5,9 @@ import Data.Column.Column;
 
 import java.util.*;
 
+/**
+ * The type Entity.
+ */
 public class Entity {
     private final Map<Column, Object> columnValueMapping;
 
@@ -12,18 +15,41 @@ public class Entity {
         this.columnValueMapping = builder.columnValueMapping;
     }
 
+    /**
+     * The type Builder.
+     */
     public static class Builder {
         private final Map<Column, Object> columnValueMapping = new LinkedHashMap<>();
+
+        /**
+         * Instantiates a new Builder.
+         *
+         * @param columnList the column list
+         */
         public Builder(Column... columnList) {
             for (Column column : columnList) {
-                this.columnValueMapping.put(column, null);
+                this.columnValueMapping.put(Objects.requireNonNull(column), null);
             }
         }
+
+        /**
+         * Add column builder.
+         *
+         * @param column the column
+         * @return the builder
+         */
         public Builder addColumn(Column column) {
            this.columnValueMapping.put(column, null);
             return this;
         }
 
+        /**
+         * With column value builder.
+         *
+         * @param columnName the column name
+         * @param value      the value
+         * @return the builder
+         */
         public Builder withColumnValue(String columnName, Object value) {
             if (!this.existsColumn(columnName)) {
                 throw new IllegalArgumentException(columnName + " does not exist for the " + this.getClass().getSimpleName() + " entity.");
@@ -50,18 +76,41 @@ public class Entity {
             return null;
         }
 
+        /**
+         * Build entity.
+         *
+         * @return the entity
+         */
         public Entity build() {
             return new Entity(this);
         };
     }
+
+    /**
+     * Gets columns.
+     *
+     * @return the columns
+     */
     public Set<Column> getColumns() {
         return new HashSet<>(this.columnValueMapping.keySet());
     }
 
 
+    /**
+     * Gets column value mapping.
+     *
+     * @return the column value mapping
+     */
     public Map<Column, Object> getColumnValueMapping() {
         return new HashMap<>(this.columnValueMapping);
     }
+
+    /**
+     * Sets column value.
+     *
+     * @param columnName  the column name
+     * @param columnValue the column value
+     */
     public void setColumnValue(String columnName, Object columnValue) {
         for (Column column : this.columnValueMapping.keySet()) {
             if (Objects.equals(columnName, column.getName())) {
@@ -71,6 +120,11 @@ public class Entity {
     }
 
 
+    /**
+     * To record string.
+     *
+     * @return the string
+     */
     public String toRecord() {
         StringBuilder string = new StringBuilder();
         for (Column column : this.columnValueMapping.keySet()) {
@@ -82,6 +136,12 @@ public class Entity {
         return string.toString();
     }
 
+    /**
+     * Gets column by name.
+     *
+     * @param columnName the column name
+     * @return the column by name
+     */
     public Column getColumnByName(String columnName) {
         for (Column column : this.columnValueMapping.keySet()) {
             if (Objects.equals(columnName, column.getName())) {

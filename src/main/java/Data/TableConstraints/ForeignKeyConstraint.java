@@ -6,10 +6,20 @@ import Entities.Table;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * The type Foreign key constraint.
+ */
 public class ForeignKeyConstraint implements TableConstraint{
     private Set<Object> foreignKeyValues = new HashSet<>();
     private final Table foreignTable;
     private final String foreignColumn;
+
+    /**
+     * Instantiates a new Foreign key constraint.
+     *
+     * @param foreignTable  the foreign table
+     * @param foreignColumn the foreign column
+     */
     public ForeignKeyConstraint(Table foreignTable, String foreignColumn) {
         this.foreignTable = foreignTable;
         this.foreignColumn = foreignColumn;

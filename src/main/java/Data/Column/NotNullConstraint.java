@@ -2,6 +2,9 @@ package Data.Column;
 
 import Data.Exceptions.NotNullConstraintException;
 
+/**
+ * The type Not null constraint.
+ */
 public class NotNullConstraint implements ColumnConstraint{
     @Override
     public boolean isValid(Object value) {
