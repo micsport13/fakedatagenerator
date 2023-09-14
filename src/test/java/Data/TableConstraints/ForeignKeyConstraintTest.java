@@ -7,10 +7,4 @@ import org.junit.jupiter.api.Test;
  */
 class ForeignKeyConstraintTest {
 
-    /**
-     * Is valid.
-     */
-    @Test
-    void isValid() {
-    }
 }

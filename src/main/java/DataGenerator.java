@@ -36,11 +36,12 @@ public class DataGenerator {
                     .withColumnValue("id", i)
                     .withColumnValue("first_name", faker.name().firstName())
                     .withColumnValue("last_name", faker.name().lastName())
-                    .withColumnValue("email", String.format("email.test+%d@email.com",i)).build();
+                    .withColumnValue("email", faker.internet().emailAddress()).build();
             table.add(entity);
         }
         long endTime = System.nanoTime();
         System.out.println(table);
+        System.out.println(table.getEntities().size());
         System.out.println("Time taken: " + (endTime - startTime)/1000000 + "ms");
     }
 }
