@@ -34,16 +34,13 @@ public class ColumnCheckValidator implements ColumnValidator {
         if (value instanceof Integer) {
             double checkValue = ((Integer) value).doubleValue();
             if (min != null && checkValue < min) {
-                System.out.println("Value provided: " + value);
                 throw new CheckConstraintException("Value is below the minimum value allowed by the check constraint");
             }
             if (max != null && checkValue > max) {
-                System.out.println("Value provided: " + value);
                 throw new CheckConstraintException("Value is above the maximum value allowed by the check constraint");
             }
         } else if (value instanceof String stringValue) {
             if (!acceptedValues.contains(stringValue)) {
-                System.out.println("Value provided: " + value);
                 throw new CheckConstraintException("Value is not in the accepted list of values");
             }
         }

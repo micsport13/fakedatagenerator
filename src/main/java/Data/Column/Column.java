@@ -114,10 +114,7 @@ public class Column {
                 return false;
             }
         }
-        if (!this.dataTypeValidator.validate(value)) {
-            throw new MismatchedDataTypeException("Value is not of the correct data type");
-        }
-        return true;
+        return this.dataTypeValidator.validate(value);
     }
 
 

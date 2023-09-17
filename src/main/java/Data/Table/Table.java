@@ -2,7 +2,6 @@ package Data.Table;
 
 import Data.Column.Column;
 import Data.Entities.Entity;
-import Data.Schema.TableSchema;
 import Data.Validators.TableValidators.TableValidator;
 
 import java.util.*;
@@ -13,7 +12,6 @@ import java.util.*;
 public class Table {
     private final String name;
     private final Map<Column, TableValidator> tableConstraints = new HashMap<>();
-    private TableSchema tableSchema = new TableSchema(new HashSet<>());
     private final List<Entity> entities = new ArrayList<>();
 
     /**
@@ -23,10 +21,6 @@ public class Table {
      */
     public Table(String name) {
         this.name = name;
-    }
-    public Table(String name, TableSchema tableSchema) {
-        this.name = name;
-        this.tableSchema = tableSchema;
     }
 
     /**
@@ -59,6 +53,13 @@ public class Table {
      */
     public List<Entity> getEntities() {
         return new ArrayList<>(entities);
+    }
+    public Set<Object> getColumnValues(String columnName) {
+        Set<Object> columnValues = new HashSet<>();
+        for (Entity entity : entities) {
+            columnValues.add(entity.getValue(columnName));
+        }
+        return columnValues;
     }
 
     /**
@@ -108,28 +109,11 @@ public class Table {
         return true;
     }
 
-    /**
-     * Add foreign key value.
-     *
-     * @param foreignTable  the foreign table
-     * @param foreignColumn the foreign column
-     * @param value         the value
-     */
-    public void addForeignKeyValue(Table foreignTable, Column foreignColumn, Set<Object> value) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    public Column getColumnByName(String columnName) {
-        return this.tableSchema.getColumnByName(columnName);
-    }
-
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Table: ")
-                .append(name)
-                .append("\n");
-        sb.append(tableSchema.toString());
-        return sb.toString();
+        return "Table: " +
+                name +
+                "\n";
     }
     public String print() {
         StringBuilder sb = new StringBuilder();

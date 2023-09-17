@@ -151,6 +151,15 @@ public class Entity {
         throw new IllegalArgumentException("Table column with name " + columnName + " does not exist.");
     }
 
+    public Object getValue(String columnName) {
+        for (Column column : this.columnValueMapping.keySet()) {
+            if (Objects.equals(columnName, column.getName())) {
+                return this.columnValueMapping.get(column);
+            }
+        }
+        throw new IllegalArgumentException("Table column with name " + columnName + " does not exist.");
+    }
+
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder();

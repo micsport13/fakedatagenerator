@@ -9,21 +9,14 @@ import java.util.Set;
  * The type Unique constraint.
  */
 public class UniqueValidator implements TableValidator {
-    private final Set<Object> uniqueValues; // TODO: Figure out how to check Uniqueness and Primary Keys
+    private final Set<Object> uniqueValues = new HashSet<>(); //
 
-    /**
-     * Instantiates a new Unique constraint.
-     */
-    public UniqueValidator() {
-        this.uniqueValues = new HashSet<>();
-    }
     private void addValue(Object value) {
         this.uniqueValues.add(value);
     }
     @Override
     public boolean validate(Object value) {
         if (this.uniqueValues.contains(value)){
-            System.out.println("Value provided: " + value);
             throw new UniqueConstraintException("Value already exists in the unique constraint");
         };
         this.addValue(value);

@@ -1,9 +1,9 @@
-package Data.Entities;
+package Data.Table;
 
 import Data.Column.Column;
 import Data.DataType.DataType;
+import Data.Entities.Entity;
 import Data.Exceptions.UniqueConstraintException;
-import Data.Table.Table;
 import Data.Validators.TableValidators.UniqueValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -10,6 +10,7 @@ import java.util.Set;
  */
 public class PrimaryKeyValidator implements TableValidator {
     private final Set<Object> primaryKeyValues = new HashSet<>();
+
     private void addValue(Object value) {
         primaryKeyValues.add(value);
     }
@@ -18,7 +19,6 @@ public class PrimaryKeyValidator implements TableValidator {
         if (value == null) {
             throw new PrimaryKeyConstraintException("Primary key cannot be null");
         } else if (primaryKeyValues.contains(value)) {
-            System.out.println("Value provided: " + value);
             throw new PrimaryKeyConstraintException("Primary key must be unique");
         }
         this.addValue(value);

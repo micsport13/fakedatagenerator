@@ -1,14 +1,11 @@
-package Data.Column;
+package Data.Validators.ColumnValidators;
 
+import Data.Column.Column;
 import Data.DataType.DataType;
 import Data.Exceptions.NotNullConstraintException;
-import Data.Validators.ColumnValidators.NotNullValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-/**
- * The type Not null constraint test.
- */
 class NotNullValidatorTest {
     /**
      * The Test column.

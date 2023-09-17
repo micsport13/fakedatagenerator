@@ -2,6 +2,7 @@ package Data.Validators.DataTypeValidators;
 
 import Data.Column.Column;
 import Data.DataType.DataType;
+import Data.Exceptions.MismatchedDataTypeException;
 
 public class BooleanValidator implements DataTypeValidator {
 
@@ -15,6 +16,9 @@ public class BooleanValidator implements DataTypeValidator {
         if (value instanceof Integer) {
             return (Integer) value == 0 || (Integer) value == 1;
         }
-        return value instanceof Boolean;
+        if (!(value instanceof Boolean)) {
+            throw new MismatchedDataTypeException(this.getClass().getSimpleName() + ": Value is not a valid boolean");
+        }
+            return true;
     }
 }

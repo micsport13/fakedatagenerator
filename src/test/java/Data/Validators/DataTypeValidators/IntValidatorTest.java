@@ -1,8 +1,9 @@
 package Data.Validators.DataTypeValidators;
 
+import Data.Exceptions.MismatchedDataTypeException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class IntValidatorTest {
@@ -34,13 +35,13 @@ class IntValidatorTest {
      */
     @Test
     public void inconvertibleStringThrowsException() {
-        assertFalse(
+        assertThrows(MismatchedDataTypeException.class, () ->
                 intValidator.validate("Test"));
     }
 
     @Test
     public void otherObjectThrowsException() {
-        assertFalse(
+        assertThrows(MismatchedDataTypeException.class, () ->
                 intValidator.validate(new Object()));
     }
 

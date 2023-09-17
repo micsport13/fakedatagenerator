@@ -1,8 +1,8 @@
-package Data.Column;
+package Data.Validators.ColumnValidators;
 
+import Data.Column.Column;
 import Data.DataType.DataType;
 import Data.Exceptions.CheckConstraintException;
-import Data.Validators.ColumnValidators.ColumnCheckValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

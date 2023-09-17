@@ -1,5 +1,7 @@
 package Data.Validators.DataTypeValidators;
 
+import Data.Exceptions.MismatchedDataTypeException;
+
 public class IntValidator implements DataTypeValidator {
     @Override
     public boolean validate(Object value) {
@@ -8,9 +10,13 @@ public class IntValidator implements DataTypeValidator {
                 Integer integer = Integer.parseInt((String) value);
                 return true;
             } catch (NumberFormatException e) {
-                return false;
+                throw new MismatchedDataTypeException(this.getClass().getSimpleName() + ": Value is not a valid integer");
+
             }
         }
-        return value instanceof Number;
+        if (!(value instanceof Number)) {
+            throw new MismatchedDataTypeException(this.getClass().getSimpleName() + ": Value is not a valid integer");
+        }
+        return true;
     }
 }

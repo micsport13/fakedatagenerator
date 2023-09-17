@@ -1,10 +1,11 @@
 package Data.Validators.DataTypeValidators;
 
+import Data.Exceptions.MismatchedDataTypeException;
 import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FloatValidatorTest {
@@ -31,7 +32,7 @@ class FloatValidatorTest {
      */
     @Test
     public void stringUnableToConvertThrowsException() {
-        assertFalse(floatValidator.validate("Test"));
+        assertThrows(MismatchedDataTypeException.class,  () -> floatValidator.validate("Test"));
     }
 
     /**
@@ -47,7 +48,7 @@ class FloatValidatorTest {
      */
     @Test
     public void dateTimeThrowsException() {
-        assertFalse(floatValidator.validate(ZonedDateTime.now()));
+        assertThrows(MismatchedDataTypeException.class, () -> floatValidator.validate(ZonedDateTime.now()));
     }
 
 }

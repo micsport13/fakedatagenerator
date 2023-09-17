@@ -12,29 +12,26 @@ import java.util.Set;
  * The type Foreign key constraint.
  */
 public class ForeignKeyValidator implements TableValidator {
-    private Set<Object> foreignKeyValues = new HashSet<>();
+    private final Set<Object> foreignKeyValues = new HashSet<>();
     private final Table foreignTable;
-    private final String foreignColumn;
+    private final String foreignColumnName;
 
     /**
      * Instantiates a new Foreign key constraint.
      *
      * @param foreignTable  the foreign table
-     * @param foreignColumn the foreign column
+     * @param foreignColumnName the foreign column
      */
-    public ForeignKeyValidator(Table foreignTable, String foreignColumn) {
+    public ForeignKeyValidator(Table foreignTable, String foreignColumnName) {
         this.foreignTable = foreignTable;
-        this.foreignColumn = foreignColumn;
+        this.foreignColumnName = foreignColumnName;
     }
     private void addValue(Object value) {
         foreignKeyValues.add(value);
     }
     @Override
     public boolean validate(Object value) {
-        Column column = foreignTable.getColumnByName(foreignColumn);
-        for (Entity entity: this.foreignTable.getEntities()) {
-            this.addValue(entity.getColumnValueMapping().get(column));
-        }
+        Set<Object> foreignValues = foreignTable.getColumnValues(foreignColumnName);
         if (this.foreignKeyValues.contains(value)) {
             return true;
         }
@@ -42,6 +39,6 @@ public class ForeignKeyValidator implements TableValidator {
     }
     @Override
     public String toString() {
-        return "Foreign Key: " + this.foreignTable.getName() + "." + this.foreignColumn;
+        return "Foreign Key: " + this.foreignTable.getName() + "." + this.foreignColumnName;
     }
 }

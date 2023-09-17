@@ -1,12 +1,9 @@
 import Data.Column.Column;
 import Data.DataType.DataType;
 import Data.Entities.Entity;
-import Data.Schema.TableSchema;
 import Data.Table.Table;
-import Data.Validators.ColumnValidators.ColumnCheckValidator;
 import Data.Validators.ColumnValidators.NotNullValidator;
 import Data.Validators.TableValidators.PrimaryKeyValidator;
-import Data.Validators.TableValidators.UniqueValidator;
 import com.github.javafaker.Faker;
 
 /**
@@ -20,26 +17,30 @@ public class DataGenerator {
      */
     public static void main(String[] args) {
         Faker faker = new Faker();
-        Table table = new Table("Members");
+
         Column idColumn = new Column("id", DataType.INT);
         Column firstNameColumn = new Column("first_name", DataType.VARCHAR, new NotNullValidator());
         Column lastNameColumn = new Column("last_name", DataType.VARCHAR, new NotNullValidator());
         Column emailColumn = new Column("email", DataType.VARCHAR, new NotNullValidator());
-        table.addTableConstraint(idColumn, new PrimaryKeyValidator());
+
         //table.addTableConstraint(emailColumn, new UniqueValidator());
-        long startTime = System.nanoTime();
-        for (int i=0; i<10000; i++){
-            Entity entity = new Entity.Builder(idColumn, firstNameColumn, lastNameColumn, emailColumn)
-                    .withColumnValue("id", i)
-                    .withColumnValue("first_name", faker.name().firstName())
-                    .withColumnValue("last_name", faker.name().lastName())
-                    .withColumnValue("email", faker.internet().emailAddress()).build();
-            table.add(entity);
-        }
-        long endTime = System.nanoTime();
-        System.out.println(table.print());
-        System.out.println(table.getEntities().size());
-        System.out.println("Time taken: " + (endTime - startTime)/1000000 + "ms");
+            Table table = new Table("Members");
+            table.addTableConstraint(idColumn, new PrimaryKeyValidator());
+            long startTime = System.nanoTime();
+            for (int i = 0; i < 250_000; i++) {
+                Entity entity = new Entity.Builder(idColumn, firstNameColumn, lastNameColumn, emailColumn)
+                        .withColumnValue("id", i)
+                        .withColumnValue("first_name", faker.name()
+                                .firstName())
+                        .withColumnValue("last_name", faker.name()
+                                .lastName())
+                        .withColumnValue("email", faker.internet()
+                                .emailAddress())
+                        .build();
+                table.add(entity);
+            }
+            long endTime = System.nanoTime();
+        System.out.println("Time taken: " + -(startTime - endTime) / 1_000_000 + "ms");
 
         // TableSchema Testing
         /*Entity entity = new Entity.Builder(idColumn, firstNameColumn, lastNameColumn, emailColumn)
