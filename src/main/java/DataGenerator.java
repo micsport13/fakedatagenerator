@@ -1,16 +1,13 @@
 import Data.Column.Column;
-import Data.Column.NotNullConstraint;
-import Data.DataType;
-import Data.Exceptions.UniqueConstraintException;
-import Data.TableConstraints.PrimaryKeyConstraint;
-import Data.TableConstraints.UniqueConstraint;
-import Entities.Entity;
-import Entities.Table;
+import Data.DataType.DataType;
+import Data.Entities.Entity;
+import Data.Schema.TableSchema;
+import Data.Table.Table;
+import Data.Validators.ColumnValidators.ColumnCheckValidator;
+import Data.Validators.ColumnValidators.NotNullValidator;
+import Data.Validators.TableValidators.PrimaryKeyValidator;
+import Data.Validators.TableValidators.UniqueValidator;
 import com.github.javafaker.Faker;
-import com.github.javafaker.Options;
-
-import java.util.List;
-import java.util.Set;
 
 /**
  * The type Data generator.
@@ -25,11 +22,11 @@ public class DataGenerator {
         Faker faker = new Faker();
         Table table = new Table("Members");
         Column idColumn = new Column("id", DataType.INT);
-        Column firstNameColumn = new Column("first_name", DataType.VARCHAR, new NotNullConstraint());
-        Column lastNameColumn = new Column("last_name", DataType.VARCHAR, new NotNullConstraint());
-        Column emailColumn = new Column("email", DataType.VARCHAR, new NotNullConstraint());
-        table.addTableConstraint(idColumn, new PrimaryKeyConstraint());
-        table.addTableConstraint(emailColumn, new UniqueConstraint());
+        Column firstNameColumn = new Column("first_name", DataType.VARCHAR, new NotNullValidator());
+        Column lastNameColumn = new Column("last_name", DataType.VARCHAR, new NotNullValidator());
+        Column emailColumn = new Column("email", DataType.VARCHAR, new NotNullValidator());
+        table.addTableConstraint(idColumn, new PrimaryKeyValidator());
+        //table.addTableConstraint(emailColumn, new UniqueValidator());
         long startTime = System.nanoTime();
         for (int i=0; i<10000; i++){
             Entity entity = new Entity.Builder(idColumn, firstNameColumn, lastNameColumn, emailColumn)
@@ -40,8 +37,30 @@ public class DataGenerator {
             table.add(entity);
         }
         long endTime = System.nanoTime();
-        System.out.println(table);
+        System.out.println(table.print());
         System.out.println(table.getEntities().size());
         System.out.println("Time taken: " + (endTime - startTime)/1000000 + "ms");
+
+        // TableSchema Testing
+        /*Entity entity = new Entity.Builder(idColumn, firstNameColumn, lastNameColumn, emailColumn)
+                .withColumnValue("id", 1)
+                .withColumnValue("first_name", faker.name().firstName())
+                .withColumnValue("last_name", faker.name().lastName())
+                .withColumnValue("email", faker.internet().emailAddress()).build();
+        TableSchema.SchemaBuilder schemaBuilder = new TableSchema.SchemaBuilder();
+        schemaBuilder.addColumn("id", DataType.INT, new PrimaryKeyValidator());
+        schemaBuilder.addColumn("first_name", DataType.VARCHAR, new NotNullValidator());
+        schemaBuilder.addColumn("last_name", DataType.VARCHAR, new NotNullValidator());
+        schemaBuilder.addColumn("email", DataType.VARCHAR, new UniqueValidator());
+        TableSchema tableSchema = schemaBuilder.build();
+        TableSchema tableSchema2 = new TableSchema(entity.getColumns());
+        tableSchema2.addConstraint("email", new UniqueValidator());
+        tableSchema2.addConstraint("email", new ColumnCheckValidator.CheckConstraintBuilder().withMinimumValue(1).build());
+        Table table1 = new Table("Members", tableSchema);
+        System.out.println(tableSchema);
+        System.out.println(table1);
+        System.out.println(tableSchema2);
+        */
+
     }
 }

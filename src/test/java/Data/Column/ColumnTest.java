@@ -1,6 +1,9 @@
 package Data.Column;
 
-import Data.DataType;
+import Data.DataType.DataType;
+import Data.Validators.ColumnValidators.ColumnCheckValidator;
+import Data.Validators.ColumnValidators.ColumnValidator;
+import Data.Validators.ColumnValidators.NotNullValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,9 +34,10 @@ public class ColumnTest {
 // Testing adding constraints
     @Test
     public void addNullConstraint() {
-        ColumnConstraint columnConstraint = new NotNullConstraint();
+        ColumnValidator columnConstraint = new NotNullValidator();
         intColumn.addConstraint(columnConstraint);
-        assertTrue(intColumn.getConstraints().contains(columnConstraint));
+        assertTrue(intColumn.getConstraints()
+                           .contains(columnConstraint));
     }
 
     /**
@@ -41,9 +45,11 @@ public class ColumnTest {
      */
     @Test
     public void addCheckConstraint() {
-        ColumnConstraint columnConstraint = new ColumnCheckConstraint.CheckConstraintBuilder().withRange(0, 10).build();
+        ColumnValidator columnConstraint = new ColumnCheckValidator.CheckConstraintBuilder().withRange(0, 10)
+                .build();
         intColumn.addConstraint(columnConstraint);
-        assertTrue(intColumn.getConstraints().contains(columnConstraint));
+        assertTrue(intColumn.getConstraints()
+                           .contains(columnConstraint));
     }
 
     /**
