@@ -14,6 +14,7 @@ public class PrimaryKeyValidator implements TableValidator {
     private void addValue(Object value) {
         primaryKeyValues.add(value);
     }
+
     @Override
     public boolean validate(Object value) {
         if (value == null) {
@@ -24,6 +25,7 @@ public class PrimaryKeyValidator implements TableValidator {
         this.addValue(value);
         return true;
     }
+
     @Override
     public String toString() {
         return "Primary Key";

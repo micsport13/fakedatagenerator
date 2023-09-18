@@ -9,6 +9,7 @@ public class BooleanValidator implements DataTypeValidator {
     /**
      * Checks if the value is a valid boolean
      * {@link DataType#BOOLEAN}
+     *
      * @param value Object value to be checked for {@link Column#isValid(Object)}
      * @return
      */
@@ -17,8 +18,9 @@ public class BooleanValidator implements DataTypeValidator {
             return (Integer) value == 0 || (Integer) value == 1;
         }
         if (!(value instanceof Boolean)) {
-            throw new MismatchedDataTypeException(this.getClass().getSimpleName() + ": Value is not a valid boolean");
+            throw new MismatchedDataTypeException(this.getClass()
+                                                          .getSimpleName() + ": Value is not a valid boolean");
         }
-            return true;
+        return true;
     }
 }

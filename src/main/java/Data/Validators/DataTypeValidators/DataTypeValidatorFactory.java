@@ -2,8 +2,6 @@ package Data.Validators.DataTypeValidators;
 
 import Data.DataType.DataType;
 
-import static Data.DataType.DataType.*;
-
 public class DataTypeValidatorFactory {
     public static DataTypeValidator getValidator(DataType dataType) {
         switch (dataType) {

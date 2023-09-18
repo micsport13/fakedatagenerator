@@ -10,6 +10,7 @@ public class TableCheckValidator implements TableValidator {
     public boolean validate(Object value) {
         throw new UnsupportedOperationException("Check constraint validation not yet implemented");
     }
+
     @Override
     public String toString() {
         return "Check"; // TODO: Update with attributes once defined

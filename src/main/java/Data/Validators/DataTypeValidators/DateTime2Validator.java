@@ -14,6 +14,7 @@ public class DateTime2Validator implements DataTypeValidator {
             ZonedDateTime zonedDateTime = ZonedDateTime.parse((String) value);
             return true;
         }
-        throw new MismatchedDataTypeException(this.getClass().getSimpleName() + ": Value is not a valid datetime2");
+        throw new MismatchedDataTypeException(this.getClass()
+                                                      .getSimpleName() + ": Value is not a valid datetime2");
     }
 }

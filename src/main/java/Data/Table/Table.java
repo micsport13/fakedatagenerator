@@ -2,6 +2,7 @@ package Data.Table;
 
 import Data.Column.Column;
 import Data.Entities.Entity;
+import Data.Schema.Schema;
 import Data.Validators.TableValidators.TableValidator;
 
 import java.util.*;
@@ -11,7 +12,7 @@ import java.util.*;
  */
 public class Table {
     private final String name;
-    private final Map<Column, TableValidator> tableConstraints = new HashMap<>();
+    private final Schema schema;
     private final List<Entity> entities = new ArrayList<>();
 
     /**
@@ -21,6 +22,7 @@ public class Table {
      */
     public Table(String name) {
         this.name = name;
+        this.schema = new Schema(new HashSet<>());
     }
 
     /**
@@ -31,9 +33,13 @@ public class Table {
      */
     public Table(String name, Entity entity) {
         this.name = name;
-        for (Column column : entity.getColumns()) {
-            this.tableConstraints.put(column, null);
-        }
+        this.schema = new Schema(entity.getColumnValueMapping()
+                                         .keySet());
+    }
+
+    public Table(String name, Set<Column> columnList) {
+        this.name = name;
+        this.schema = new Schema(columnList);
     }
 
     /**
@@ -43,7 +49,7 @@ public class Table {
      * @param tableConstraint the table constraint
      */
     public void addTableConstraint(Column column, TableValidator tableConstraint) {
-        this.tableConstraints.put(column, Objects.requireNonNull(tableConstraint, "Table Validator cannot be null"));
+        this.schema.addColumn(column, new HashSet<>(Set.of(Objects.requireNonNull(tableConstraint, "Table Validator cannot be null"))));
     }
 
     /**
@@ -54,6 +60,7 @@ public class Table {
     public List<Entity> getEntities() {
         return new ArrayList<>(entities);
     }
+
     public Set<Object> getColumnValues(String columnName) {
         Set<Object> columnValues = new HashSet<>();
         for (Entity entity : entities) {
@@ -87,8 +94,8 @@ public class Table {
      *
      * @return the table constraints
      */
-    public Map<Column, TableValidator> getTableConstraints() {
-        return new HashMap<>(tableConstraints);
+    public Map<Column, Set<TableValidator>> getSchema() {
+        return this.schema.getTableConstraints();
     }
 
 
@@ -99,11 +106,12 @@ public class Table {
      * @return the boolean
      */
     public boolean isValidEntity(Entity entity) {
-        for (Map.Entry<Column, TableValidator> tableConstraints : this.tableConstraints.entrySet()) {
+        for (Map.Entry<Column, Set<TableValidator>> tableConstraints : this.schema.getTableConstraints()
+                .entrySet()) {
             if (tableConstraints.getValue() != null) {
                 tableConstraints.getValue()
-                        .validate(entity.getColumnValueMapping()
-                                         .get(tableConstraints.getKey()));
+                        .forEach(constraint -> constraint.validate(entity.getColumnValueMapping()
+                                                                           .get(tableConstraints.getKey())));
             }
         }
         return true;
@@ -113,13 +121,16 @@ public class Table {
     public String toString() {
         return "Table: " +
                 name +
-                "\n";
+                "\n" + schema.toString();
     }
-    public String print() {
+
+    public String printTable() {
         StringBuilder sb = new StringBuilder();
         sb.append("Table: ")
                 .append(name)
                 .append("\n");
+        sb.append("Schema: \n")
+                .append(this.schema.toString());
         for (Entity entity : entities) {
             sb.append(entity.toRecord())
                     .append("\n");

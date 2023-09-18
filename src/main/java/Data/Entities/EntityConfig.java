@@ -13,7 +13,7 @@ import java.util.Set;
  * The type Entity config.
  */
 public class EntityConfig {
-    private Set<Column> columns = new LinkedHashSet<>();
+    private final Set<Column> columns = new LinkedHashSet<>();
 
     /**
      * Load config entity config.

@@ -16,77 +16,6 @@ public class Entity {
     }
 
     /**
-     * The type SchemaBuilder.
-     */
-    public static class Builder {
-        private final Map<Column, Object> columnValueMapping = new LinkedHashMap<>();
-
-        /**
-         * Instantiates a new SchemaBuilder.
-         *
-         * @param columnList the column list
-         */
-        public Builder(Column... columnList) {
-            for (Column column : columnList) {
-                this.columnValueMapping.put(Objects.requireNonNull(column), null);
-            }
-        }
-
-        /**
-         * Add column builder.
-         *
-         * @param column the column
-         * @return the builder
-         */
-        public Builder addColumn(Column column) {
-           this.columnValueMapping.put(column, null);
-            return this;
-        }
-
-        /**
-         * With column value builder.
-         *
-         * @param columnName the column name
-         * @param value      the value
-         * @return the builder
-         */
-        public Builder withColumnValue(String columnName, Object value) {
-            if (!this.existsColumn(columnName)) {
-                throw new IllegalArgumentException(columnName + " does not exist for the " + this.getClass().getSimpleName() + " entity.");
-            }
-            if (Objects.requireNonNull(getColumnByName(columnName)).isValid(value)) {
-                this.columnValueMapping.put(getColumnByName(columnName), value);
-            }
-            return this;
-        }
-        private boolean existsColumn(String columnName) {
-            for (Column column : this.columnValueMapping.keySet()) {
-                if (column.getName().equals(columnName)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        private Column getColumnByName(String columnName) {
-            for (Column column : this.columnValueMapping.keySet()) {
-                if (column.getName().equals(columnName)) {
-                    return column;
-                }
-            }
-            return null;
-        }
-
-        /**
-         * Build entity.
-         *
-         * @return the entity
-         */
-        public Entity build() {
-            return new Entity(this);
-        };
-    }
-
-    /**
      * Gets columns.
      *
      * @return the columns
@@ -94,7 +23,6 @@ public class Entity {
     public Set<Column> getColumns() {
         return new HashSet<>(this.columnValueMapping.keySet());
     }
-
 
     /**
      * Gets column value mapping.
@@ -113,12 +41,11 @@ public class Entity {
      */
     public void setColumnValue(String columnName, Object columnValue) {
         for (Column column : this.columnValueMapping.keySet()) {
-            if (Objects.equals(columnName, column.getName())) {
+            if (Objects.equals(columnName, column.getName()) && column.isValid(columnValue)) {
                 this.columnValueMapping.put(column, columnValue);
             }
         }
     }
-
 
     /**
      * To record string.
@@ -166,8 +93,89 @@ public class Entity {
         for (Map.Entry<Column, Object> entry : columnValueMapping.entrySet()) {
             Column column = entry.getKey();
             Object value = entry.getValue();
-            string.append(column.toString()).append("\nValue: ").append(value).append("\n====================\n");
+            string.append(column.toString())
+                    .append("\nValue: ")
+                    .append(value)
+                    .append("\n====================\n");
         }
         return string.toString();
+    }
+
+    /**
+     * The type SchemaBuilder.
+     */
+    public static class Builder {
+        private final Map<Column, Object> columnValueMapping = new LinkedHashMap<>();
+
+        /**
+         * Instantiates a new SchemaBuilder.
+         *
+         * @param columnList the column list
+         */
+        public Builder(Column... columnList) {
+            for (Column column : columnList) {
+                this.columnValueMapping.put(Objects.requireNonNull(column), null);
+            }
+        }
+
+        /**
+         * Add column builder.
+         *
+         * @param column the column
+         * @return the builder
+         */
+        public Builder addColumn(Column column) {
+            this.columnValueMapping.put(column, null);
+            return this;
+        }
+
+        /**
+         * With column value builder.
+         *
+         * @param columnName the column name
+         * @param value      the value
+         * @return the builder
+         */
+        public Builder withColumnValue(String columnName, Object value) {
+            if (!this.existsColumn(columnName)) {
+                throw new IllegalArgumentException(columnName + " does not exist for the " + this.getClass()
+                        .getSimpleName() + " entity.");
+            }
+            if (Objects.requireNonNull(getColumnByName(columnName))
+                    .isValid(value)) {
+                this.columnValueMapping.put(getColumnByName(columnName), value);
+            }
+            return this;
+        }
+
+        private boolean existsColumn(String columnName) {
+            for (Column column : this.columnValueMapping.keySet()) {
+                if (column.getName()
+                        .equals(columnName)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private Column getColumnByName(String columnName) {
+            for (Column column : this.columnValueMapping.keySet()) {
+                if (column.getName()
+                        .equals(columnName)) {
+                    return column;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * Build entity.
+         *
+         * @return the entity
+         */
+        public Entity build() {
+            return new Entity(this);
+        }
+
     }
 }

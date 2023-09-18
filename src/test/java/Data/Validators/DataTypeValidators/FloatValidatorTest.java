@@ -32,7 +32,7 @@ class FloatValidatorTest {
      */
     @Test
     public void stringUnableToConvertThrowsException() {
-        assertThrows(MismatchedDataTypeException.class,  () -> floatValidator.validate("Test"));
+        assertThrows(MismatchedDataTypeException.class, () -> floatValidator.validate("Test"));
     }
 
     /**

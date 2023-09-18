@@ -1,7 +1,6 @@
 package Data.Validators.TableValidators;
 
 import Data.Exceptions.PrimaryKeyConstraintException;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

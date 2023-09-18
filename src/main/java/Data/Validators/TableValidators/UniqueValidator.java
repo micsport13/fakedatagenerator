@@ -14,14 +14,16 @@ public class UniqueValidator implements TableValidator {
     private void addValue(Object value) {
         this.uniqueValues.add(value);
     }
+
     @Override
     public boolean validate(Object value) {
-        if (this.uniqueValues.contains(value)){
-            throw new UniqueConstraintException("Value already exists in the unique constraint");
-        };
+        if (this.uniqueValues.contains(value)) {
+            throw new UniqueConstraintException(UniqueValidator.class.getSimpleName() + ": Value already exists in the unique constraint");
+        }
         this.addValue(value);
         return true;
     }
+
     @Override
     public String toString() {
         return "Unique";

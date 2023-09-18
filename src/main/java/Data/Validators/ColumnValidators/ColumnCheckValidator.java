@@ -25,9 +25,10 @@ public class ColumnCheckValidator implements ColumnValidator {
 
     /**
      * Checks if value passed obeys the check constraint
+     *
      * @param value the value to be checked
-     * @
      * @return
+     * @
      */
     @Override
     public boolean validate(Object value) {
@@ -48,13 +49,70 @@ public class ColumnCheckValidator implements ColumnValidator {
         return true;
     }
 
+    @Override
+    public int hashCode() {
+        int result = 17; // A prime number for initial value
+
+        // Check and include the hash codes of non-null fields
+        if (min != null) {
+            result = 31 * result + min.hashCode();
+        }
+        if (max != null) {
+            result = 31 * result + max.hashCode();
+        }
+        result = 31 * result + acceptedValues.hashCode();
+
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof ColumnCheckValidator columnCheckConstraint)) {
+            return false;
+        }
+        if (this.min != null && this.max != null && columnCheckConstraint.min != null && columnCheckConstraint.max != null) {
+            return this.min.equals(columnCheckConstraint.min) && this.max.equals(columnCheckConstraint.max);
+        }
+        if (this.min != null && columnCheckConstraint.min != null) {
+            if (!this.min.equals(columnCheckConstraint.min)) {
+                return false;
+            }
+        }
+        if (this.max != null && columnCheckConstraint.max != null) {
+            return this.max.equals(columnCheckConstraint.max);
+        }
+        return this.acceptedValues.equals(columnCheckConstraint.acceptedValues);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder defaultString = new StringBuilder("Check: ");
+        if (this.min != null && this.max != null) {
+            return defaultString.toString() + this.min + " <= value <= " + this.max;
+        }
+        if (this.min != null) {
+            return defaultString + "value >= " + this.min;
+        }
+        if (this.max != null) {
+            return defaultString + "value <= " + this.max;
+        }
+        if (!this.acceptedValues.isEmpty()) {
+            for (String value : this.acceptedValues) {
+                defaultString.append(value)
+                        .append(", ");
+            }
+        }
+        return defaultString.toString();
+    }
+
     /**
      * The type Check constraint builder.
      */
     public static class CheckConstraintBuilder {
+        private final Set<String> acceptedValues = new HashSet<>();
         private Double min;
         private Double max;
-        private final Set<String> acceptedValues = new HashSet<>();
 
         /**
          * Instantiates a new Check constraint builder.
@@ -80,7 +138,8 @@ public class ColumnCheckValidator implements ColumnValidator {
          * @return the check constraint builder
          */
         public CheckConstraintBuilder withMinimumValue(Integer minimumValue) {
-            this.min = Objects.requireNonNull(minimumValue).doubleValue();
+            this.min = Objects.requireNonNull(minimumValue)
+                    .doubleValue();
             return this;
         }
 
@@ -102,7 +161,8 @@ public class ColumnCheckValidator implements ColumnValidator {
          * @return the check constraint builder
          */
         public CheckConstraintBuilder withMaximumValue(Integer maximumValue) {
-            this.max = Objects.requireNonNull(maximumValue).doubleValue();
+            this.max = Objects.requireNonNull(maximumValue)
+                    .doubleValue();
             return this;
         }
 
@@ -115,8 +175,10 @@ public class ColumnCheckValidator implements ColumnValidator {
          * @return the check constraint builder
          */
         public CheckConstraintBuilder withRange(Integer lowerBound, Integer upperBound) {
-            this.min = Objects.requireNonNull(lowerBound).doubleValue();
-            this.max = Objects.requireNonNull(upperBound).doubleValue();
+            this.min = Objects.requireNonNull(lowerBound)
+                    .doubleValue();
+            this.max = Objects.requireNonNull(upperBound)
+                    .doubleValue();
             return this;
         }
 
@@ -152,60 +214,5 @@ public class ColumnCheckValidator implements ColumnValidator {
         public ColumnCheckValidator build() {
             return new ColumnCheckValidator(this);
         }
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder defaultString = new StringBuilder("Check: ");
-        if (this.min != null && this.max != null) {
-            return defaultString.toString() + this.min + " <= value <= " + this.max;
-        }
-        if (this.min != null) {
-            return defaultString + "value >= " + this.min;
-        }
-        if (this.max != null) {
-            return defaultString + "value <= " + this.max;
-        }
-        if (!this.acceptedValues.isEmpty()) {
-            for (String value: this.acceptedValues) {
-                defaultString.append(value)
-                        .append(", ");
-            }
-        }
-        return defaultString.toString();
-    }
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) return true;
-        if (!(o instanceof ColumnCheckValidator columnCheckConstraint)) {
-            return false;
-        }
-        if (this.min != null && this.max!= null && columnCheckConstraint.min != null && columnCheckConstraint.max != null) {
-            return this.min.equals(columnCheckConstraint.min) && this.max.equals(columnCheckConstraint.max);
-        }
-        if (this.min != null && columnCheckConstraint.min != null) {
-            if (!this.min.equals(columnCheckConstraint.min)) {
-                return false;
-            }
-        }
-        if (this.max != null && columnCheckConstraint.max != null) {
-            return this.max.equals(columnCheckConstraint.max);
-        }
-        return this.acceptedValues.equals(columnCheckConstraint.acceptedValues);
-    }
-    @Override
-    public int hashCode() {
-        int result = 17; // A prime number for initial value
-
-        // Check and include the hash codes of non-null fields
-        if (min != null) {
-            result = 31 * result + min.hashCode();
-        }
-        if (max != null) {
-            result = 31 * result + max.hashCode();
-        }
-        result = 31 * result + acceptedValues.hashCode();
-
-        return result;
     }
 }

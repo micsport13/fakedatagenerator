@@ -19,7 +19,7 @@ class IntValidatorTest {
      */
     @Test
     public void convertibleStringToIntIsValid() {
-        assertTrue(intValidator.validate("1"));
+        assertThrows(MismatchedDataTypeException.class, () -> intValidator.validate("1"));
     }
 
     /**

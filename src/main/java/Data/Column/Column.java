@@ -3,9 +3,9 @@ package Data.Column;
 import Data.DataType.DataType;
 import Data.Exceptions.MismatchedDataTypeException;
 import Data.Validators.ColumnValidators.ColumnValidator;
-import Data.Validators.DataTypeValidators.DataTypeValidatorFactory;
-import Data.Validators.DataTypeValidators.DataTypeValidator;
 import Data.Validators.ColumnValidators.NotNullValidator;
+import Data.Validators.DataTypeValidators.DataTypeValidator;
+import Data.Validators.DataTypeValidators.DataTypeValidatorFactory;
 import Data.Validators.Validator;
 
 import java.util.HashSet;
@@ -26,10 +26,11 @@ public class Column {
 
     /**
      * Instantiates a column without constraints
+     *
      * @param columnName
      * @param dataType
      */
-     public Column(String columnName, DataType dataType) {
+    public Column(String columnName, DataType dataType) {
         this.name = columnName;
         this.dataType = dataType;
         this.dataTypeValidator = DataTypeValidatorFactory.getValidator(dataType);
@@ -69,6 +70,7 @@ public class Column {
     /**
      * Gets all column constraints.
      * Returns a defensive copy of the constraints
+     *
      * @return the constraints of the column
      */
     public Set<ColumnValidator> getConstraints() {
@@ -82,23 +84,6 @@ public class Column {
      */
     public void addConstraint(ColumnValidator columnConstraint) {
         this.constraints.add(columnConstraint);
-    }
-
-    /**
-     * Prints out the column name, data type, and constraints in the following format:
-     * Column:  name
-     * Data Type:  data type
-     * Constraints: constraint1, constraint2, etc.
-     */
-    @Override
-    public String toString() {
-        StringBuilder string = new StringBuilder("Column: " + this.name + "\nData Type: " + this.dataType);
-        if (!this.constraints.isEmpty())
-            for (ColumnValidator constraint : this.constraints) {
-                string.append("\nValidator: ")
-                        .append(constraint);
-            }
-        return string.toString();
     }
 
     /**
@@ -117,9 +102,14 @@ public class Column {
         return this.dataTypeValidator.validate(value);
     }
 
+    @Override
+    public int hashCode() {
+        return this.name.hashCode() * this.constraints.hashCode() * this.dataType.hashCode();
+    }
 
     /**
      * Checks if the column is equal to another column
+     *
      * @param o The column object
      * @return
      */
@@ -131,8 +121,21 @@ public class Column {
         }
         return this.name.equals(column.name) && this.dataType.equals(column.dataType);
     }
+
+    /**
+     * Prints out the column name, data type, and constraints in the following format:
+     * Column:  name
+     * Data Type:  data type
+     * Constraints: constraint1, constraint2, etc.
+     */
     @Override
-    public int hashCode() {
-        return this.name.hashCode() * this.constraints.hashCode() * this.dataType.hashCode();
+    public String toString() {
+        StringBuilder string = new StringBuilder("Column: " + this.name + "\nData Type: " + this.dataType);
+        if (!this.constraints.isEmpty())
+            for (ColumnValidator constraint : this.constraints) {
+                string.append("\nValidator: ")
+                        .append(constraint);
+            }
+        return string.toString();
     }
 }

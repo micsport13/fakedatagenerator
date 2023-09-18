@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class VarcharValidatorTest {
     private final VarcharValidator varcharValidator = new VarcharValidator();
+
     @Test
 
     public void nonStringValueThrowsMismatchedDataTypeException() {

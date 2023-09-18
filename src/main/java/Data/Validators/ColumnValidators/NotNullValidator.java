@@ -15,13 +15,16 @@ public class NotNullValidator implements ColumnValidator {
     }
 
     @Override
+    public int hashCode() {
+        return 79 * 31;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         return o instanceof NotNullValidator;
     }
-    @Override public int hashCode() {
-        return 79 * 31;
-    }
+
     @Override
     public String toString() {
         return "Not Null";
