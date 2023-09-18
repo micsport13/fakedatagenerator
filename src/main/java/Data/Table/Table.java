@@ -22,7 +22,7 @@ public class Table {
      */
     public Table(String name) {
         this.name = name;
-        this.schema = new Schema(new HashSet<>());
+        this.schema = new Schema(new LinkedHashSet<>());
     }
 
     /**
@@ -39,7 +39,7 @@ public class Table {
 
     public Table(String name, Set<Column> columnList) {
         this.name = name;
-        this.schema = new Schema(columnList);
+        this.schema = new Schema(new LinkedHashSet<>(columnList));
     }
 
     /**
@@ -94,8 +94,8 @@ public class Table {
      *
      * @return the table constraints
      */
-    public Map<Column, Set<TableValidator>> getSchema() {
-        return this.schema.getTableConstraints();
+    public Schema getSchema() {
+        return this.schema;
     }
 
 
@@ -131,6 +131,12 @@ public class Table {
                 .append("\n");
         sb.append("Schema: \n")
                 .append(this.schema.toString());
+        sb.append("Values: \n");
+        for (Column column : this.schema.getColumns()) {
+            sb.append(column.getName())
+                    .append(",");
+        }
+        sb.append("\n");
         for (Entity entity : entities) {
             sb.append(entity.toRecord())
                     .append("\n");

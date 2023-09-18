@@ -9,7 +9,7 @@ public class NotNullValidator implements ColumnValidator {
     @Override
     public boolean validate(Object value) {
         if (value == null) {
-            throw new NotNullConstraintException("Value cannot be null");
+            throw new NotNullConstraintException(NotNullValidator.class.getSimpleName() + ": Value cannot be null");
         }
         return true;
     }

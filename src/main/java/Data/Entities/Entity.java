@@ -21,7 +21,7 @@ public class Entity {
      * @return the columns
      */
     public Set<Column> getColumns() {
-        return new HashSet<>(this.columnValueMapping.keySet());
+        return new LinkedHashSet<>(this.columnValueMapping.keySet());
     }
 
     /**
@@ -30,7 +30,7 @@ public class Entity {
      * @return the column value mapping
      */
     public Map<Column, Object> getColumnValueMapping() {
-        return new HashMap<>(this.columnValueMapping);
+        return new LinkedHashMap<>(this.columnValueMapping);
     }
 
     /**
@@ -174,6 +174,9 @@ public class Entity {
          * @return the entity
          */
         public Entity build() {
+            for (Map.Entry<Column, Object> columnValueMapping: this.columnValueMapping.entrySet()) {
+                columnValueMapping.getKey().isValid(columnValueMapping.getValue());
+            }
             return new Entity(this);
         }
 

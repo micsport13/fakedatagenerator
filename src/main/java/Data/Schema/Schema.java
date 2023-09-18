@@ -4,16 +4,13 @@ import Data.Column.Column;
 import Data.Validators.TableValidators.TableValidator;
 import Data.Validators.Validator;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Schema implements Validator {
-    private final Map<Column, Set<TableValidator>> tableConstraints = new HashMap<>();
+    private final Map<Column, Set<TableValidator>> tableConstraints = new LinkedHashMap<>();
 
     public Schema(Set<Column> columnSet) {
-        for (Column column : columnSet) {
+        for (Column column : new LinkedHashSet<>(columnSet)) {
             this.tableConstraints.put(column, new HashSet<>());
         }
     }
@@ -34,6 +31,9 @@ public class Schema implements Validator {
     public Map<Column, Set<TableValidator>> getTableConstraints() {
         return tableConstraints;
     }
+    public Set<Column> getColumns() {
+        return this.tableConstraints.keySet();
+    }
 
     @Override
     public boolean validate(Object value) {
@@ -49,12 +49,18 @@ public class Schema implements Validator {
     public String toString() {
         StringBuilder sb = new StringBuilder("Schema: \n");
         for (Map.Entry<Column, Set<TableValidator>> entry : tableConstraints.entrySet()) {
-            sb.append(entry.getKey()
-                              .getName())
-                    .append("\n\t Constraints: ")
+            sb.append("\tName: ")
+                    .append(entry.getKey()
+                                    .getName())
+                    .append("\n")
+                    .append("\tData type: ")
+                    .append(entry.getKey()
+                                    .getDataType())
+                    .append("\n")
+                    .append("\tConstraints: ")
                     .append(entry.getValue()
                                     .toString())
-                    .append("\n");
+                    .append("\n").append("--------------------\n");
         }
         return sb.toString();
     }
