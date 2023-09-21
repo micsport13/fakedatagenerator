@@ -41,6 +41,10 @@ public class Table {
         this.name = name;
         this.schema = new Schema(new LinkedHashSet<>(columnList));
     }
+    public Table(String name, Column... columns) {
+        this.name = name;
+        this.schema = new Schema(new LinkedHashSet<>(List.of(columns)));
+    }
 
     /**
      * Add table constraint.
@@ -48,8 +52,8 @@ public class Table {
      * @param column          the column
      * @param tableConstraint the table constraint
      */
-    public void addTableConstraint(Column column, TableValidator tableConstraint) {
-        this.schema.addColumn(column, new HashSet<>(Set.of(Objects.requireNonNull(tableConstraint, "Table Validator cannot be null"))));
+    public void addTableConstraint(Column column, TableValidator... tableConstraints) {
+        this.schema.addColumn(column, Objects.requireNonNull(tableConstraints, "Table Validator cannot be null"));
     }
 
     /**

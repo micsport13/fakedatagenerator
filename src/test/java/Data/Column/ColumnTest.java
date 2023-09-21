@@ -45,7 +45,7 @@ public class ColumnTest {
      */
     @Test
     public void addCheckConstraint() {
-        ColumnValidator columnConstraint = new ColumnCheckValidator.CheckConstraintBuilder().withRange(0, 10)
+        ColumnValidator columnConstraint = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withRange(0, 10)
                 .build();
         intColumn.addConstraint(columnConstraint);
         assertTrue(intColumn.getConstraints()

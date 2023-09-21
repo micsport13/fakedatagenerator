@@ -3,7 +3,7 @@ package Data.Validators.DataTypeValidators;
 import Data.DataType.DataType;
 
 public class DataTypeValidatorFactory {
-    public static DataTypeValidator getValidator(DataType dataType) {
+    public static DataTypeValidator createValidator(DataType dataType) {
         switch (dataType) {
             case BOOLEAN -> {
                 return new BooleanValidator();

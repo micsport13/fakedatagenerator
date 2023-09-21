@@ -32,7 +32,7 @@ class ColumnCheckValidatorTest {
     @Test
     public void valueBelowMinimumCheckConstraintThrowsException() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder().withMinimumValue(0.0)
+                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withMinimumValue(0.0)
                 .build();
         Assertions.assertThrows(CheckConstraintException.class, () -> {
             intColumn.addConstraint(columnCheckConstraint);
@@ -46,7 +46,7 @@ class ColumnCheckValidatorTest {
     @Test
     public void valueAtMinimumCheckConstraintThrowsNoException() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder().withMinimumValue(0)
+                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withMinimumValue(0)
                 .build();
         assertTrue(columnCheckConstraint.validate(-.05));
     }
@@ -59,7 +59,7 @@ class ColumnCheckValidatorTest {
     @Test
     public void valueAboveMaximumCheckConstraintThrowsException() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder().withMaximumValue(10.0)
+                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withMaximumValue(10.0)
                 .build();
         Assertions.assertThrows(CheckConstraintException.class, () -> {
             intColumn.addConstraint(columnCheckConstraint);
@@ -73,7 +73,7 @@ class ColumnCheckValidatorTest {
     @Test
     public void valueAtMaximumCheckConstraintThrowsNoException() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder().withMaximumValue(10)
+                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withMaximumValue(10)
                 .build();
         assertTrue(columnCheckConstraint.validate(10));
     }
@@ -85,7 +85,7 @@ class ColumnCheckValidatorTest {
     @Test
     public void valueBetweenMinimumAndMaximumCheckConstraintThrowsNoException() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder().withRange(0, 10)
+                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withRange(0, 10)
                 .build();
         assertTrue(columnCheckConstraint.validate(5));
     }
@@ -98,7 +98,7 @@ class ColumnCheckValidatorTest {
     public void valueNotInAcceptedValuesThrowsException() {
         ColumnCheckValidator
                 columnCheckConstraint =
-                new ColumnCheckValidator.CheckConstraintBuilder().withAcceptedValues("Test", "Test1")
+                new ColumnCheckValidator.CheckConstraintBuilder(this.varcharColumn.getDataType()).withAcceptedValues("Test", "Test1")
                         .build();
         varcharColumn.addConstraint(columnCheckConstraint);
         Assertions.assertThrows(CheckConstraintException.class, () -> varcharColumn.isValid("Test3"));
@@ -111,7 +111,7 @@ class ColumnCheckValidatorTest {
     public void valueInAcceptedValuesThrowsNoException() {
         ColumnCheckValidator
                 columnCheckConstraint =
-                new ColumnCheckValidator.CheckConstraintBuilder().withAcceptedValues("Test", "Test1")
+                new ColumnCheckValidator.CheckConstraintBuilder(this.varcharColumn.getDataType()).withAcceptedValues("Test", "Test1")
                         .build();
         varcharColumn.addConstraint(columnCheckConstraint);
         Assertions.assertDoesNotThrow(() -> varcharColumn.isValid("Test"));
@@ -124,11 +124,11 @@ class ColumnCheckValidatorTest {
     @Test
     public void multipleCheckConstraintsWithSameMinimumAreEqual() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder().withMinimumValue(0)
+                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withMinimumValue(0)
                 .withMaximumValue(10)
                 .build();
         ColumnCheckValidator
-                columnCheckConstraint1 = new ColumnCheckValidator.CheckConstraintBuilder().withMinimumValue(0)
+                columnCheckConstraint1 = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withMinimumValue(0)
                 .withMaximumValue(10)
                 .build();
         Assertions.assertEquals(columnCheckConstraint, columnCheckConstraint1);
@@ -140,10 +140,10 @@ class ColumnCheckValidatorTest {
     @Test
     public void multipleCheckConstraintsWithSameMaximumAreEqual() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder().withMaximumValue(10)
+                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withMaximumValue(10)
                 .build();
         ColumnCheckValidator
-                columnCheckConstraint1 = new ColumnCheckValidator.CheckConstraintBuilder().withMaximumValue(10)
+                columnCheckConstraint1 = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withMaximumValue(10)
                 .build();
         Assertions.assertEquals(columnCheckConstraint, columnCheckConstraint1);
     }
@@ -154,11 +154,11 @@ class ColumnCheckValidatorTest {
     @Test
     public void multipleCheckConstraintsWithSameRangeAreEqual() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder().withMinimumValue(0)
+                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withMinimumValue(0)
                 .withMaximumValue(10)
                 .build();
         ColumnCheckValidator
-                columnCheckConstraint1 = new ColumnCheckValidator.CheckConstraintBuilder().withMinimumValue(0)
+                columnCheckConstraint1 = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withMinimumValue(0)
                 .withMaximumValue(10)
                 .build();
         Assertions.assertEquals(columnCheckConstraint, columnCheckConstraint1);
@@ -170,11 +170,11 @@ class ColumnCheckValidatorTest {
     @Test
     public void multipleCheckConstraintsWithDifferentRangesAreNotEqual() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder().withMinimumValue(0)
+                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withMinimumValue(0)
                 .withMaximumValue(10)
                 .build();
         ColumnCheckValidator
-                columnCheckConstraint1 = new ColumnCheckValidator.CheckConstraintBuilder().withMinimumValue(0)
+                columnCheckConstraint1 = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withMinimumValue(0)
                 .withMaximumValue(8)
                 .build();
         Assertions.assertNotEquals(columnCheckConstraint, columnCheckConstraint1);
@@ -187,11 +187,11 @@ class ColumnCheckValidatorTest {
     public void multipleCheckConstraintsWithSameAcceptedValuesAreEqual() {
         ColumnCheckValidator
                 columnCheckConstraint =
-                new ColumnCheckValidator.CheckConstraintBuilder().withAcceptedValues("Test", "Test1")
+                new ColumnCheckValidator.CheckConstraintBuilder(this.varcharColumn.getDataType()).withAcceptedValues("Test", "Test1")
                         .build();
         ColumnCheckValidator
                 columnCheckConstraint1 =
-                new ColumnCheckValidator.CheckConstraintBuilder().withAcceptedValues("Test", "Test1")
+                new ColumnCheckValidator.CheckConstraintBuilder(this.varcharColumn.getDataType()).withAcceptedValues("Test", "Test1")
                         .build();
         Assertions.assertEquals(columnCheckConstraint, columnCheckConstraint1);
     }
@@ -203,10 +203,10 @@ class ColumnCheckValidatorTest {
     public void multipleCheckConstraintsWithDifferentAcceptedValuesAreNotEqual() {
         ColumnCheckValidator
                 columnCheckConstraint =
-                new ColumnCheckValidator.CheckConstraintBuilder().withAcceptedValues("Test", "Test1")
+                new ColumnCheckValidator.CheckConstraintBuilder(this.varcharColumn.getDataType()).withAcceptedValues("Test", "Test1")
                         .build();
         ColumnCheckValidator
-                columnCheckConstraint1 = new ColumnCheckValidator.CheckConstraintBuilder().withAcceptedValues("Test")
+                columnCheckConstraint1 = new ColumnCheckValidator.CheckConstraintBuilder(this.varcharColumn.getDataType()).withAcceptedValues("Test")
                 .build();
         Assertions.assertNotEquals(columnCheckConstraint, columnCheckConstraint1);
     }
@@ -218,11 +218,11 @@ class ColumnCheckValidatorTest {
     public void multipleCheckConstraintsWithDifferentOrderedAcceptedValuesAreEqual() {
         ColumnCheckValidator
                 columnCheckConstraint =
-                new ColumnCheckValidator.CheckConstraintBuilder().withAcceptedValues("Test", "Test1")
+                new ColumnCheckValidator.CheckConstraintBuilder(this.varcharColumn.getDataType()).withAcceptedValues("Test", "Test1")
                         .build();
         ColumnCheckValidator
                 columnCheckConstraint1 =
-                new ColumnCheckValidator.CheckConstraintBuilder().withAcceptedValues("Test1", "Test")
+                new ColumnCheckValidator.CheckConstraintBuilder(this.varcharColumn.getDataType()).withAcceptedValues("Test1", "Test")
                         .build();
         Assertions.assertEquals(columnCheckConstraint, columnCheckConstraint1);
     }

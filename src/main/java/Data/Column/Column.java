@@ -33,7 +33,7 @@ public class Column {
     public Column(String columnName, DataType dataType) {
         this.name = columnName;
         this.dataType = dataType;
-        this.dataTypeValidator = DataTypeValidatorFactory.getValidator(dataType);
+        this.dataTypeValidator = DataTypeValidatorFactory.createValidator(dataType);
         this.constraints = new HashSet<>();
     }
 
