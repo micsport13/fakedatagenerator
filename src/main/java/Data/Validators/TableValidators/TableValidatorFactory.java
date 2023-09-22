@@ -16,25 +16,11 @@ public class TableValidatorFactory {
             case UNIQUE -> new UniqueValidator();
             case CHECK ->
                     throw new IllegalArgumentException("To create a check, you must pass in values to apply to the check");
+            case NOT_NULL -> throw new UnsupportedOperationException("To create a not null constraint, use the column validator factory");
             default -> throw new IllegalArgumentException("Invalid constraint type: " + constraintType);
         };
     }
 
-    public static Validator createValidator(ConstraintType constraintType, DataType datatype, Number minValue, Number maxValue) {
-        if (constraintType != ConstraintType.CHECK) {
-            throw new IllegalArgumentException("Cannot pass ranges to a non-check constraint");
-        }
-        if (minValue != null && maxValue != null) {
-            return new ColumnCheckValidator.CheckConstraintBuilder(datatype).withRange(minValue, maxValue).build();
-        }
-        if (minValue != null) {
-            return new ColumnCheckValidator.CheckConstraintBuilder(datatype).withMinimumValue(minValue).build();
-        }
-        if (maxValue != null) {
-            return new ColumnCheckValidator.CheckConstraintBuilder(datatype).withMaximumValue(maxValue).build();
-        }
-        throw new IllegalArgumentException("Unable to create numeric check constraint");
-    }
 
     public static Validator createValidator(ConstraintType constraintType, Table foreignTable, String columnName){
         if (constraintType != ConstraintType.FOREIGN_KEY) {
