@@ -2,6 +2,7 @@ package Data.Validators.DataTypeValidators;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BooleanValidatorTest {
@@ -13,7 +14,7 @@ class BooleanValidatorTest {
 // Testing Booleans
     @Test
     public void validInputThrowsNoException() {
-        assertTrue(booleanValidator.validate(true));
+        assertDoesNotThrow(() -> booleanValidator.validate(true));
     }
 
 
@@ -23,7 +24,7 @@ class BooleanValidatorTest {
 // Testing Integers in place of booleans
     @Test
     public void inputOfZeroIsValid() {
-        assertTrue(booleanValidator.validate(0));
+        assertDoesNotThrow(() -> booleanValidator.validate(0));
     }
 
     /**
@@ -31,7 +32,7 @@ class BooleanValidatorTest {
      */
     @Test
     public void inputOfOneIsValid() {
-        assertTrue(booleanValidator.validate(1));
+        assertDoesNotThrow(() -> booleanValidator.validate(1));
     }
 
     /**
@@ -39,7 +40,7 @@ class BooleanValidatorTest {
      */
     @Test
     public void inputOfTrueIsValid() {
-        assertTrue(booleanValidator.validate(true));
+        assertDoesNotThrow(() -> booleanValidator.validate(true));
     }
 
     /**
@@ -47,6 +48,6 @@ class BooleanValidatorTest {
      */
     @Test
     public void inputOfFalseIsValid() {
-        assertTrue(booleanValidator.validate(false));
+        assertDoesNotThrow(() -> booleanValidator.validate(false));
     }
 }

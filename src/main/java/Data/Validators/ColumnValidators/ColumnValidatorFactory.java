@@ -9,7 +9,7 @@ public class ColumnValidatorFactory {
         return switch(constraintType) {
             case CHECK -> throw new UnsupportedOperationException("When creating a column check constraint, you must provide parameters");
             case NOT_NULL -> new NotNullValidator();
-            default -> throw new IllegalArgumentException("Other constraint types are not supported for the column validator factory");
+            default -> throw new UnsupportedOperationException("Other constraint types are not supported for the column validator factory");
         };
     }
 

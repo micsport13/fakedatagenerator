@@ -1,21 +1,26 @@
 package Data.Validators.DataTypeValidators;
 
+import Data.DataType.DataType;
 import Data.Exceptions.MismatchedDataTypeException;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 
 public class DateTimeOffsetValidator implements DataTypeValidator {
     @Override
-    public boolean validate(Object value) {
+    public void validate(Object value) {
         if (value instanceof ZonedDateTime) {
-            return true;
+            return;
         }
         if (value instanceof String) {
-            ZonedDateTime zonedDateTime = ZonedDateTime.parse((String) value);
-            return true;
+            try {
+                ZonedDateTime.parse((String) value);
+            } catch (DateTimeParseException e) {
+                throw new MismatchedDataTypeException(this.getClass().getSimpleName() + ": Value is not a valid datetimeoffset");
+            }
+
         }
         throw new MismatchedDataTypeException(this.getClass()
                                                       .getSimpleName() + ": Value is not a valid datetimeoffset");
-
     }
 }

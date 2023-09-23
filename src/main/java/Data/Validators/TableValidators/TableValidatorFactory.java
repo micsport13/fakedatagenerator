@@ -12,12 +12,11 @@ public class TableValidatorFactory {
         return switch (constraintType) {
             case PRIMARY_KEY -> new PrimaryKeyValidator();
             case FOREIGN_KEY ->
-                    throw new IllegalArgumentException("To create a foreign key, you must pass in the foreign table and column");// ForeignKeyValidator(); // TODO: Figure out how to implement these
+                    throw new UnsupportedOperationException("To create a foreign key, you must pass in the foreign table and column");// ForeignKeyValidator(); // TODO: Figure out how to implement these
             case UNIQUE -> new UniqueValidator();
             case CHECK ->
-                    throw new IllegalArgumentException("To create a check, you must pass in values to apply to the check");
+                    throw new UnsupportedOperationException("To create a check, you must pass in values to apply to the check");
             case NOT_NULL -> throw new UnsupportedOperationException("To create a not null constraint, use the column validator factory");
-            default -> throw new IllegalArgumentException("Invalid constraint type: " + constraintType);
         };
     }
 

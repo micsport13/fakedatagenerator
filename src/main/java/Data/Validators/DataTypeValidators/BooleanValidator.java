@@ -11,16 +11,14 @@ public class BooleanValidator implements DataTypeValidator {
      * {@link DataType#BOOLEAN}
      *
      * @param value Object value to be checked for {@link Column#isValid(Object)}
-     * @return
      */
-    public boolean validate(Object value) {
-        if (value instanceof Integer) {
-            return (Integer) value == 0 || (Integer) value == 1;
+    public void validate(Object value) {
+        if (value instanceof Integer && ((Integer) value == 1 || (Integer) value == 0)) {
+            return;
         }
         if (!(value instanceof Boolean)) {
             throw new MismatchedDataTypeException(this.getClass()
                                                           .getSimpleName() + ": Value is not a valid boolean");
         }
-        return true;
     }
 }

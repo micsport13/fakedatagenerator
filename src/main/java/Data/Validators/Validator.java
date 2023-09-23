@@ -8,7 +8,6 @@ public interface Validator {
      * Is valid boolean.
      *
      * @param value the value
-     * @return the boolean
      */
-    boolean validate(Object value);
+    void validate(Object value);
 }

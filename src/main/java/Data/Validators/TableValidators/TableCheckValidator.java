@@ -16,8 +16,7 @@ public class TableCheckValidator implements TableValidator {
     }
 
     @Override
-    public boolean validate(Object value) {
-        return false;
+    public void validate(Object value) {
         // TODO: handle the checking
         // Should correspond to making sure an entity is created with the correct values in all of the objects.
 

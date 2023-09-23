@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FloatValidatorTest {
     private final FloatValidator floatValidator = new FloatValidator();
@@ -16,7 +15,7 @@ class FloatValidatorTest {
      */
     @Test
     public void validFloatThrowsNoException() {
-        assertTrue(floatValidator.validate(3.0));
+        assertDoesNotThrow(() -> floatValidator.validate(3.0));
     }
 
     /**
@@ -24,7 +23,7 @@ class FloatValidatorTest {
      */
     @Test
     public void integerThrowsNoException() {
-        assertTrue(floatValidator.validate(3));
+        assertDoesNotThrow(()-> floatValidator.validate(3));
     }
 
     /**
@@ -40,7 +39,7 @@ class FloatValidatorTest {
      */
     @Test
     public void stringAbleToConvertThrowsNoException() {
-        assertTrue(floatValidator.validate("3.0"));
+        assertDoesNotThrow(() -> floatValidator.validate("3.0"));
     }
 
     /**

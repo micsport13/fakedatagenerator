@@ -7,11 +7,10 @@ import Data.Exceptions.NotNullConstraintException;
  */
 public class NotNullValidator implements ColumnValidator {
     @Override
-    public boolean validate(Object value) {
+    public void validate(Object value) {
         if (value == null) {
             throw new NotNullConstraintException(NotNullValidator.class.getSimpleName() + ": Value cannot be null");
         }
-        return true;
     }
 
     @Override

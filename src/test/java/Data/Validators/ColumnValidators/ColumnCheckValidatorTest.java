@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * The type Column check constraint test.
@@ -48,7 +48,7 @@ class ColumnCheckValidatorTest {
         ColumnCheckValidator
                 columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withMinimumValue(0)
                 .build();
-        assertTrue(columnCheckConstraint.validate(-.05));
+        assertDoesNotThrow(() -> columnCheckConstraint.validate(-.05));
     }
 
 
@@ -75,7 +75,7 @@ class ColumnCheckValidatorTest {
         ColumnCheckValidator
                 columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withMaximumValue(10)
                 .build();
-        assertTrue(columnCheckConstraint.validate(10));
+        assertDoesNotThrow(() -> columnCheckConstraint.validate(10));
     }
 
     /**
@@ -87,7 +87,7 @@ class ColumnCheckValidatorTest {
         ColumnCheckValidator
                 columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withRange(0, 10)
                 .build();
-        assertTrue(columnCheckConstraint.validate(5));
+        assertDoesNotThrow(() -> columnCheckConstraint.validate(5));
     }
 
     /**
@@ -225,6 +225,11 @@ class ColumnCheckValidatorTest {
                 new ColumnCheckValidator.CheckConstraintBuilder(this.varcharColumn.getDataType()).withAcceptedValues("Test1", "Test")
                         .build();
         Assertions.assertEquals(columnCheckConstraint, columnCheckConstraint1);
+    }
+
+    @Test
+    public void build_WithBothRangeAndAcceptedValues_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> new ColumnCheckValidator.CheckConstraintBuilder(this.varcharColumn.getDataType()).withRange(0,1).withAcceptedValues("TEst").build());
     }
 
 

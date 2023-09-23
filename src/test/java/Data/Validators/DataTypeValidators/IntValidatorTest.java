@@ -3,15 +3,14 @@ package Data.Validators.DataTypeValidators;
 import Data.Exceptions.MismatchedDataTypeException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class IntValidatorTest {
     private final IntValidator intValidator = new IntValidator();
 
     @Test
     public void intObjectIsValid() {
-        assertTrue(intValidator.validate(1));
+        assertDoesNotThrow(() -> intValidator.validate(1));
     }
 
     /**
@@ -27,7 +26,7 @@ class IntValidatorTest {
      */
     @Test
     public void convertibleDoubleIsValid() {
-        assertTrue(intValidator.validate(1.0));
+        assertDoesNotThrow(() -> intValidator.validate(1.0));
     }
 
     /**

@@ -4,6 +4,7 @@ import Data.Exceptions.PrimaryKeyConstraintException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -19,14 +20,14 @@ class PrimaryKeyConstraintTest {
 
     @Test
     void addValueNotInPrimaryKeyThrowsNoException() {
-        primaryKeyValidator.validate(1);
+        assertDoesNotThrow(() -> primaryKeyValidator.validate(1));
     }
 
     @Test
     void addMultipleValuesNotInPrimaryKeyThrowsNoException() {
-        primaryKeyValidator.validate(1);
-        primaryKeyValidator.validate(2);
-        primaryKeyValidator.validate(3);
+        assertDoesNotThrow(() -> primaryKeyValidator.validate(1));
+        assertDoesNotThrow(() -> primaryKeyValidator.validate(2));
+        assertDoesNotThrow(() -> primaryKeyValidator.validate(3));
     }
 
     @Test

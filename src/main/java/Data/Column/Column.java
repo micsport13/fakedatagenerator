@@ -93,13 +93,12 @@ public class Column {
      * @return true if the value is valid for the column
      * @throws MismatchedDataTypeException if the value is not of the correct data type
      */
-    public boolean isValid(Object value) {
+    public boolean isValid(Object value) {  // TODO: Should this be a boolean?
         for (Validator validator : this.constraints) {
-            if (!validator.validate(value)) {
-                return false;
-            }
+            validator.validate(value);
         }
-        return this.dataTypeValidator.validate(value);
+        this.dataTypeValidator.validate(value);
+        return true;
     }
 
     @Override

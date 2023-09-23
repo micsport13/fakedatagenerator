@@ -26,9 +26,9 @@ public class DataGenerator {
         Column lastNameColumn = new Column("last_name", DataType.VARCHAR, new NotNullValidator());
         Column emailColumn = new Column("email", DataType.VARCHAR, new NotNullValidator());
         Column isAdmin = new Column("is_admin", DataType.BOOLEAN, new NotNullValidator());
-        Table members = new Table("Members", new LinkedHashSet<>(List.of(idColumn, firstNameColumn, lastNameColumn, emailColumn, isAdmin)));
+        Table members = new Table("Members", idColumn, firstNameColumn, lastNameColumn, emailColumn, isAdmin);
         members.addTableConstraint(idColumn, new PrimaryKeyValidator());
-        members.addTableConstraint(idColumn, new UniqueValidator());
+        members.addTableConstraint(idColumn, new UniqueValidator()); // FIXME: This overwrites existing validators.
         //members.addTableConstraint(emailColumn, new UniqueValidator());
         long startTime = System.nanoTime();
         for (int i = 0; i < 1_000; i++) {
@@ -47,7 +47,7 @@ public class DataGenerator {
         long endTime = System.nanoTime();
         System.out.println("Time taken: " + -(startTime - endTime) / 1_000_000 + "ms");
         System.out.println(members);
-        System.out.println(members.getSchema().toString());
-        System.out.println(members.printTable());
+        //System.out.println(members.getSchema().toString());
+        //System.out.println(members.printTable());
     }
 }

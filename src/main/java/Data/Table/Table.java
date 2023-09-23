@@ -22,7 +22,7 @@ public class Table {
      */
     public Table(String name) {
         this.name = name;
-        this.schema = new Schema(new LinkedHashSet<>());
+        this.schema = new Schema();
     }
 
     /**
@@ -33,24 +33,19 @@ public class Table {
      */
     public Table(String name, Entity entity) {
         this.name = name;
-        this.schema = new Schema(entity.getColumnValueMapping()
-                                         .keySet());
-    }
-
-    public Table(String name, Set<Column> columnList) {
-        this.name = name;
-        this.schema = new Schema(new LinkedHashSet<>(columnList));
+        this.schema = new Schema((Column[]) entity.getColumnValueMapping()
+                                         .keySet().toArray());
     }
     public Table(String name, Column... columns) {
         this.name = name;
-        this.schema = new Schema(new LinkedHashSet<>(List.of(columns)));
+        this.schema = new Schema(columns);
     }
 
     /**
      * Add table constraint.
      *
      * @param column          the column
-     * @param tableConstraint the table constraint
+     * @param tableConstraints the table constraints
      */
     public void addTableConstraint(Column column, TableValidator... tableConstraints) {
         this.schema.addColumn(column, Objects.requireNonNull(tableConstraints, "Table Validator cannot be null"));

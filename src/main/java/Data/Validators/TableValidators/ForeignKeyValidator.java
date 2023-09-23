@@ -30,10 +30,10 @@ public class ForeignKeyValidator implements TableValidator {
     }
 
     @Override
-    public boolean validate(Object value) {
+    public void validate(Object value) {
         this.foreignKeyValues.addAll(this.foreignTable.getColumnValues(foreignColumnName));
         if (this.foreignKeyValues.contains(value)) {
-            return true;
+            return;
         }
         throw new ForeignKeyConstraintException("Value does not exist in the foreign key values");
     }

@@ -11,7 +11,7 @@ class DateTime2ValidatorTest {
 
     @Test
     public void stringWithNoTimeZoneThrowsNoException() {
-        Assertions.assertTrue(dateTime2Validator.validate("2020-01-01T00:00:00.000Z"));
+        Assertions.assertDoesNotThrow(() -> dateTime2Validator.validate("2020-01-01T00:00:00.000Z"));
     }
 
     /**
@@ -19,7 +19,7 @@ class DateTime2ValidatorTest {
      */
     @Test
     public void stringWithTimeZoneThrowsNoException() {
-        Assertions.assertTrue(dateTime2Validator.validate("2020-01-01T00:00:00.000+00:00"));
+        Assertions.assertDoesNotThrow(() -> dateTime2Validator.validate("2020-01-01T00:00:00.000+00:00"));
     }
 
     /**
@@ -28,7 +28,7 @@ class DateTime2ValidatorTest {
     @Test
     public void dateTeimeThrowsNoException() {
         ZonedDateTime zonedDateTime = ZonedDateTime.now();
-        Assertions.assertTrue(dateTime2Validator.validate(zonedDateTime));
+        Assertions.assertDoesNotThrow(() -> dateTime2Validator.validate(zonedDateTime));
     }
 
     /**
@@ -37,7 +37,7 @@ class DateTime2ValidatorTest {
     @Test
     public void validInputOfParameterizedZonedDateTimeThrowsNoException() {
         ZonedDateTime zonedDateTime = ZonedDateTime.of(2023, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC"));
-        Assertions.assertTrue(dateTime2Validator.validate(zonedDateTime));
+        Assertions.assertDoesNotThrow(() -> dateTime2Validator.validate(zonedDateTime));
     }
 
 }

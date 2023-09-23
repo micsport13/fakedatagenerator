@@ -16,12 +16,11 @@ public class UniqueValidator implements TableValidator {
     }
 
     @Override
-    public boolean validate(Object value) {
+    public void validate(Object value) {
         if (this.uniqueValues.contains(value)) {
             throw new UniqueConstraintException(UniqueValidator.class.getSimpleName() + ": Value already exists in the unique constraint");
         }
         this.addValue(value);
-        return true;
     }
 
     @Override

@@ -30,11 +30,9 @@ public class ColumnCheckValidator implements ColumnValidator {
      * Checks if value passed obeys the check constraint
      *
      * @param value the value to be checked
-     * @return
-     * @
      */
     @Override
-    public boolean validate(Object value) {
+    public void validate(Object value) {
         if (value instanceof Integer) {
             double checkValue = ((Integer) value).doubleValue();
             if (min != null && checkValue < min.doubleValue()) {
@@ -48,8 +46,6 @@ public class ColumnCheckValidator implements ColumnValidator {
                 throw new CheckConstraintException("Value is not in the accepted list of values");
             }
         }
-
-        return true;
     }
 
     @Override

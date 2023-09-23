@@ -16,14 +16,13 @@ public class PrimaryKeyValidator implements TableValidator {
     }
 
     @Override
-    public boolean validate(Object value) {
+    public void validate(Object value) {
         if (value == null) {
             throw new PrimaryKeyConstraintException("Primary key cannot be null");
         } else if (primaryKeyValues.contains(value)) {
             throw new PrimaryKeyConstraintException("Primary key must be unique");
         }
         this.addValue(value);
-        return true;
     }
 
     @Override
