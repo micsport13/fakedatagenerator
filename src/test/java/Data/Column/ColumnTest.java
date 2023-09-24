@@ -4,6 +4,7 @@ import Data.DataType.DataType;
 import Data.Validators.ColumnValidators.ColumnCheckValidator;
 import Data.Validators.ColumnValidators.ColumnValidator;
 import Data.Validators.ColumnValidators.NotNullValidator;
+import Data.Validators.TableValidators.UniqueValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +15,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * The type Column test.
  */
 public class ColumnTest {
+    /*
+    TODO: Things to test
+        Column state validation (Validator is correct, Name is correct, dataType is correct)
+        Column validator state (Validator is correct, any column constraints are present)
+        Prevent duplicate constraints (Also, prevent conflicting constraints)
+        Name validation (Column cannot have special symbols)
+     */
     /**
      * The Int column.
      */
@@ -33,7 +41,7 @@ public class ColumnTest {
      */
 // Testing adding constraints
     @Test
-    public void addNullConstraint() {
+    public void addConstraint_WithNullConstraint_AddsSuccessfullyToColumnConstraints() {
         ColumnValidator columnConstraint = new NotNullValidator();
         intColumn.addConstraint(columnConstraint);
         assertTrue(intColumn.getConstraints()
@@ -44,7 +52,7 @@ public class ColumnTest {
      * Add check constraint.
      */
     @Test
-    public void addCheckConstraint() {
+    public void addConstraint_WithValidCheckConstraint_AddsSuccessfullyToColumnConstraints() {
         ColumnValidator columnConstraint = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withRange(0, 10)
                 .build();
         intColumn.addConstraint(columnConstraint);
@@ -57,9 +65,19 @@ public class ColumnTest {
      */
 // Testing equality of columns
     @Test
-    public void columnsWithSameParametersAreEqual() {
+    public void equals_WithAnotherColumnOfSameNameAndType_ColumnsAreEqual() {
         Column column = new Column("int", DataType.INT);
         assertEquals(intColumn, column);
+    }
+
+    @Test
+    public void addMultipleConstraints_WithValidConstraints_IncludesAllConstraints() {
+        this.intColumn.addConstraint(new NotNullValidator());
+        ColumnValidator testCheckConstraint = new ColumnCheckValidator
+                .CheckConstraintBuilder(this.intColumn.getDataType())
+                .withMinimumValue(1).build();
+        this.intColumn.addConstraint(testCheckConstraint);
+        assertTrue(this.intColumn.getConstraints().size() == 2);
     }
 
 }

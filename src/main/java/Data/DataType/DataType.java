@@ -30,6 +30,7 @@ public enum DataType {
      * Varchar data type.
      */
     VARCHAR(String.class);
+    // TODO: Add more data types like Double, Array?, etc.
 
     private final Class<?> associatedClass;
 

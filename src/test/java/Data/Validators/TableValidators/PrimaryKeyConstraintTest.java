@@ -19,19 +19,19 @@ class PrimaryKeyConstraintTest {
     }
 
     @Test
-    void addValueNotInPrimaryKeyThrowsNoException() {
+    void validate_addValueNotInPrimaryKey_ThrowsNoException() {
         assertDoesNotThrow(() -> primaryKeyValidator.validate(1));
     }
 
     @Test
-    void addMultipleValuesNotInPrimaryKeyThrowsNoException() {
+    void validate_addMultipleValuesNotInPrimaryKey_ThrowsNoException() {
         assertDoesNotThrow(() -> primaryKeyValidator.validate(1));
         assertDoesNotThrow(() -> primaryKeyValidator.validate(2));
         assertDoesNotThrow(() -> primaryKeyValidator.validate(3));
     }
 
     @Test
-    void addValueInPrimaryKeyThrowsException() {
+    void validate_addExistingValueToPrimaryKey_ThrowsPrimaryKeyConstraintException() {
         primaryKeyValidator.validate(1);
         assertThrows(PrimaryKeyConstraintException.class, () -> primaryKeyValidator.validate(1));
     }

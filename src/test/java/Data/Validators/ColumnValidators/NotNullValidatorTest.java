@@ -7,17 +7,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class NotNullValidatorTest {
-    /**
-     * The Test column.
-     */
-    Column testColumn = new Column("Test", DataType.INT, new NotNullValidator());
+    private NotNullValidator notNullValidator = new NotNullValidator();
 
     /**
      * Null input throws not null constraint exception.
      */
     @Test
-    public void nullInputThrowsNotNullConstraintException() {
-        Assertions.assertThrows(NotNullConstraintException.class, () -> testColumn.isValid(null));
+    public void validate_nullInput_ThrowsNotNullConstraintException() {
+        Assertions.assertThrows(NotNullConstraintException.class, () -> notNullValidator.validate(null));
     }
 
     /**
@@ -25,6 +22,6 @@ class NotNullValidatorTest {
      */
     @Test
     public void notNullInputThrowsNoException() {
-        Assertions.assertDoesNotThrow(() -> testColumn.isValid(1));
+        Assertions.assertDoesNotThrow(() -> notNullValidator.validate(1));
     }
 }

@@ -9,7 +9,7 @@ class IntValidatorTest {
     private final IntValidator intValidator = new IntValidator();
 
     @Test
-    public void intObjectIsValid() {
+    public void validate_IntValue_ThrowsNoException() {
         assertDoesNotThrow(() -> intValidator.validate(1));
     }
 
@@ -17,7 +17,7 @@ class IntValidatorTest {
      * Convertible string to int is valid.
      */
     @Test
-    public void convertibleStringToIntIsValid() {
+    public void validate_ConvertibleStringValue_ThrowsMismatchedDataTypeException() {
         assertThrows(MismatchedDataTypeException.class, () -> intValidator.validate("1"));
     }
 
@@ -25,7 +25,7 @@ class IntValidatorTest {
      * Convertible double is valid.
      */
     @Test
-    public void convertibleDoubleIsValid() {
+    public void validate_convertibleDoubleValue_ThrowsNoException() {
         assertDoesNotThrow(() -> intValidator.validate(1.0));
     }
 
@@ -33,15 +33,19 @@ class IntValidatorTest {
      * Inconvertible string throws exception.
      */
     @Test
-    public void inconvertibleStringThrowsException() {
+    public void validate_InconvertibleStringValue_ThrowsMismatchedDataTypeException() {
         assertThrows(MismatchedDataTypeException.class, () ->
                 intValidator.validate("Test"));
     }
 
     @Test
-    public void otherObjectThrowsException() {
+    public void validate_NonNumericValue_ThrowsMismatchedDataTypeException() {
         assertThrows(MismatchedDataTypeException.class, () ->
                 intValidator.validate(new Object()));
+    }
+    @Test
+    public void validate_NullInput_ThrowsNoException() {
+        assertDoesNotThrow(() -> intValidator.validate(null));
     }
 
 }

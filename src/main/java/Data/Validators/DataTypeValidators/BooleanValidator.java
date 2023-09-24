@@ -13,6 +13,9 @@ public class BooleanValidator implements DataTypeValidator {
      * @param value Object value to be checked for {@link Column#isValid(Object)}
      */
     public void validate(Object value) {
+        if (value == null) {
+            return;
+        }
         if (value instanceof Integer && ((Integer) value == 1 || (Integer) value == 0)) {
             return;
         }

@@ -8,23 +8,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DataTypeValidatorFactoryTest {
     @Test
-    void testCreateValidator() {
-        DataTypeValidator booleanValidator = DataTypeValidatorFactory.createValidator(DataType.BOOLEAN);
-        assertTrue(booleanValidator instanceof BooleanValidator);
+    void createValidator_AllValidDataTypes_ReturnsCorrectValidatorType() {
+        assertTrue(DataTypeValidatorFactory.createValidator(DataType.BOOLEAN) instanceof BooleanValidator);
 
-        DataTypeValidator intValidator = DataTypeValidatorFactory.createValidator(DataType.INT);
-        assertTrue(intValidator instanceof IntValidator);
+        assertTrue(DataTypeValidatorFactory.createValidator(DataType.INT) instanceof IntValidator);
 
-        DataTypeValidator varcharValidator = DataTypeValidatorFactory.createValidator(DataType.VARCHAR);
-        assertTrue(varcharValidator instanceof VarcharValidator);
+        assertTrue(DataTypeValidatorFactory.createValidator(DataType.VARCHAR) instanceof VarcharValidator);
 
-        DataTypeValidator dateTime2Validator = DataTypeValidatorFactory.createValidator(DataType.DATETIME2);
-        assertTrue(dateTime2Validator instanceof DateTime2Validator);
+        assertTrue(DataTypeValidatorFactory.createValidator(DataType.DATETIME2) instanceof DateTime2Validator);
 
-        DataTypeValidator dateTimeOffsetValidator = DataTypeValidatorFactory.createValidator(DataType.DATETIMEOFFSET);
-        assertTrue(dateTimeOffsetValidator instanceof DateTimeOffsetValidator);
+        assertTrue(DataTypeValidatorFactory.createValidator(DataType.DATETIMEOFFSET) instanceof DateTimeOffsetValidator);
 
-        DataTypeValidator floatValidator = DataTypeValidatorFactory.createValidator(DataType.FLOAT);
-        assertTrue(floatValidator instanceof FloatValidator);
+        assertTrue(DataTypeValidatorFactory.createValidator(DataType.FLOAT) instanceof FloatValidator);
     }
 }

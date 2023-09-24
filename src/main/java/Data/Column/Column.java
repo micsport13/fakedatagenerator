@@ -6,6 +6,7 @@ import Data.Validators.ColumnValidators.ColumnValidator;
 import Data.Validators.ColumnValidators.NotNullValidator;
 import Data.Validators.DataTypeValidators.DataTypeValidator;
 import Data.Validators.DataTypeValidators.DataTypeValidatorFactory;
+import Data.Validators.OtherValidators.NameValidator;
 import Data.Validators.Validator;
 
 import java.util.HashSet;
@@ -18,11 +19,13 @@ import java.util.Set;
  * Contains a name, a data type, and a set of constraints
  */
 public class Column {
+    // TODO: Add static regex column name checking (Name validator?)
 
     private final String name;
     private final DataType dataType;
     private final DataTypeValidator dataTypeValidator;
     private final Set<ColumnValidator> constraints;
+    // TODO: Add default value option/ Determine where it needs to go
 
     /**
      * Instantiates a column without constraints
@@ -31,6 +34,7 @@ public class Column {
      * @param dataType
      */
     public Column(String columnName, DataType dataType) {
+        NameValidator.validate(columnName);
         this.name = columnName;
         this.dataType = dataType;
         this.dataTypeValidator = DataTypeValidatorFactory.createValidator(dataType);

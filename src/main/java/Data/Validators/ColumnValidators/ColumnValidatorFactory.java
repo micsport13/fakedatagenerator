@@ -14,6 +14,9 @@ public class ColumnValidatorFactory {
     }
 
     public static Validator createValidator(DataType dataType, Number minValue, Number maxValue) {
+        if (dataType == null) {
+            throw new IllegalArgumentException("Data type cannot be null");
+        }
         if (minValue != null && maxValue != null) {
             return new ColumnCheckValidator.CheckConstraintBuilder(dataType).withRange(minValue, maxValue).build();
         }
@@ -25,7 +28,10 @@ public class ColumnValidatorFactory {
         }
         throw new IllegalArgumentException("Unable to create numeric check constraint");
     }
-    public static Validator createValidator(String... acceptedValues) {
+    public static Validator createValidator(String firstAcceptedValue, String... acceptedValues) {
+        if (firstAcceptedValue == null) {
+            throw new IllegalArgumentException("Must provide at least one acceptable value");
+        }
         return new ColumnCheckValidator.CheckConstraintBuilder(DataType.VARCHAR).withAcceptedValues(acceptedValues).build();
     }
 

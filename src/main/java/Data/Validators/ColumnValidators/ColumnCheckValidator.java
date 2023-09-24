@@ -15,8 +15,8 @@ import java.util.Set;
  */
 public class ColumnCheckValidator implements ColumnValidator {
     private final DataType dataType;
-    private final Number min;
-    private final Number max;
+    private final Number min; //TODO: Figure out how to keep this generic yet converts to the datatype class for precision
+    private final Number max; // TODO: Figure out how to keep this generic yet converts to the datatype for precision
     private final Set<String> acceptedValues;
 
     private ColumnCheckValidator(CheckConstraintBuilder builder) {
@@ -33,12 +33,12 @@ public class ColumnCheckValidator implements ColumnValidator {
      */
     @Override
     public void validate(Object value) {
-        if (value instanceof Integer) {
-            double checkValue = ((Integer) value).doubleValue();
-            if (min != null && checkValue < min.doubleValue()) {
+        if (Number.class.isAssignableFrom(value.getClass())) {
+            Number checkValue = (Number) value;
+            if (this.min != null && checkValue.doubleValue() < this.min.doubleValue()) {
                 throw new CheckConstraintException("Value is below the minimum value allowed by the check constraint");
             }
-            if (max != null && checkValue > max.doubleValue()) {
+            if (this.max != null && checkValue.doubleValue() > this.max.doubleValue()) {
                 throw new CheckConstraintException("Value is above the maximum value allowed by the check constraint");
             }
         } else if (value instanceof String stringValue) {
@@ -111,8 +111,8 @@ public class ColumnCheckValidator implements ColumnValidator {
     public static class CheckConstraintBuilder {
         private final DataType dataType;
         private final Set<String> acceptedValues = new HashSet<>();
-        private Number min;
-        private Number max;
+        private Number min; // TODO: Figure out how to keep this generic yet converts to the datatype for precision
+        private Number max; // TODO: Figure out how to keep this generic yet converts to the datatype for precision
 
         /**
          * Instantiates a new Check constraint builder.

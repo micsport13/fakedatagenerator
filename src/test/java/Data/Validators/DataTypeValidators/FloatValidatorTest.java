@@ -14,7 +14,7 @@ class FloatValidatorTest {
      * Valid float throws no exception.
      */
     @Test
-    public void validFloatThrowsNoException() {
+    public void validate_FloatValue_ThrowsNoException() {
         assertDoesNotThrow(() -> floatValidator.validate(3.0));
     }
 
@@ -22,7 +22,7 @@ class FloatValidatorTest {
      * Integer throws no exception.
      */
     @Test
-    public void integerThrowsNoException() {
+    public void validate_IntegerValue_ThrowsNoException() {
         assertDoesNotThrow(()-> floatValidator.validate(3));
     }
 
@@ -30,7 +30,7 @@ class FloatValidatorTest {
      * String unable to convert throws exception.
      */
     @Test
-    public void stringUnableToConvertThrowsException() {
+    public void validate_StringUnableToConvertToFloat_ThrowsException() {
         assertThrows(MismatchedDataTypeException.class, () -> floatValidator.validate("Test"));
     }
 
@@ -38,7 +38,7 @@ class FloatValidatorTest {
      * String able to convert throws no exception.
      */
     @Test
-    public void stringAbleToConvertThrowsNoException() {
+    public void validate_StringAbleToConvertToFloat_ThrowsNoException() {
         assertDoesNotThrow(() -> floatValidator.validate("3.0"));
     }
 
@@ -46,8 +46,13 @@ class FloatValidatorTest {
      * Date time throws exception.
      */
     @Test
-    public void dateTimeThrowsException() {
+    public void validate_DateTimeObject_ThrowsException() {
         assertThrows(MismatchedDataTypeException.class, () -> floatValidator.validate(ZonedDateTime.now()));
+    }
+
+    @Test
+    public void validate_NullInput_ThrowsNoException() {
+        assertDoesNotThrow(() -> floatValidator.validate(null));
     }
 
 }

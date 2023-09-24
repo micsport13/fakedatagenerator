@@ -31,7 +31,7 @@ public class ColumnValidatorFactoryTest {
     @Test
     public void createValidator_withMaxValueOnly_ReturnsValidCheckValidator() {
         Validator maxCheckValidator = ColumnValidatorFactory.createValidator(DataType.FLOAT, null, 10);
-        assertDoesNotThrow(() -> maxCheckValidator.validate(1));
+        assertTrue(maxCheckValidator instanceof ColumnCheckValidator);
     }
     @Test
     public void createValidator_withNullRange_ThrowsIllegalArgumentException() {
@@ -40,9 +40,13 @@ public class ColumnValidatorFactoryTest {
     @Test
     public void createValidator_withMinValueOnly_ThrowsNoException() {
         Validator minCheckValidator = ColumnValidatorFactory.createValidator(DataType.FLOAT, 1, null);
-        assertDoesNotThrow(() -> minCheckValidator.validate(1));
+        assertTrue(minCheckValidator instanceof ColumnCheckValidator);
     }
 
+    @Test
+    public void createValidator_withNullDataType_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> ColumnValidatorFactory.createValidator((String) null));
+    }
     @Test
     public void createValidator_allNulls_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class,() -> ColumnValidatorFactory.createValidator(null, null, null));

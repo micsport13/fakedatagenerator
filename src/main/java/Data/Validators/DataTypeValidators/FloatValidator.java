@@ -5,6 +5,9 @@ import Data.Exceptions.MismatchedDataTypeException;
 public class FloatValidator implements DataTypeValidator {
     @Override
     public void validate(Object value) {
+        if (value == null) {
+            return;
+        }
         if (value instanceof String) {
             try {
                 Double.parseDouble((String) value);

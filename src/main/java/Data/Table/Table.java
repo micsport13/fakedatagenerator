@@ -25,17 +25,6 @@ public class Table {
         this.schema = new Schema();
     }
 
-    /**
-     * Instantiates a new Table.
-     *
-     * @param name   the name
-     * @param entity the entity
-     */
-    public Table(String name, Entity entity) {
-        this.name = name;
-        this.schema = new Schema((Column[]) entity.getColumnValueMapping()
-                                         .keySet().toArray());
-    }
     public Table(String name, Column... columns) {
         this.name = name;
         this.schema = new Schema(columns);
@@ -48,6 +37,7 @@ public class Table {
      * @param tableConstraints the table constraints
      */
     public void addTableConstraint(Column column, TableValidator... tableConstraints) {
+        // TODO: Prevalidate adding the constraint before adding the constraint
         this.schema.addColumn(column, Objects.requireNonNull(tableConstraints, "Table Validator cannot be null"));
     }
 
@@ -61,6 +51,8 @@ public class Table {
     }
 
     public Set<Object> getColumnValues(String columnName) {
+        //TODO: Should this be a set or an array/list?
+        //  Set only has context for eliminating duplicates
         Set<Object> columnValues = new HashSet<>();
         for (Entity entity : entities) {
             columnValues.add(entity.getValue(columnName));

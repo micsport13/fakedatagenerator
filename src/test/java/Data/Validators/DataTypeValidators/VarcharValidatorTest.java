@@ -3,6 +3,7 @@ package Data.Validators.DataTypeValidators;
 import Data.Exceptions.MismatchedDataTypeException;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class VarcharValidatorTest {
@@ -10,9 +11,13 @@ class VarcharValidatorTest {
 
     @Test
 
-    public void nonStringValueThrowsMismatchedDataTypeException() {
+    public void validate_nonStringValue_ThrowsMismatchedDataTypeException() {
         assertThrows(MismatchedDataTypeException.class, () ->
                 varcharValidator.validate(1)
         );
+    }
+    @Test
+    public void validate_NullInput_ThrowsNoException() {
+        assertDoesNotThrow(() -> varcharValidator.validate(null));
     }
 }
