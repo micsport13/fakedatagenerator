@@ -1,8 +1,6 @@
 package Data.Validators.TableValidators;
 
-import Data.DataType.DataType;
 import Data.Table.Table;
-import Data.Validators.ColumnValidators.ColumnCheckValidator;
 import Data.Validators.ConstraintType;
 import Data.Validators.Validator;
 
@@ -26,11 +24,5 @@ public class TableValidatorFactory {
             throw new IllegalArgumentException("Cannot pass a table to a non-foreign key constraint");
         }
         return new ForeignKeyValidator(foreignTable, columnName);
-    }
-    public static Validator createValidator(ConstraintType constraintType, String... acceptedValues){
-        if (constraintType != ConstraintType.CHECK) {
-            throw new IllegalArgumentException("Cannot pass a string array to a non-check constraint");
-        }
-        return new ColumnCheckValidator.CheckConstraintBuilder(DataType.VARCHAR).withAcceptedValues(acceptedValues).build();
     }
 }

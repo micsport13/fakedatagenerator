@@ -97,7 +97,7 @@ public class Table {
      * @return the boolean
      */
     public boolean isValidEntity(Entity entity) {
-        for (Map.Entry<Column, Set<TableValidator>> tableConstraints : this.schema.getTableConstraints()
+        for (Map.Entry<Column<?>, Set<TableValidator>> tableConstraints : this.schema.getTableConstraints()
                 .entrySet()) {
             if (tableConstraints.getValue() != null) {
                 tableConstraints.getValue()

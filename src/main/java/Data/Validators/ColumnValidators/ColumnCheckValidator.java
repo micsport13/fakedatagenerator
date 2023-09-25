@@ -1,11 +1,10 @@
 package Data.Validators.ColumnValidators;
 
-import Data.DataType.DataType;
 import Data.Exceptions.CheckConstraintException;
 import Data.Validators.TableValidators.TableCheckValidator;
 
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -13,14 +12,12 @@ import java.util.Set;
  * Check Validator Column
  * Not to be confused with {@link TableCheckValidator}
  */
-public class ColumnCheckValidator implements ColumnValidator {
-    private final DataType dataType;
+public final class ColumnCheckValidator implements ColumnValidator {
     private final Number min; //TODO: Figure out how to keep this generic yet converts to the datatype class for precision
     private final Number max; // TODO: Figure out how to keep this generic yet converts to the datatype for precision
     private final Set<String> acceptedValues;
 
-    private ColumnCheckValidator(CheckConstraintBuilder builder) {
-        this.dataType = builder.dataType;
+    private <T> ColumnCheckValidator(CheckConstraintBuilder<T> builder) {
         this.min = builder.min;
         this.max = builder.max;
         this.acceptedValues = builder.acceptedValues;
@@ -108,8 +105,8 @@ public class ColumnCheckValidator implements ColumnValidator {
     /**
      * The type Check constraint builder.
      */
-    public static class CheckConstraintBuilder {
-        private final DataType dataType;
+    public final static class CheckConstraintBuilder<T> {
+        private final T dataType;
         private final Set<String> acceptedValues = new HashSet<>();
         private Number min; // TODO: Figure out how to keep this generic yet converts to the datatype for precision
         private Number max; // TODO: Figure out how to keep this generic yet converts to the datatype for precision
@@ -117,7 +114,7 @@ public class ColumnCheckValidator implements ColumnValidator {
         /**
          * Instantiates a new Check constraint builder.
          */
-        public CheckConstraintBuilder(DataType dataType) {
+        public CheckConstraintBuilder(T dataType) {
             this.dataType = dataType;
         }
 
@@ -127,10 +124,7 @@ public class ColumnCheckValidator implements ColumnValidator {
          * @param minimumValue the minimum value
          * @return the check constraint builder
          */
-        public CheckConstraintBuilder withMinimumValue(Number minimumValue) {
-            if (!Number.class.isAssignableFrom(this.dataType.getAssociatedClass())) {
-                throw new IllegalArgumentException("Cannot set a minimum value on a non-numeric column");
-            }
+        public <U extends Number> CheckConstraintBuilder<T> withMinimumValue(U minimumValue) {
             this.min = Objects.requireNonNull(minimumValue);
             return this;
         }
@@ -141,10 +135,7 @@ public class ColumnCheckValidator implements ColumnValidator {
          * @param maximumValue the maximum value
          * @return the check constraint builder
          */
-        public CheckConstraintBuilder withMaximumValue(Number maximumValue) {
-            if (!Number.class.isAssignableFrom(this.dataType.getAssociatedClass())) {
-                throw new IllegalArgumentException("Cannot set a minimum value on a non-numeric column");
-            }
+        public <U extends Number> CheckConstraintBuilder<T> withMaximumValue(U maximumValue) {
             this.max = Objects.requireNonNull(maximumValue);
             return this;
         }
@@ -157,22 +148,16 @@ public class ColumnCheckValidator implements ColumnValidator {
          * @param upperBound the upper bound
          * @return the check constraint builder
          */
-        public CheckConstraintBuilder withRange(Number lowerBound, Number upperBound) {
-            if (!Number.class.isAssignableFrom(this.dataType.getAssociatedClass())) {
-                throw new IllegalArgumentException("Cannot assign ranges to non-numeric checks");
-            }
-            this.min = Objects.requireNonNull(lowerBound)
-                    .doubleValue();
-            this.max = Objects.requireNonNull(upperBound)
-                    .doubleValue();
+        public <U extends Number> CheckConstraintBuilder<T> withRange(U lowerBound, U upperBound) {
+            this.min = Objects.requireNonNull(lowerBound);
+            this.max = Objects.requireNonNull(upperBound);
             return this;
         }
 
-        public CheckConstraintBuilder withAcceptedValues(String... acceptedValues) {
-            if (!String.class.isAssignableFrom(this.dataType.getAssociatedClass())) {
-                throw new IllegalArgumentException("Cannot assign accepted string values to non-string type");
-            }
-            this.acceptedValues.addAll(Arrays.asList(Objects.requireNonNull(acceptedValues)));
+        @SafeVarargs
+        public final <U extends String> CheckConstraintBuilder<T> withAcceptedValues(U firstAcceptedValue, U... acceptedValues) {
+            this.acceptedValues.add(Objects.requireNonNull(firstAcceptedValue));
+            this.acceptedValues.addAll(List.of(acceptedValues));
             return this;
         }
 
@@ -182,6 +167,9 @@ public class ColumnCheckValidator implements ColumnValidator {
          * @return the column check constraint
          */
         public ColumnCheckValidator build() {
+            if (!this.acceptedValues.isEmpty() && (this.min != null || this.max != null)) {
+                throw new IllegalArgumentException("Only one of accepted values or range can be specified");
+            }
             return new ColumnCheckValidator(this);
         }
     }

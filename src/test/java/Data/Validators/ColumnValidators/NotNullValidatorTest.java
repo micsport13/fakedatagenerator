@@ -1,7 +1,5 @@
 package Data.Validators.ColumnValidators;
 
-import Data.Column.Column;
-import Data.DataType.DataType;
 import Data.Exceptions.NotNullConstraintException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -1,10 +1,8 @@
 package Data.Column;
 
-import Data.DataType.DataType;
 import Data.Validators.ColumnValidators.ColumnCheckValidator;
 import Data.Validators.ColumnValidators.ColumnValidator;
 import Data.Validators.ColumnValidators.NotNullValidator;
-import Data.Validators.TableValidators.UniqueValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,14 +23,14 @@ public class ColumnTest {
     /**
      * The Int column.
      */
-    public Column intColumn;
+    public Column<?> intColumn;
 
     /**
      * Sets .
      */
     @BeforeEach
     public void setup() {
-        intColumn = new Column("int", DataType.INT);
+        intColumn = new Column<>("int", Integer.class);
     }
 
 
@@ -53,7 +51,7 @@ public class ColumnTest {
      */
     @Test
     public void addConstraint_WithValidCheckConstraint_AddsSuccessfullyToColumnConstraints() {
-        ColumnValidator columnConstraint = new ColumnCheckValidator.CheckConstraintBuilder(this.intColumn.getDataType()).withRange(0, 10)
+        ColumnValidator columnConstraint = new ColumnCheckValidator.CheckConstraintBuilder<>(this.intColumn.getDataType()).withRange(0, 10)
                 .build();
         intColumn.addConstraint(columnConstraint);
         assertTrue(intColumn.getConstraints()
@@ -66,7 +64,7 @@ public class ColumnTest {
 // Testing equality of columns
     @Test
     public void equals_WithAnotherColumnOfSameNameAndType_ColumnsAreEqual() {
-        Column column = new Column("int", DataType.INT);
+        Column<Integer> column = new Column<>("int", Integer.class);
         assertEquals(intColumn, column);
     }
 
@@ -74,10 +72,11 @@ public class ColumnTest {
     public void addMultipleConstraints_WithValidConstraints_IncludesAllConstraints() {
         this.intColumn.addConstraint(new NotNullValidator());
         ColumnValidator testCheckConstraint = new ColumnCheckValidator
-                .CheckConstraintBuilder(this.intColumn.getDataType())
+                .CheckConstraintBuilder<>(this.intColumn.getDataType())
                 .withMinimumValue(1).build();
         this.intColumn.addConstraint(testCheckConstraint);
-        assertTrue(this.intColumn.getConstraints().size() == 2);
+        assertEquals(2, this.intColumn.getConstraints()
+                .size());
     }
 
 }

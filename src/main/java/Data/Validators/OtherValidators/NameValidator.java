@@ -1,6 +1,5 @@
 package Data.Validators.OtherValidators;
 
-import Data.Validators.Validator;
 import java.util.regex.Pattern;
 
 public class NameValidator {

@@ -1,6 +1,5 @@
 package Data.Validators.ColumnValidators;
 
-import Data.DataType.DataType;
 import Data.Validators.ConstraintType;
 import Data.Validators.Validator;
 
@@ -13,26 +12,27 @@ public class ColumnValidatorFactory {
         };
     }
 
-    public static Validator createValidator(DataType dataType, Number minValue, Number maxValue) {
+    public static <T extends Number> Validator createValidator(Class<T> dataType, T minValue, T maxValue) {
         if (dataType == null) {
             throw new IllegalArgumentException("Data type cannot be null");
         }
         if (minValue != null && maxValue != null) {
-            return new ColumnCheckValidator.CheckConstraintBuilder(dataType).withRange(minValue, maxValue).build();
+            return new ColumnCheckValidator.CheckConstraintBuilder<>(dataType).withRange(minValue, maxValue).build();
         }
         if (minValue != null) {
-            return new ColumnCheckValidator.CheckConstraintBuilder(dataType).withMinimumValue(minValue).build();
+            return new ColumnCheckValidator.CheckConstraintBuilder<>(dataType).withMinimumValue(minValue).build();
         }
         if (maxValue != null) {
-            return new ColumnCheckValidator.CheckConstraintBuilder(dataType).withMaximumValue(maxValue).build();
+            return new ColumnCheckValidator.CheckConstraintBuilder<>(dataType).withMaximumValue(maxValue).build();
         }
         throw new IllegalArgumentException("Unable to create numeric check constraint");
     }
-    public static Validator createValidator(String firstAcceptedValue, String... acceptedValues) {
+    @SafeVarargs
+    public static <U extends String> Validator createValidator(U firstAcceptedValue, U... acceptedValues) {
         if (firstAcceptedValue == null) {
             throw new IllegalArgumentException("Must provide at least one acceptable value");
         }
-        return new ColumnCheckValidator.CheckConstraintBuilder(DataType.VARCHAR).withAcceptedValues(acceptedValues).build();
+        return new ColumnCheckValidator.CheckConstraintBuilder<>(String.class).withAcceptedValues(firstAcceptedValue, acceptedValues).build();
     }
 
 

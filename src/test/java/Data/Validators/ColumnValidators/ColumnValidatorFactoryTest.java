@@ -1,11 +1,11 @@
 package Data.Validators.ColumnValidators;
 
-import Data.DataType.DataType;
 import Data.Validators.ConstraintType;
 import Data.Validators.Validator;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ColumnValidatorFactoryTest {
 
@@ -20,26 +20,21 @@ public class ColumnValidatorFactoryTest {
     }
     @Test
     public void createValidator_withRangeValues_ReturnsValidCheckValidator() {
-        assertTrue(ColumnValidatorFactory.createValidator(DataType.FLOAT, 0, 10) instanceof ColumnCheckValidator);
-    }
-
-    @Test
-    public void createValidator_withIncorrectDataType_ThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> ColumnValidatorFactory.createValidator(DataType.VARCHAR, 0, 10));
+        assertTrue(ColumnValidatorFactory.createValidator(Integer.class, 0, 10) instanceof ColumnCheckValidator);
     }
 
     @Test
     public void createValidator_withMaxValueOnly_ReturnsValidCheckValidator() {
-        Validator maxCheckValidator = ColumnValidatorFactory.createValidator(DataType.FLOAT, null, 10);
+        Validator maxCheckValidator = ColumnValidatorFactory.createValidator(Integer.class, null, 10);
         assertTrue(maxCheckValidator instanceof ColumnCheckValidator);
     }
     @Test
     public void createValidator_withNullRange_ThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> ColumnValidatorFactory.createValidator(DataType.FLOAT, null, null));
+        assertThrows(IllegalArgumentException.class, () -> ColumnValidatorFactory.createValidator(Float.class, null, null));
     }
     @Test
     public void createValidator_withMinValueOnly_ThrowsNoException() {
-        Validator minCheckValidator = ColumnValidatorFactory.createValidator(DataType.FLOAT, 1, null);
+        Validator minCheckValidator = ColumnValidatorFactory.createValidator(Integer.class, 1, null);
         assertTrue(minCheckValidator instanceof ColumnCheckValidator);
     }
 

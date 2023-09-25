@@ -1,7 +1,6 @@
 package Data.Table;
 
 import Data.Column.Column;
-import Data.DataType.DataType;
 import Data.Entities.Entity;
 import Data.Exceptions.UniqueConstraintException;
 import Data.Validators.TableValidators.UniqueValidator;
@@ -9,7 +8,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * The type Table test.
@@ -31,8 +31,8 @@ class TableTest {
     @BeforeEach
     public void setUp() {
         this.table = new Table("TableTest");
-        this.testEntity = new Entity.Builder(new Column("id", DataType.INT),
-                                             new Column("name", DataType.VARCHAR)).withColumnValue("id", 1)
+        this.testEntity = new Entity.Builder(new Column<>("id", Integer.class),
+                                             new Column<>("name", String.class)).withColumnValue("id", 1)
                 .withColumnValue("name", "Dave")
                 .build();
     }
@@ -53,7 +53,8 @@ class TableTest {
     public void add_WithMultipleEntities_AllAddedSucessfullyToTable() {
         this.table.add(this.testEntity);
         this.table.add(this.testEntity);
-        assertTrue(this.table.getEntities().size() == 2);
+        assertEquals(2, this.table.getEntities()
+                .size());
     }
 
     /**
@@ -71,7 +72,7 @@ class TableTest {
     @Test
     public void add_MultipleEntitiesOnUniqueColumn_ThrowsNoException() {
         Entity testEntity2 =
-                new Entity.Builder(new Column("id", DataType.INT), new Column("name", DataType.VARCHAR)).withColumnValue("id", 2)
+                new Entity.Builder(new Column<>("id", Integer.class), new Column<>("name", String.class)).withColumnValue("id", 2)
                         .withColumnValue("name", "John")
                         .build();
         this.table.addTableConstraint(this.testEntity.getColumnByName("name"), new UniqueValidator());
