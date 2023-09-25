@@ -25,9 +25,9 @@ public class Table {
         this.schema = new Schema();
     }
 
-    public Table(String name, Column... columns) {
+    public Table(String name, Schema schema) {
         this.name = name;
-        this.schema = new Schema(columns);
+        this.schema = schema;
     }
 
     /**
@@ -36,7 +36,7 @@ public class Table {
      * @param column          the column
      * @param tableConstraints the table constraints
      */
-    public void addTableConstraint(Column column, TableValidator... tableConstraints) {
+    public <T> void addTableConstraint(Column<T> column, TableValidator... tableConstraints) {
         // TODO: Prevalidate adding the constraint before adding the constraint
         this.schema.addColumn(column, Objects.requireNonNull(tableConstraints, "Table Validator cannot be null"));
     }
@@ -123,7 +123,7 @@ public class Table {
         sb.append("Schema: \n")
                 .append(this.schema.toString());
         sb.append("Values: \n");
-        for (Column column : this.schema.getColumns()) {
+        for (Column<?> column : this.schema.getColumns()) {
             sb.append(column.getName())
                     .append(",");
         }

@@ -138,13 +138,21 @@ public class Entity {
          * @return the builder
          */
         public <T> Builder withColumnValue(String columnName, T value) {
+            if (value == null) {
+                throw new IllegalArgumentException("Value cannot be null if calling this method");
+            }
             for (Column<?> column : this.columnValueMapping.getMap().keySet()) {
                 if (column.getName()
                         .equals(columnName) && column.getDataType().isInstance(value)) {
+                    @SuppressWarnings("unchecked")
+                            // Since the column type cannot be handled at compile time, this unchecked cast must be here.
                     Column<T> correctColumn = (Column<T>) column;
                     this.columnValueMapping.add(correctColumn, value);
-                } else if (!column.getDataType().isInstance(value)) {
-                    throw new IllegalArgumentException("Value does not match column data type");
+                    return this;
+                }
+                if (column.getName()
+                        .equals(columnName) && !column.getDataType().isInstance(value)) {
+                    throw new IllegalArgumentException("Value does not match the column type of " + column.getDataType().getSimpleName() + " of the column: " + columnName);
                 }
             }
             return this;
@@ -166,9 +174,6 @@ public class Entity {
          * @return the entity
          */
         public Entity build() {
-            //for (Map.Entry<Column<?>, Object> columnValueMapping: this.columnValueMapping.getMap().entrySet()) {
-             //   columnValueMapping.getKey().isValid(columnValueMapping.getValue());
-            //}
             return new Entity(this);
         }
 

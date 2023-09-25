@@ -10,7 +10,7 @@ public class NameValidator {
             throw new IllegalArgumentException("Name must be a string");
         }
         if (!NAME_VALIDATION.matcher((String) value).matches()) {
-            throw new IllegalArgumentException("Name is not valid");
+            throw new IllegalArgumentException("Name must only contain characters A-Z, 0-9, or _");
         }
     }
 }
