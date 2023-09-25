@@ -137,7 +137,7 @@ public class Entity {
          * @param value      the value
          * @return the builder
          */
-        public <T> Builder withColumnValue(String columnName, T value) {
+        public <T> Builder withColumnValue(String columnName, T value) throws ClassCastException {
             if (value == null) {
                 throw new IllegalArgumentException("Value cannot be null if calling this method");
             }

@@ -18,8 +18,13 @@ public class Schema implements Validator {
         }
     }
 
-    public void addColumn(Column<?> column, TableValidator... tableValidators) {
-        this.tableConstraints.put(column, new HashSet<>(Set.of(tableValidators)));
+    public void addColumn(Column<?> column, TableValidator... tableValidators) { // TODO: Validate constraints if existing
+        if (this.tableConstraints.get(column) != null){
+            this.tableConstraints.get(column)
+                    .addAll(Set.of(tableValidators));
+        } else {
+            this.tableConstraints.put(column, new HashSet<>(Set.of(tableValidators)));
+        }
     }
 
     // TODO: Determine if this method should be removed
@@ -30,6 +35,13 @@ public class Schema implements Validator {
         } else {
             this.tableConstraints.put(column, new HashSet<>(tableValidator));  // TODO: Allow for other implementations?
         }
+    }
+    public Column<?> getColumn(String columnName) {
+        for (Column<?> column:this.getColumns()) {
+            if (column.getName().equals(columnName))
+                    return column;
+        }
+        throw new IllegalArgumentException("Column with name " +columnName + " not found.");
     }
 
     public Map<Column<?>, Set<TableValidator>> getTableConstraints() {
