@@ -1,0 +1,31 @@
+1696481376988:exit
+1696481812855:help
+1696481819283:create-column
+1696481827248:create-column --scanner
+1696481834853:create-column --scanner std.in
+1696481839206:Integer
+1696481846090:stacktrace
+1696481897914:print-options
+1696482054588:5
+1696482056911:exit
+1696482547034:print-options
+1696482548059:4
+1696482554223:help
+1696482565891:create-column
+1696482567827:help
+1696564961668:config load
+1696564964760:load
+1696566971338:help
+1696566976984:create
+1696566990817:config
+1696566994255:config load
+1696567079628:help
+1696567227850:create table
+1696567235218:create column
+1696567241202:create column --scanner
+1696567249496:create column --scanner System.in
+1696567372805:create column
+1696567377118:help
+1696567384848:create column --help
+1696567452479:create column --columnName test --dataType Integer
+1696567503831:create column --columnName test --dataType Integer --constraints NOT_NULL

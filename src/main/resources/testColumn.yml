@@ -1,0 +1,5 @@
+---
+name: "Alma"
+dataType: "String"
+constraints:
+ - "com.fakedatagenerator.validators.ColumnValidators.NotNullValidator"

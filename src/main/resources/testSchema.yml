@@ -1,0 +1,13 @@
+---
+columns:
+  - name: "Alma"
+    dataType: "String"
+    constraints:
+      - "com.fakedatagenerator.validators.TableValidators.UniqueValidator"
+    table_constraints:
+      - "com.fakedatagenerator.validators.ColumnValidators.NotNullValidator"
+  - name: "id"
+    dataType: "Integer"
+    constraints: []
+    table_constraints:
+      - "com.fakedatagenerator.validators.ColumnValidators.NotNullValidator"

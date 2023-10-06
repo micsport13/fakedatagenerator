@@ -1,5 +1,0 @@
----
-columnName: "Alma"
-dataType: "String"
-constraints:
-- "NotNullValidator"
