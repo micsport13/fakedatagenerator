@@ -118,7 +118,7 @@ public final class ColumnCheckValidator implements ColumnValidator {
                         .doubleValue() < this.min.doubleValue();
             }
             if (otherCheckValidator.getAcceptedValues() != null) {
-                return !this.acceptedValues.containsAll(otherCheckValidator.getAcceptedValues());
+                return !this.acceptedValues.equals(otherCheckValidator.getAcceptedValues());
             }
         }
         return false;
