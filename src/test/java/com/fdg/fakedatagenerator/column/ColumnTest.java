@@ -6,8 +6,7 @@ import com.fdg.fakedatagenerator.validators.ColumnValidators.NotNullValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * The type Column test.
@@ -51,8 +50,9 @@ public class ColumnTest {
      */
     @Test
     public void addConstraint_WithValidCheckConstraint_AddsSuccessfullyToColumnConstraints() {
-        ColumnValidator columnConstraint = new ColumnCheckValidator.CheckConstraintBuilder<>(this.intColumn.getDataType()).withRange(0, 10)
-                .build();
+        ColumnValidator columnConstraint =
+                new ColumnCheckValidator.CheckConstraintBuilder<>(this.intColumn.getDataType()).withRange(0, 10)
+                        .build();
         intColumn.addConstraint(columnConstraint);
         assertTrue(intColumn.getConstraints()
                            .contains(columnConstraint));
@@ -73,10 +73,28 @@ public class ColumnTest {
         this.intColumn.addConstraint(new NotNullValidator());
         ColumnValidator testCheckConstraint = new ColumnCheckValidator
                 .CheckConstraintBuilder<>(this.intColumn.getDataType())
-                .withMinimumValue(1).build();
+                .withMinimumValue(1)
+                .build();
         this.intColumn.addConstraint(testCheckConstraint);
         assertEquals(2, this.intColumn.getConstraints()
                 .size());
+    }
+
+    @Test
+    public void addConstraint_WithConflictingConstraints_ThrowsIllegalArgumentException() {
+        this.intColumn.addConstraint(new NotNullValidator());
+        ColumnValidator testCheckConstraint = new ColumnCheckValidator
+                .CheckConstraintBuilder<>(this.intColumn.getDataType())
+                .withMaximumValue(1)
+                .build();
+        this.intColumn.addConstraint(testCheckConstraint);
+        ColumnValidator testCheckConstraint2 = new ColumnCheckValidator
+                .CheckConstraintBuilder<>(this.intColumn.getDataType())
+                .withMinimumValue(2)
+                .build();
+        assertThrows(IllegalArgumentException.class, () -> {
+            this.intColumn.addConstraint(testCheckConstraint2);
+        });
     }
 
 }

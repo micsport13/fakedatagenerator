@@ -22,16 +22,18 @@ public class UniqueValidator implements TableValidator {
         }
         this.addValue(value);
     }
+
+    @Override
+    public int hashCode() {
+        return this.uniqueValues.hashCode();
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
         return obj instanceof UniqueValidator;
     }
 
-    @Override
-    public int hashCode() {
-        return this.uniqueValues.hashCode();
-    }
     @Override
     public String toString() {
         return "Unique";

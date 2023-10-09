@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -61,8 +63,13 @@ class TableTest {
      */
     @Test
     public void addTableConstraint_WithUniqueColumn_ThrowsNoException() {
-        this.table.addTableConstraint(this.testEntity.getColumnByName("name"), new UniqueValidator());
-        this.table.add(this.testEntity);
+        Optional<Column<?>> column = this.testEntity.getColumnByName("name");
+        if (column.isPresent()) {
+            this.table.addTableConstraint(column.get(), new UniqueValidator());
+            this.table.add(this.testEntity);
+        } else {
+            Assertions.fail("Column not found");
+        }
     }
 
     /**
@@ -74,9 +81,14 @@ class TableTest {
                 new Entity.Builder(new Column<>("id", Integer.class), new Column<>("name", String.class)).withColumnValue("id", 2)
                         .withColumnValue("name", "John")
                         .build();
-        this.table.addTableConstraint(this.testEntity.getColumnByName("name"), new UniqueValidator());
-        this.table.add(testEntity);
-        Assertions.assertDoesNotThrow(() -> this.table.add(testEntity2));
+        Optional<Column<?>> column = this.testEntity.getColumnByName("name");
+        if (column.isPresent()) {
+            this.table.addTableConstraint(column.get(), new UniqueValidator());
+            this.table.add(testEntity);
+            Assertions.assertDoesNotThrow(() -> this.table.add(testEntity2));
+        } else {
+            Assertions.fail("Column not found");
+        }
     }
 
     /**
@@ -84,9 +96,13 @@ class TableTest {
      */
     @Test
     public void add_MultipleMembersWithNonUniqueIntoUniqueColumn_ValuesThrowsException() {
-        this.table.addTableConstraint(this.testEntity.getColumnByName("name"), new UniqueValidator());
-        this.table.add(this.testEntity);
-        Assertions.assertThrows(UniqueConstraintException.class, () -> this.table.add(testEntity));
+        Optional<Column<?>> column = this.testEntity.getColumnByName("name");
+        if (column.isPresent()) {
+            this.table.addTableConstraint(column.get(), new UniqueValidator());
+            this.table.add(this.testEntity);
+            Assertions.assertThrows(UniqueConstraintException.class, () -> this.table.add(testEntity));
+        } else {
+            Assertions.fail("Column not found");
+        }
     }
-
 }

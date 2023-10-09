@@ -8,8 +8,8 @@ import org.springframework.shell.command.annotation.CommandScan;
 @CommandScan(basePackages = "com.fdg.fakedatagenerator.commands")
 public class FakedatageneratorApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(FakedatageneratorApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(FakedatageneratorApplication.class, args);
+    }
 
 }

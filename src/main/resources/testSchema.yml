@@ -8,6 +8,6 @@ columns:
       - "com.fakedatagenerator.validators.ColumnValidators.NotNullValidator"
   - name: "id"
     dataType: "Integer"
-    constraints: []
+    constraints: [ ]
     table_constraints:
       - "com.fakedatagenerator.validators.ColumnValidators.NotNullValidator"

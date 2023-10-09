@@ -14,12 +14,13 @@ public class TableValidatorFactory {
             case UNIQUE -> new UniqueValidator();
             case CHECK ->
                     throw new UnsupportedOperationException("To create a check, you must pass in values to apply to the check");
-            case NOT_NULL -> throw new UnsupportedOperationException("To create a not null constraint, use the column validator factory");
+            case NOT_NULL ->
+                    throw new UnsupportedOperationException("To create a not null constraint, use the column validator factory");
         };
     }
 
 
-    public static Validator createValidator(ConstraintType constraintType, Table foreignTable, String columnName){
+    public static Validator createValidator(ConstraintType constraintType, Table foreignTable, String columnName) {
         if (constraintType != ConstraintType.FOREIGN_KEY) {
             throw new IllegalArgumentException("Cannot pass a table to a non-foreign key constraint");
         }

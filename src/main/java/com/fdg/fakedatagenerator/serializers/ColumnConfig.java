@@ -16,7 +16,9 @@ public class ColumnConfig {
     }
 
     public static void writeConfig(String filePath, Column<?> column) throws IOException {
-        ObjectMapper objectMapper = YAMLMapper.builder().enable(YAMLGenerator.Feature.INDENT_ARRAYS).build();
+        ObjectMapper objectMapper = YAMLMapper.builder()
+                .enable(YAMLGenerator.Feature.INDENT_ARRAYS)
+                .build();
         objectMapper.writeValue(new File(filePath), column);
     }
 }

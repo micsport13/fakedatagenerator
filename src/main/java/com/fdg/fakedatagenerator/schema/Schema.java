@@ -22,14 +22,14 @@ public class Schema implements Validator {
     @JsonProperty("table_constraints")
     private final Map<Column<?>, Set<TableValidator>> tableConstraints = new LinkedHashMap<>();
 
-    public Schema(Column<?>... columns){
-        for (Column<?> column :columns) {
+    public Schema(Column<?>... columns) {
+        for (Column<?> column : columns) {
             this.tableConstraints.put(column, new HashSet<>());
         }
     }
 
     public void addColumn(Column<?> column, TableValidator... tableValidators) { // TODO: Validate constraints if existing
-        if (this.tableConstraints.get(column) != null){
+        if (this.tableConstraints.get(column) != null) {
             this.tableConstraints.get(column)
                     .addAll(Set.of(tableValidators));
         } else {
@@ -38,9 +38,10 @@ public class Schema implements Validator {
     }
 
     public Column<?> getColumn(String columnName) {
-        for (Column<?> column:this.getColumns()) {
-            if (column.getName().equals(columnName))
-                    return column;
+        for (Column<?> column : this.getColumns()) {
+            if (column.getName()
+                    .equals(columnName))
+                return column;
         }
         throw new IllegalArgumentException("Column with name " + columnName + " not found.");
     }
@@ -68,12 +69,14 @@ public class Schema implements Validator {
                     .append("\n")
                     .append("\tData type: ")
                     .append(entry.getKey()
-                                    .getDataType().getSimpleName())
+                                    .getDataType()
+                                    .getSimpleName())
                     .append("\n")
                     .append("\tConstraints: ")
                     .append(entry.getValue()
                                     .toString())
-                    .append("\n").append("--------------------\n");
+                    .append("\n")
+                    .append("--------------------\n");
         }
         return sb.toString();
     }

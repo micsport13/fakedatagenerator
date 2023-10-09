@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class NotNullValidatorTest {
-    private NotNullValidator notNullValidator = new NotNullValidator();
+    private final NotNullValidator notNullValidator = new NotNullValidator();
 
     /**
      * Null input throws not null constraint exception.

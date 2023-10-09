@@ -19,10 +19,11 @@ class ColumnCheckValidatorTest {
     @Test
     public void validate_valueBelowMinimumCheckConstraint_ThrowsException() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0.0)
-                .build();
+                columnCheckConstraint =
+                new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0.0)
+                        .build();
         Assertions.assertThrows(CheckConstraintException.class, () ->
-            columnCheckConstraint.validate(-1));
+                columnCheckConstraint.validate(-1));
     }
 
     /**
@@ -31,23 +32,27 @@ class ColumnCheckValidatorTest {
     @Test
     public void validate_AtMinimumCheckConstraint_ThrowsNoException() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0)
-                .build();
+                columnCheckConstraint =
+                new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0)
+                        .build();
         assertDoesNotThrow(() -> columnCheckConstraint.validate(0));
     }
 
     @Test
     public void validate_BelowMinimumCheckConstraint_ThrowsException() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0)
-                .build();
+                columnCheckConstraint =
+                new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0)
+                        .build();
         assertThrows(CheckConstraintException.class, () -> columnCheckConstraint.validate(-1));
     }
+
     @Test
     public void validate_ExtremelySmallDoubleBelowMinimumCheckConstraint_ThrowsException() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder<>(Float.class).withMinimumValue(0f)
-                .build();
+                columnCheckConstraint =
+                new ColumnCheckValidator.CheckConstraintBuilder<>(Float.class).withMinimumValue(0f)
+                        .build();
         assertThrows(CheckConstraintException.class, () -> columnCheckConstraint.validate(-.00000000005f));
     }
 
@@ -58,9 +63,10 @@ class ColumnCheckValidatorTest {
     @Test
     public void validate_valueAboveMaximumCheckConstraint_ThrowsException() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMaximumValue(10.0)
-                .build();
-        Assertions.assertThrows(CheckConstraintException.class, () ->  columnCheckConstraint.validate(11));
+                columnCheckConstraint =
+                new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMaximumValue(10.0)
+                        .build();
+        Assertions.assertThrows(CheckConstraintException.class, () -> columnCheckConstraint.validate(11));
     }
 
     /**
@@ -69,8 +75,9 @@ class ColumnCheckValidatorTest {
     @Test
     public void validate_AtMaximumCheckConstraint_ThrowsNoException() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMaximumValue(10)
-                .build();
+                columnCheckConstraint =
+                new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMaximumValue(10)
+                        .build();
         assertDoesNotThrow(() -> columnCheckConstraint.validate(10));
     }
 
@@ -81,8 +88,9 @@ class ColumnCheckValidatorTest {
     @Test
     public void validate_BetweenMinimumAndMaximumCheckConstraint_ThrowsNoException() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withRange(0, 10)
-                .build();
+                columnCheckConstraint =
+                new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withRange(0, 10)
+                        .build();
         assertDoesNotThrow(() -> columnCheckConstraint.validate(5));
     }
 
@@ -118,13 +126,15 @@ class ColumnCheckValidatorTest {
     @Test
     public void equals_multipleCheckConstraintsWithSameMinimum_AreEqual() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0)
-                .withMaximumValue(10)
-                .build();
+                columnCheckConstraint =
+                new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0)
+                        .withMaximumValue(10)
+                        .build();
         ColumnCheckValidator
-                columnCheckConstraint1 = new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0)
-                .withMaximumValue(10)
-                .build();
+                columnCheckConstraint1 =
+                new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0)
+                        .withMaximumValue(10)
+                        .build();
         Assertions.assertEquals(columnCheckConstraint, columnCheckConstraint1);
     }
 
@@ -134,11 +144,13 @@ class ColumnCheckValidatorTest {
     @Test
     public void equals_multipleCheckConstraintsWithSameMaximum_AreEqual() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMaximumValue(10)
-                .build();
+                columnCheckConstraint =
+                new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMaximumValue(10)
+                        .build();
         ColumnCheckValidator
-                columnCheckConstraint1 = new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMaximumValue(10)
-                .build();
+                columnCheckConstraint1 =
+                new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMaximumValue(10)
+                        .build();
         Assertions.assertEquals(columnCheckConstraint, columnCheckConstraint1);
     }
 
@@ -148,13 +160,15 @@ class ColumnCheckValidatorTest {
     @Test
     public void equals_multipleCheckConstraintsWithSameRange_AreEqual() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0)
-                .withMaximumValue(10)
-                .build();
+                columnCheckConstraint =
+                new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0)
+                        .withMaximumValue(10)
+                        .build();
         ColumnCheckValidator
-                columnCheckConstraint1 = new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0)
-                .withMaximumValue(10)
-                .build();
+                columnCheckConstraint1 =
+                new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0)
+                        .withMaximumValue(10)
+                        .build();
         Assertions.assertEquals(columnCheckConstraint, columnCheckConstraint1);
     }
 
@@ -164,13 +178,15 @@ class ColumnCheckValidatorTest {
     @Test
     public void equals_multipleCheckConstraintsWithDifferentRanges_AreNotEqual() {
         ColumnCheckValidator
-                columnCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0)
-                .withMaximumValue(10)
-                .build();
+                columnCheckConstraint =
+                new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0)
+                        .withMaximumValue(10)
+                        .build();
         ColumnCheckValidator
-                columnCheckConstraint1 = new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0)
-                .withMaximumValue(8)
-                .build();
+                columnCheckConstraint1 =
+                new ColumnCheckValidator.CheckConstraintBuilder<>(Integer.class).withMinimumValue(0)
+                        .withMaximumValue(8)
+                        .build();
         Assertions.assertNotEquals(columnCheckConstraint, columnCheckConstraint1);
     }
 
@@ -200,8 +216,9 @@ class ColumnCheckValidatorTest {
                 new ColumnCheckValidator.CheckConstraintBuilder<>(String.class).withAcceptedValues("Test", "Test1")
                         .build();
         ColumnCheckValidator
-                columnCheckConstraint1 = new ColumnCheckValidator.CheckConstraintBuilder<>(String.class).withAcceptedValues("Test")
-                .build();
+                columnCheckConstraint1 =
+                new ColumnCheckValidator.CheckConstraintBuilder<>(String.class).withAcceptedValues("Test")
+                        .build();
         Assertions.assertNotEquals(columnCheckConstraint, columnCheckConstraint1);
     }
 
@@ -223,7 +240,9 @@ class ColumnCheckValidatorTest {
 
     @Test
     public void build_WithBothRangeAndAcceptedValues_ThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> new ColumnCheckValidator.CheckConstraintBuilder<>(String.class).withRange(0,1).withAcceptedValues("TEst").build());
+        assertThrows(IllegalArgumentException.class, () -> new ColumnCheckValidator.CheckConstraintBuilder<>(String.class).withRange(0, 1)
+                .withAcceptedValues("TEst")
+                .build());
     }
 
 

@@ -2,6 +2,7 @@ package com.fdg.fakedatagenerator.validators.ColumnValidators;
 
 import com.fdg.fakedatagenerator.exceptions.CheckConstraintException;
 import com.fdg.fakedatagenerator.validators.TableValidators.TableCheckValidator;
+import lombok.Getter;
 
 import java.util.HashSet;
 import java.util.List;
@@ -12,8 +13,10 @@ import java.util.Set;
  * Check Validator Column
  * Not to be confused with {@link TableCheckValidator}
  */
+@Getter
 public final class ColumnCheckValidator implements ColumnValidator {
-    private final Number min; //TODO: Figure out how to keep this generic yet converts to the datatype class for precision
+    private final Number min;
+            //TODO: Figure out how to keep this generic yet converts to the datatype class for precision
     private final Number max; // TODO: Figure out how to keep this generic yet converts to the datatype for precision
     private final Set<String> acceptedValues;
 
@@ -100,6 +103,25 @@ public final class ColumnCheckValidator implements ColumnValidator {
             }
         }
         return defaultString.toString();
+    }
+
+    @Override
+    public boolean conflictsWith(ColumnValidator other) {
+        if (other instanceof ColumnCheckValidator otherCheckValidator) {
+
+            if (otherCheckValidator.getMin() != null && this.max != null) {
+                return otherCheckValidator.getMin()
+                        .doubleValue() > this.max.doubleValue();
+            }
+            if (otherCheckValidator.getMax() != null && this.max != null) {
+                return otherCheckValidator.getMax()
+                        .doubleValue() < this.min.doubleValue();
+            }
+            if (otherCheckValidator.getAcceptedValues() != null) {
+                return !this.acceptedValues.containsAll(otherCheckValidator.getAcceptedValues());
+            }
+        }
+        return false;
     }
 
     /**

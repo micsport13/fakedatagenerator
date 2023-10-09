@@ -29,4 +29,9 @@ public class NotNullValidator implements com.fdg.fakedatagenerator.validators.Co
     public String toString() {
         return "Not Null";
     }
+
+    @Override
+    public boolean conflictsWith(ColumnValidator other) {
+        return false;
+    }
 }

@@ -24,7 +24,7 @@ import java.util.Set;
 @Getter
 @JsonSerialize(using = ColumnSerializer.class)
 @JsonDeserialize(using = ColumnDeserializer.class)
-public class Column <T> {
+public class Column<T> {
     @JsonProperty("name")
     private final String name;
     @JsonProperty("dataType")
@@ -41,7 +41,7 @@ public class Column <T> {
      * @param columnName Name of the column
      * @param dataType   Data type of the column
      */
-    public Column(String columnName,  Class<T> dataType) {
+    public Column(String columnName, Class<T> dataType) {
         NameValidator.validate(columnName);
         this.name = columnName;
         this.dataType = dataType;
@@ -65,6 +65,11 @@ public class Column <T> {
      * @param columnConstraint the column constraint
      */
     public void addConstraint(ColumnValidator columnConstraint) {
+        for (ColumnValidator constraint : this.constraints) {
+            if (constraint.conflictsWith(columnConstraint)) {
+                throw new IllegalArgumentException("Constraint conflicts with existing constraints");
+            }
+        }
         this.constraints.add(columnConstraint);
     }
 
@@ -107,7 +112,8 @@ public class Column <T> {
      */
     @Override
     public String toString() {
-        StringBuilder string = new StringBuilder("Column: " + this.name + "\nData Type: " + this.dataType.getSimpleName());
+        StringBuilder string =
+                new StringBuilder("Column: " + this.name + "\nData Type: " + this.dataType.getSimpleName());
         if (!this.constraints.isEmpty())
             for (ColumnValidator constraint : this.constraints) {
                 string.append("\nValidator: ")

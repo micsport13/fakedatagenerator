@@ -39,12 +39,13 @@ public class Table {
     /**
      * Add table constraint.
      *
-     * @param column          the column
+     * @param column           the column
      * @param tableConstraints the table constraints
      */
     public <T> void addTableConstraint(Column<T> column, TableValidator... tableConstraints) {
         var schemaColumns = this.schema.getTableConstraints();
-        if (schemaColumns.containsKey(column) && schemaColumns.get(column).contains(tableConstraints)) {
+        if (schemaColumns.containsKey(column) && schemaColumns.get(column)
+                .contains(tableConstraints)) {
             System.out.println("Constraint already exists for column " + column.getName());
         } else if (schemaColumns.containsKey(column)) {
             this.schema.getTableConstraints()

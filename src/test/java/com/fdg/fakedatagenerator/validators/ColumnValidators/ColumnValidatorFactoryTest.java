@@ -18,6 +18,7 @@ public class ColumnValidatorFactoryTest {
     public void createValidator_withValidAcceptedValues_ReturnsValidCheckValidator() {
         assertTrue(ColumnValidatorFactory.createValidator("Test", "Test2") instanceof ColumnCheckValidator);
     }
+
     @Test
     public void createValidator_withRangeValues_ReturnsValidCheckValidator() {
         assertTrue(ColumnValidatorFactory.createValidator(Integer.class, 0, 10) instanceof ColumnCheckValidator);
@@ -28,10 +29,12 @@ public class ColumnValidatorFactoryTest {
         Validator maxCheckValidator = ColumnValidatorFactory.createValidator(Integer.class, null, 10);
         assertTrue(maxCheckValidator instanceof ColumnCheckValidator);
     }
+
     @Test
     public void createValidator_withNullRange_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> ColumnValidatorFactory.createValidator(Float.class, null, null));
     }
+
     @Test
     public void createValidator_withMinValueOnly_ThrowsNoException() {
         Validator minCheckValidator = ColumnValidatorFactory.createValidator(Integer.class, 1, null);
@@ -42,8 +45,9 @@ public class ColumnValidatorFactoryTest {
     public void createValidator_withNullDataType_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> ColumnValidatorFactory.createValidator((String) null));
     }
+
     @Test
     public void createValidator_allNulls_ThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,() -> ColumnValidatorFactory.createValidator(null, null, null));
+        assertThrows(IllegalArgumentException.class, () -> ColumnValidatorFactory.createValidator(null, null, null));
     }
 }

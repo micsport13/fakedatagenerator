@@ -6,4 +6,5 @@ import com.fdg.fakedatagenerator.validators.Validator;
  * The interface Column constraint.
  */
 public interface ColumnValidator extends Validator {
+    boolean conflictsWith(ColumnValidator other);
 }
