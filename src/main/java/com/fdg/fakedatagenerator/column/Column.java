@@ -32,29 +32,14 @@ public class Column<T> {
     private final @NotNull Class<T> dataType;
     @JsonProperty("constraints")
     private final Set<ColumnValidator> constraints = new HashSet<>();
-    // TODO: Add default value option/ Determine where it needs to go
 
-    // TODO: Add deserializer
 
-    /**
-     * Instantiates a new Column with no constraints
-     *
-     * @param columnName Name of the column
-     * @param dataType   Data type of the column
-     */
     public Column(String columnName, Class<T> dataType) {
         NameValidator.validate(columnName);
         this.name = columnName;
         this.dataType = dataType;
     }
 
-    /**
-     * Instantiates a new Column with constraints
-     *
-     * @param columnName  the column name
-     * @param dataType    the column data type
-     * @param constraints the constraints of the column, i.e {@link NotNullValidator}
-     */
     public Column(String columnName, Class<T> dataType, @JsonProperty("constraints") ColumnValidator... constraints) {
         this(columnName, dataType);
         for (ColumnValidator constraint : constraints) {
@@ -76,12 +61,7 @@ public class Column<T> {
         this.constraints.add(columnConstraint);
     }
 
-    /**
-     * Checks if value is valid for the column
-     *
-     * @param value the object to be checked for insertion
-     * @return true if the value is valid for the column
-     */
+
     public boolean isValid(T value) {  // TODO: Should this be a boolean?
         for (Validator validator : this.constraints) {
             validator.validate(value);
@@ -94,11 +74,7 @@ public class Column<T> {
         return this.name.hashCode() * this.constraints.hashCode() * this.dataType.hashCode();
     }
 
-    /**
-     * Checks if the column is equal to another column
-     *
-     * @param o The column object
-     */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -107,12 +83,6 @@ public class Column<T> {
         return this.name.equals(column.name) && this.dataType.equals(column.dataType);
     }
 
-    /**
-     * Prints out the column name, data type, and constraints in the following format:
-     * Column:  name
-     * Data Type:  data type
-     * Constraints: constraint1, constraint2, etc.
-     */
     @Override
     public String toString() {
         StringBuilder string =
