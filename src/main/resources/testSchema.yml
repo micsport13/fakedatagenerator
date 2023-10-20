@@ -3,11 +3,10 @@ columns:
   - name: "Alma"
     dataType: "String"
     constraints:
-      - "com.fakedatagenerator.validators.TableValidators.UniqueValidator"
+      - "com.fdg.fakedatagenerator.validators.ColumnValidators.NotNullValidator"
     table_constraints:
-      - "com.fakedatagenerator.validators.ColumnValidators.NotNullValidator"
+      - "com.fdg.fakedatagenerator.validators.TableValidators.UniqueValidator"
   - name: "id"
     dataType: "Integer"
-    constraints: [ ]
-    table_constraints:
-      - "com.fakedatagenerator.validators.ColumnValidators.NotNullValidator"
+    constraints:
+      - "com.fdg.fakedatagenerator.validators.ColumnValidators.NotNullValidator"

@@ -2,14 +2,19 @@ package com.fdg.fakedatagenerator.entities;
 
 
 import com.fdg.fakedatagenerator.column.Column;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 
 import java.util.*;
 
 /**
  * The type Entity.
  */
+
+@Getter
 public class Entity {
-    private final EntityMap columnValueMapping;
+
+    private final @NotNull EntityMap columnValueMapping;
 
     private Entity(Builder builder) {
         this.columnValueMapping = builder.columnValueMapping;
@@ -23,15 +28,6 @@ public class Entity {
     public Set<Column<?>> getColumns() {
         return new LinkedHashSet<>(this.columnValueMapping.getMap()
                                            .keySet());
-    }
-
-    /**
-     * Gets column value mapping.
-     *
-     * @return the column value mapping
-     */
-    public EntityMap getColumnValueMapping() {
-        return this.columnValueMapping;
     }
 
     /**

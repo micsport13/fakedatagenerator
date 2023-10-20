@@ -10,6 +10,7 @@ import com.fdg.fakedatagenerator.validators.ColumnValidators.ColumnValidator;
 import com.fdg.fakedatagenerator.validators.ColumnValidators.NotNullValidator;
 import com.fdg.fakedatagenerator.validators.OtherValidators.NameValidator;
 import com.fdg.fakedatagenerator.validators.Validator;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 import java.util.HashSet;
@@ -26,9 +27,9 @@ import java.util.Set;
 @JsonDeserialize(using = ColumnDeserializer.class)
 public class Column<T> {
     @JsonProperty("name")
-    private final String name;
+    private final @NotNull String name;
     @JsonProperty("dataType")
-    private final Class<T> dataType;
+    private final @NotNull Class<T> dataType;
     @JsonProperty("constraints")
     private final Set<ColumnValidator> constraints = new HashSet<>();
     // TODO: Add default value option/ Determine where it needs to go
@@ -56,7 +57,9 @@ public class Column<T> {
      */
     public Column(String columnName, Class<T> dataType, @JsonProperty("constraints") ColumnValidator... constraints) {
         this(columnName, dataType);
-        this.constraints.addAll(List.of(Objects.requireNonNull(constraints, "Constraints cannot be null")));
+        for (ColumnValidator constraint : constraints) {
+            this.addConstraint(constraint);
+        }
     }
 
     /**

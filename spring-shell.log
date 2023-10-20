@@ -29,3 +29,13 @@
 1696567384848:create column --help
 1696567452479:create column --columnName test --dataType Integer
 1696567503831:create column --columnName test --dataType Integer --constraints NOT_NULL
+1696819340162:help
+1696819345197:config load
+1696819364815:config load --path testSchema.yml
+1696819374991:help
+1696819379399:config save
+1696819435583:config save --path test
+1696819571814:config save
+1696819581215:config save --path test
+1696819910007:config save --path src/main/java/resources/test.yml
+1696820010049:config save --path test

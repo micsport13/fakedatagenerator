@@ -8,6 +8,7 @@ import com.fdg.fakedatagenerator.schema.Schema;
 import com.fdg.fakedatagenerator.serializers.TableDeserializer;
 import com.fdg.fakedatagenerator.serializers.TableSerializer;
 import com.fdg.fakedatagenerator.validators.TableValidators.TableValidator;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.*;
 
@@ -17,7 +18,7 @@ import java.util.*;
 @JsonSerialize(using = TableSerializer.class)
 @JsonDeserialize(using = TableDeserializer.class)
 public class Table {
-    private final String name;
+    private final @NotNull String name;
     private final Schema schema;
     private final List<Entity> entities = new ArrayList<>();
 

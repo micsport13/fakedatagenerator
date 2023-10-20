@@ -28,23 +28,28 @@ public class SchemaSerializer extends StdSerializer<Schema> {
             jsonGenerator.writeStringField("name", column.getName());
             jsonGenerator.writeStringField("dataType", column.getDataType()
                     .getSimpleName());
-
-            jsonGenerator.writeArrayFieldStart("constraints");
-            for (var tableValidator : schema.getTableConstraints()
-                    .get(column)) {
-                jsonGenerator.writeString(tableValidator.getClass()
-                                                  .getName());
+            if (!column.getConstraints()
+                    .isEmpty()) {
+                jsonGenerator.writeArrayFieldStart("constraints");
+                for (var constraint : column.getConstraints()) {
+                    jsonGenerator.writeString(constraint.getClass()
+                                                      .getName());
+                }
+                jsonGenerator.writeEndArray();
             }
-            jsonGenerator.writeEndArray();
-            jsonGenerator.writeArrayFieldStart("table_constraints");
-            for (var constraint : column.getConstraints()) {
-                jsonGenerator.writeString(constraint.getClass()
-                                                  .getName());
+            if (!schema.getTableConstraints().get(column).isEmpty()) {
+                jsonGenerator.writeArrayFieldStart("table_constraints");
+                for (var tableValidator : schema.getTableConstraints()
+                        .get(column)) {
+                    jsonGenerator.writeString(tableValidator.getClass()
+                                                      .getName());
+                }
+                jsonGenerator.writeEndArray();
             }
-            jsonGenerator.writeEndArray();
             jsonGenerator.writeEndObject();
         }
         jsonGenerator.writeEndArray();
         jsonGenerator.writeEndObject();
+
     }
 }
