@@ -36,13 +36,12 @@ public class ColumnTest {
     /**
      * Add null constraint.
      */
-// Testing adding constraints
+    // Testing adding constraints
     @Test
     public void addConstraint_WithNullConstraint_AddsSuccessfullyToColumnConstraints() {
         ColumnValidator columnConstraint = new NotNullValidator();
         intColumn.addConstraint(columnConstraint);
-        assertTrue(intColumn.getConstraints()
-                           .contains(columnConstraint));
+        assertTrue(intColumn.getConstraints().contains(columnConstraint));
     }
 
     /**
@@ -50,18 +49,16 @@ public class ColumnTest {
      */
     @Test
     public void addConstraint_WithValidCheckConstraint_AddsSuccessfullyToColumnConstraints() {
-        ColumnValidator columnConstraint =
-                new ColumnCheckValidator.CheckConstraintBuilder<>(this.intColumn.getDataType()).withRange(0, 10)
-                        .build();
+        ColumnValidator columnConstraint = new ColumnCheckValidator.CheckConstraintBuilder<>(this.intColumn.getDataType()).withRange(0, 10)
+                                                                                                                          .build();
         intColumn.addConstraint(columnConstraint);
-        assertTrue(intColumn.getConstraints()
-                           .contains(columnConstraint));
+        assertTrue(intColumn.getConstraints().contains(columnConstraint));
     }
 
     /**
      * Columns with same parameters are equal.
      */
-// Testing equality of columns
+    // Testing equality of columns
     @Test
     public void equals_WithAnotherColumnOfSameNameAndType_ColumnsAreEqual() {
         Column<Integer> column = new Column<>("int", Integer.class);
@@ -71,27 +68,20 @@ public class ColumnTest {
     @Test
     public void addMultipleConstraints_WithValidConstraints_IncludesAllConstraints() {
         this.intColumn.addConstraint(new NotNullValidator());
-        ColumnValidator testCheckConstraint = new ColumnCheckValidator
-                .CheckConstraintBuilder<>(this.intColumn.getDataType())
-                .withMinimumValue(1)
-                .build();
+        ColumnValidator testCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder<>(this.intColumn.getDataType()).withMinimumValue(1)
+                                                                                                                             .build();
         this.intColumn.addConstraint(testCheckConstraint);
-        assertEquals(2, this.intColumn.getConstraints()
-                .size());
+        assertEquals(2, this.intColumn.getConstraints().size());
     }
 
     @Test
     public void addConstraint_WithConflictingConstraints_ThrowsIllegalArgumentException() {
         this.intColumn.addConstraint(new NotNullValidator());
-        ColumnValidator testCheckConstraint = new ColumnCheckValidator
-                .CheckConstraintBuilder<>(this.intColumn.getDataType())
-                .withMaximumValue(1)
-                .build();
+        ColumnValidator testCheckConstraint = new ColumnCheckValidator.CheckConstraintBuilder<>(this.intColumn.getDataType()).withMaximumValue(1)
+                                                                                                                             .build();
         this.intColumn.addConstraint(testCheckConstraint);
-        ColumnValidator testCheckConstraint2 = new ColumnCheckValidator
-                .CheckConstraintBuilder<>(this.intColumn.getDataType())
-                .withMinimumValue(2)
-                .build();
+        ColumnValidator testCheckConstraint2 = new ColumnCheckValidator.CheckConstraintBuilder<>(this.intColumn.getDataType()).withMinimumValue(2)
+                                                                                                                              .build();
         assertThrows(IllegalArgumentException.class, () -> {
             this.intColumn.addConstraint(testCheckConstraint2);
         });

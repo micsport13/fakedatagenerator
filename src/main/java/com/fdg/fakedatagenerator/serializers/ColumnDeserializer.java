@@ -1,7 +1,6 @@
 package com.fdg.fakedatagenerator.serializers;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -22,15 +21,12 @@ public class ColumnDeserializer extends StdDeserializer<Column<?>> {
 
     @Override
     public Column<?> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-        JsonNode node = jsonParser.getCodec()
-                .readTree(jsonParser);
-        String columnName = node.get("columnName")
-                .asText();
+        JsonNode node = jsonParser.getCodec().readTree(jsonParser);
+        String columnName = node.get("columnName").asText();
         Class<?> dataType = null;
         try {
             log.info("Deserializing column: " + columnName);
-            dataType = Class.forName(node.get("dataType")
-                                             .asText());
+            dataType = Class.forName(node.get("dataType").asText());
         } catch (ClassNotFoundException e) {
             log.error(e);
         }

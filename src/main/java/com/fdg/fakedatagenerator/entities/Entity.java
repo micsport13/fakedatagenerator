@@ -26,23 +26,20 @@ public class Entity {
      * @return the columns
      */
     public Set<Column<?>> getColumns() {
-        return new LinkedHashSet<>(this.columnValueMapping.getMap()
-                                           .keySet());
+        return new LinkedHashSet<>(this.columnValueMapping.getMap().keySet());
     }
 
     /**
      * Sets column value.
      *
-     * @param columnName  the column name
+     * @param columnName the column name
      * @param columnValue the column value
      */
     @SuppressWarnings("unchecked")
     public <T> void setColumnValue(String columnName, T columnValue) {
         Optional<Column<?>> column = getColumnByName(columnName);
         if (column.isPresent()) {
-            if (columnValue == null || column.get()
-                    .getDataType()
-                    .isInstance(columnValue)) {
+            if (columnValue == null || column.get().getDataType().isInstance(columnValue)) {
                 this.columnValueMapping.add((Column<T>) column.get(), columnValue);
             } else {
                 throw new IllegalArgumentException("Value is not compatible with the column's data type.");
@@ -60,11 +57,9 @@ public class Entity {
      */
     public String toRecord() {
         StringBuilder string = new StringBuilder();
-        for (Column<?> column : this.columnValueMapping.getMap()
-                .keySet()) {
+        for (Column<?> column : this.columnValueMapping.getMap().keySet()) {
             Object value = this.columnValueMapping.get(column);
-            string.append(value)
-                    .append(",");
+            string.append(value).append(",");
         }
         string.deleteCharAt(string.length() - 1);
         return string.toString();
@@ -74,11 +69,11 @@ public class Entity {
      * Gets column by name.
      *
      * @param columnName the column name
+     *
      * @return the column by name
      */
     public Optional<Column<?>> getColumnByName(String columnName) {
-        for (Column<?> column : this.columnValueMapping.getMap()
-                .keySet()) {
+        for (Column<?> column : this.columnValueMapping.getMap().keySet()) {
             if (Objects.equals(columnName, column.getName())) {
                 return Optional.of(column);
             }
@@ -89,24 +84,18 @@ public class Entity {
     public <T> Optional<T> getValue(String columnName) {
         Optional<Column<?>> optionalColumn = getColumnByName(columnName);
         return optionalColumn.map(column -> {
-            @SuppressWarnings("unchecked")
-            Column<T> typedColumn = (Column<T>) column;
-            return this.getColumnValueMapping()
-                    .get(typedColumn);
+            @SuppressWarnings("unchecked") Column<T> typedColumn = (Column<T>) column;
+            return this.getColumnValueMapping().get(typedColumn);
         });
     }
 
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder();
-        for (Map.Entry<Column<?>, ?> entry : columnValueMapping.getMap()
-                .entrySet()) {
+        for (Map.Entry<Column<?>, ?> entry : columnValueMapping.getMap().entrySet()) {
             Column<?> column = entry.getKey();
             Object value = entry.getValue();
-            string.append(column.toString())
-                    .append("\nValue: ")
-                    .append(value)
-                    .append("\n====================\n");
+            string.append(column.toString()).append("\nValue: ").append(value).append("\n====================\n");
         }
         return string.toString();
     }
@@ -132,6 +121,7 @@ public class Entity {
          * Add column builder.
          *
          * @param column the column
+         *
          * @return the builder
          */
         public Builder addColumn(Column<?> column) {
@@ -143,39 +133,33 @@ public class Entity {
          * With column value builder.
          *
          * @param columnName the column name
-         * @param value      the value
+         * @param value the value
+         *
          * @return the builder
          */
         public <T> Builder withColumnValue(String columnName, T value) throws ClassCastException {
             if (value == null) {
                 throw new IllegalArgumentException("Value cannot be null if calling this method");
             }
-            for (Column<?> column : this.columnValueMapping.getMap()
-                    .keySet()) {
-                if (column.getName()
-                        .equals(columnName) && column.getDataType()
-                        .isInstance(value)) {
+            for (Column<?> column : this.columnValueMapping.getMap().keySet()) {
+                if (column.getName().equals(columnName) && column.getDataType().isInstance(value)) {
                     @SuppressWarnings("unchecked")
                     // Since the column type cannot be handled at compile time, this unchecked cast must be here.
                     Column<T> correctColumn = (Column<T>) column;
                     this.columnValueMapping.add(correctColumn, value);
                     return this;
                 }
-                if (column.getName()
-                        .equals(columnName) && !column.getDataType()
-                        .isInstance(value)) {
+                if (column.getName().equals(columnName) && !column.getDataType().isInstance(value)) {
                     throw new IllegalArgumentException("Value does not match the column type of " + column.getDataType()
-                            .getSimpleName() + " of the column: " + columnName);
+                                                                                                          .getSimpleName() + " of the column: " + columnName);
                 }
             }
             return this;
         }
 
         private boolean existsColumn(String columnName) {
-            for (Column<?> column : this.columnValueMapping.getMap()
-                    .keySet()) {
-                if (column.getName()
-                        .equals(columnName)) {
+            for (Column<?> column : this.columnValueMapping.getMap().keySet()) {
+                if (column.getName().equals(columnName)) {
                     return true;
                 }
             }

@@ -30,8 +30,7 @@ public class Schema implements Validator {
 
     public void addColumn(Column<?> column, TableValidator... tableValidators) { // TODO: Validate constraints if existing
         if (this.tableConstraints.get(column) != null) {
-            this.tableConstraints.get(column)
-                    .addAll(Set.of(tableValidators));
+            this.tableConstraints.get(column).addAll(Set.of(tableValidators));
         } else {
             this.tableConstraints.put(column, new HashSet<>(Set.of(tableValidators)));
         }
@@ -39,9 +38,7 @@ public class Schema implements Validator {
 
     public Column<?> getColumn(String columnName) {
         for (Column<?> column : this.getColumns()) {
-            if (column.getName()
-                    .equals(columnName))
-                return column;
+            if (column.getName().equals(columnName)) return column;
         }
         throw new IllegalArgumentException("Column with name " + columnName + " not found.");
     }
@@ -64,19 +61,15 @@ public class Schema implements Validator {
         StringBuilder sb = new StringBuilder("Schema: \n");
         for (Map.Entry<Column<?>, Set<TableValidator>> entry : this.tableConstraints.entrySet()) {
             sb.append("\tName: ")
-                    .append(entry.getKey()
-                                    .getName())
-                    .append("\n")
-                    .append("\tData type: ")
-                    .append(entry.getKey()
-                                    .getDataType()
-                                    .getSimpleName())
-                    .append("\n")
-                    .append("\tConstraints: ")
-                    .append(entry.getValue()
-                                    .toString())
-                    .append("\n")
-                    .append("--------------------\n");
+              .append(entry.getKey().getName())
+              .append("\n")
+              .append("\tData type: ")
+              .append(entry.getKey().getDataType().getSimpleName())
+              .append("\n")
+              .append("\tConstraints: ")
+              .append(entry.getValue().toString())
+              .append("\n")
+              .append("--------------------\n");
         }
         return sb.toString();
     }

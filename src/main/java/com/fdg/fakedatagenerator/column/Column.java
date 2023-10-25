@@ -7,15 +7,12 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.serializers.ColumnDeserializer;
 import com.fdg.fakedatagenerator.serializers.ColumnSerializer;
 import com.fdg.fakedatagenerator.validators.ColumnValidators.ColumnValidator;
-import com.fdg.fakedatagenerator.validators.ColumnValidators.NotNullValidator;
 import com.fdg.fakedatagenerator.validators.OtherValidators.NameValidator;
 import com.fdg.fakedatagenerator.validators.Validator;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -85,13 +82,12 @@ public class Column<T> {
 
     @Override
     public String toString() {
-        StringBuilder string =
-                new StringBuilder("Column: " + this.name + "\nData Type: " + this.dataType.getSimpleName());
-        if (!this.constraints.isEmpty())
+        StringBuilder string = new StringBuilder("Column: " + this.name + "\nData Type: " + this.dataType.getSimpleName());
+        if (!this.constraints.isEmpty()) {
             for (ColumnValidator constraint : this.constraints) {
-                string.append("\nValidator: ")
-                        .append(constraint);
+                string.append("\nValidator: ").append(constraint);
             }
+        }
         return string.toString();
     }
 

@@ -16,7 +16,7 @@ import java.util.Set;
 @Getter
 public final class ColumnCheckValidator implements ColumnValidator {
     private final Number min;
-            //TODO: Figure out how to keep this generic yet converts to the datatype class for precision
+    //TODO: Figure out how to keep this generic yet converts to the datatype class for precision
     private final Number max; // TODO: Figure out how to keep this generic yet converts to the datatype for precision
     private final Set<String> acceptedValues;
 
@@ -98,8 +98,7 @@ public final class ColumnCheckValidator implements ColumnValidator {
         }
         if (!this.acceptedValues.isEmpty()) {
             for (String value : this.acceptedValues) {
-                defaultString.append(value)
-                        .append(", ");
+                defaultString.append(value).append(", ");
             }
         }
         return defaultString.toString();
@@ -110,12 +109,10 @@ public final class ColumnCheckValidator implements ColumnValidator {
         if (other instanceof ColumnCheckValidator otherCheckValidator) {
 
             if (otherCheckValidator.getMin() != null && this.max != null) {
-                return otherCheckValidator.getMin()
-                        .doubleValue() > this.max.doubleValue();
+                return otherCheckValidator.getMin().doubleValue() > this.max.doubleValue();
             }
             if (otherCheckValidator.getMax() != null && this.max != null) {
-                return otherCheckValidator.getMax()
-                        .doubleValue() < this.min.doubleValue();
+                return otherCheckValidator.getMax().doubleValue() < this.min.doubleValue();
             }
             if (otherCheckValidator.getAcceptedValues() != null) {
                 return !this.acceptedValues.equals(otherCheckValidator.getAcceptedValues());
@@ -144,6 +141,7 @@ public final class ColumnCheckValidator implements ColumnValidator {
          * With minimum value check constraint builder.
          *
          * @param minimumValue the minimum value
+         *
          * @return the check constraint builder
          */
         public <U extends Number> CheckConstraintBuilder<T> withMinimumValue(U minimumValue) {
@@ -155,6 +153,7 @@ public final class ColumnCheckValidator implements ColumnValidator {
          * With maximum value check constraint builder.
          *
          * @param maximumValue the maximum value
+         *
          * @return the check constraint builder
          */
         public <U extends Number> CheckConstraintBuilder<T> withMaximumValue(U maximumValue) {
@@ -168,6 +167,7 @@ public final class ColumnCheckValidator implements ColumnValidator {
          *
          * @param lowerBound the lower bound
          * @param upperBound the upper bound
+         *
          * @return the check constraint builder
          */
         public <U extends Number> CheckConstraintBuilder<T> withRange(U lowerBound, U upperBound) {

@@ -40,18 +40,15 @@ public class Table {
     /**
      * Add table constraint.
      *
-     * @param column           the column
+     * @param column the column
      * @param tableConstraints the table constraints
      */
     public <T> void addTableConstraint(Column<T> column, TableValidator... tableConstraints) {
         var schemaColumns = this.schema.getTableConstraints();
-        if (schemaColumns.containsKey(column) && schemaColumns.get(column)
-                .contains(tableConstraints)) {
+        if (schemaColumns.containsKey(column) && schemaColumns.get(column).contains(tableConstraints)) {
             System.out.println("Constraint already exists for column " + column.getName());
         } else if (schemaColumns.containsKey(column)) {
-            this.schema.getTableConstraints()
-                    .get(column)
-                    .addAll(Set.of(tableConstraints));
+            this.schema.getTableConstraints().get(column).addAll(Set.of(tableConstraints));
         } else {
             this.schema.addColumn(column, Objects.requireNonNull(tableConstraints, "Table Validator cannot be null"));
         }
@@ -108,15 +105,16 @@ public class Table {
      * Is valid entity boolean.
      *
      * @param entity the entity
+     *
      * @return the boolean
      */
     public boolean isValidEntity(Entity entity) {
         for (Map.Entry<Column<?>, Set<TableValidator>> tableConstraints : this.schema.getTableConstraints()
-                .entrySet()) {
+                                                                                     .entrySet()) {
             if (tableConstraints.getValue() != null) {
                 tableConstraints.getValue()
-                        .forEach(constraint -> constraint.validate(entity.getColumnValueMapping()
-                                                                           .get(tableConstraints.getKey())));
+                                .forEach(constraint -> constraint.validate(entity.getColumnValueMapping()
+                                                                                 .get(tableConstraints.getKey())));
             }
         }
         return true;
@@ -124,27 +122,20 @@ public class Table {
 
     @Override
     public String toString() {
-        return "Table: " +
-                name +
-                "\n" + schema.toString();
+        return "Table: " + name + "\n" + schema.toString();
     }
 
     public String printTable() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Table: ")
-                .append(name)
-                .append("\n");
-        sb.append("Schema: \n")
-                .append(this.schema.toString());
+        sb.append("Table: ").append(name).append("\n");
+        sb.append("Schema: \n").append(this.schema.toString());
         sb.append("Values: \n");
         for (Column<?> column : this.schema.getColumns()) {
-            sb.append(column.getName())
-                    .append(",");
+            sb.append(column.getName()).append(",");
         }
         sb.append("\n");
         for (Entity entity : entities) {
-            sb.append(entity.toRecord())
-                    .append("\n");
+            sb.append(entity.toRecord()).append("\n");
         }
         return sb.toString();
     }

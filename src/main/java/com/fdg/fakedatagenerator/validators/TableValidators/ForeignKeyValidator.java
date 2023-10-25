@@ -17,7 +17,7 @@ public class ForeignKeyValidator implements TableValidator {
     /**
      * Instantiates a new Foreign key constraint.
      *
-     * @param foreignTable      the foreign table
+     * @param foreignTable the foreign table
      * @param foreignColumnName the foreign column
      */
     public ForeignKeyValidator(Table foreignTable, String foreignColumnName) {

@@ -20,8 +20,8 @@ public class SchemaConfig {
     public static void writeConfig(String filePath, Schema schema) throws IOException {
         log.info("Writing configuration with path: " + filePath);
         ObjectMapper objectMapper = YAMLMapper.builder()
-                .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
-                .build();
+                                              .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
+                                              .build();
         objectMapper.writeValue(new File(filePath), schema);
     }
 }

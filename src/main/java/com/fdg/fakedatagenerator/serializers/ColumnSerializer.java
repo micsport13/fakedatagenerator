@@ -24,12 +24,10 @@ public class ColumnSerializer extends StdSerializer<Column<?>> {
         log.info("Serializing column: " + column);
         jsonGenerator.writeStartObject();
         jsonGenerator.writeStringField("name", column.getName());
-        jsonGenerator.writeStringField("dataType", column.getDataType()
-                .getSimpleName());
+        jsonGenerator.writeStringField("dataType", column.getDataType().getSimpleName());
         jsonGenerator.writeArrayFieldStart("constraints");
         for (var columnValidator : column.getConstraints()) {
-            jsonGenerator.writeString(columnValidator.getClass()
-                                              .getName());
+            jsonGenerator.writeString(columnValidator.getClass().getName());
         }
         jsonGenerator.writeEndArray();
         jsonGenerator.writeEndObject();

@@ -13,8 +13,7 @@ public class EntityMap {
     }
 
     public <T> T get(Column<T> type) {
-        return type.getDataType()
-                .cast(columnValueMapping.get(type));
+        return type.getDataType().cast(columnValueMapping.get(type));
     }
 
     public Map<Column<?>, Object> getMap() {
