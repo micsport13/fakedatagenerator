@@ -9,6 +9,7 @@ import com.fdg.fakedatagenerator.serializers.table.TableDeserializer;
 import com.fdg.fakedatagenerator.serializers.table.TableSerializer;
 import com.fdg.fakedatagenerator.validators.TableValidators.TableValidator;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 
 import java.util.*;
 
@@ -18,7 +19,11 @@ import java.util.*;
 @JsonSerialize(using = TableSerializer.class)
 @JsonDeserialize(using = TableDeserializer.class)
 public class Table {
+
+    @Getter
     private final @NotNull String name;
+
+    @Getter
     private final Schema schema;
     private final List<Entity> entities = new ArrayList<>();
 
@@ -43,15 +48,17 @@ public class Table {
      * @param column the column
      * @param tableConstraints the table constraints
      */
-    public <T> void addTableConstraint(Column column, TableValidator... tableConstraints) {
+    public <T> void addTableConstraint(Column<T> column, TableValidator... tableConstraints) {
         var schemaColumns = this.schema.getTableConstraints();
-        if (schemaColumns.containsKey(column) && schemaColumns.get(column).contains(tableConstraints)) {
-            System.out.println("Constraint already exists for column " + column.getName());
-        } else if (schemaColumns.containsKey(column)) {
-            this.schema.getTableConstraints().get(column).addAll(Set.of(tableConstraints));
-        } else {
-            this.schema.addColumn(column, Objects.requireNonNull(tableConstraints, "Table Validator cannot be null"));
+        if (schemaColumns.containsKey(column)) {
+            Set<TableValidator> columnConstraints = schemaColumns.get(column);
+            if (columnConstraints.containsAll(Arrays.asList(tableConstraints))) {
+                System.out.println("Constraint already exists for column " + column.getName());
+            } else {
+                this.schema.getTableConstraints().get(column).addAll(Set.of(Objects.requireNonNull(tableConstraints, "Must provide a table constraint")));
+            }
         }
+
     }
 
     /**
@@ -80,24 +87,6 @@ public class Table {
         if (isValidEntity(entity)) {
             entities.add(entity);
         }
-    }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets table constraints.
-     *
-     * @return the table constraints
-     */
-    public Schema getSchema() {
-        return this.schema;
     }
 
 

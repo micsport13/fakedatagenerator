@@ -2,20 +2,22 @@ package com.fdg.fakedatagenerator.commands;
 
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.schema.Schema;
-import com.fdg.fakedatagenerator.table.Table;
 import com.fdg.fakedatagenerator.validators.ColumnValidators.ColumnValidator;
 import com.fdg.fakedatagenerator.validators.ColumnValidators.ColumnValidatorFactory;
 import com.fdg.fakedatagenerator.validators.ConstraintType;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.command.annotation.Command;
 import org.springframework.shell.command.annotation.Option;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 @Log4j2
 @Command(command = "create", group = "Create")
 public class CreateCommand {
+    @Autowired
     private final DataManager dataManager;
 
     public CreateCommand(DataManager dataManager) {
@@ -33,16 +35,58 @@ public class CreateCommand {
     }
 
     @Command(command = "table", description = "Create a table")
-    public void createTable(Scanner scanner, List<Column<?>> columns) {
-        Schema schema = createSchema(columns);
+    public void createTable(Scanner scanner) {
         System.out.print("Enter table name: ");
         String tableName = scanner.next();
-        this.dataManager.addTable(new Table(tableName, schema));
+        System.out.println("Available schemas: ");
+        int i = 0;
+        for (Schema schema : this.dataManager.getSchemas()) {
+            System.out.print(i + ". ");
+            schema.getColumns()
+                  .forEach(column -> System.out.println(column.getName() + ", " + column.getDataType()
+                                                                                        .getSimpleName()));
+        }
+
+        System.out.println("Enter schema index: ");
+        int schemaIndex = scanner.nextInt();
+        if (schemaIndex >= 0 && schemaIndex < this.dataManager.getSchemas().size()) {
+            Schema schema = this.dataManager.getSchemas().get(schemaIndex);
+            this.dataManager.addTable(tableName, schema);
+        } else {
+            System.out.println("Invalid index: " + schemaIndex);
+        }
+
     }
 
-    private Schema createSchema(List<Column<?>> columns) {
-        log.info("Created schema with columns: " + columns);
-        return new Schema(columns.toArray(new Column[0]));
+    @Command(command = "schema", description = "Create a schema")
+    private Schema createSchema(Scanner scanner, List<Column<?>> columns) {
+        System.out.println("Available columns: ");
+        int i = 0;
+        for (Column<?> column : this.dataManager.getColumns()) {
+            System.out.println(i + ". " + column.getName() + " " + column.getDataType().getSimpleName());
+            i++;
+        }
+
+        System.out.println("Enter column indices separated by space: ");
+        String[] inputs = scanner.nextLine().split(" ");
+
+        List<Column<?>> selectedColumns = new ArrayList<>();
+
+        for (String input : inputs) {
+            try {
+                int index = Integer.parseInt(input);
+                if (index >= 0 && index < columns.size()) {
+                    selectedColumns.add(columns.get(index));
+                } else {
+                    System.out.println("Invalid index: " + index);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input: " + input);
+            }
+        }
+
+        log.info("Created schema with columns: " + selectedColumns);
+        return new Schema(selectedColumns.toArray(new Column[0]));
     }
 
     @Command(command = "column", description = "Create a column")
