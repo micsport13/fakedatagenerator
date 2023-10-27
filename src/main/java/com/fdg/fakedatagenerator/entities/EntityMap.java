@@ -8,7 +8,7 @@ import java.util.Map;
 public class EntityMap {
     private final Map<Column<?>, Object> columnValueMapping = new LinkedHashMap<>();
 
-    public <T> void add(Column<T> type, T value) {
+    public <T> void add(Column type, T value) {
         columnValueMapping.put(type, value);
     }
 

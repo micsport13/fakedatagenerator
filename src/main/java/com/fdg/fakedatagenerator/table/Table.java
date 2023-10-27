@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.entities.Entity;
 import com.fdg.fakedatagenerator.schema.Schema;
-import com.fdg.fakedatagenerator.serializers.TableDeserializer;
-import com.fdg.fakedatagenerator.serializers.TableSerializer;
+import com.fdg.fakedatagenerator.serializers.table.TableDeserializer;
+import com.fdg.fakedatagenerator.serializers.table.TableSerializer;
 import com.fdg.fakedatagenerator.validators.TableValidators.TableValidator;
 import jakarta.validation.constraints.NotNull;
 
@@ -43,7 +43,7 @@ public class Table {
      * @param column the column
      * @param tableConstraints the table constraints
      */
-    public <T> void addTableConstraint(Column<T> column, TableValidator... tableConstraints) {
+    public <T> void addTableConstraint(Column column, TableValidator... tableConstraints) {
         var schemaColumns = this.schema.getTableConstraints();
         if (schemaColumns.containsKey(column) && schemaColumns.get(column).contains(tableConstraints)) {
             System.out.println("Constraint already exists for column " + column.getName());

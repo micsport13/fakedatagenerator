@@ -40,7 +40,7 @@ public class Entity {
         Optional<Column<?>> column = getColumnByName(columnName);
         if (column.isPresent()) {
             if (columnValue == null || column.get().getDataType().isInstance(columnValue)) {
-                this.columnValueMapping.add((Column<T>) column.get(), columnValue);
+                this.columnValueMapping.add(column.get(), columnValue);
             } else {
                 throw new IllegalArgumentException("Value is not compatible with the column's data type.");
             }
