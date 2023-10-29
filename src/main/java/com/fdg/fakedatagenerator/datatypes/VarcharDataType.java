@@ -1,6 +1,8 @@
 package com.fdg.fakedatagenerator.datatypes;
 
-public class VarcharDataType implements DataType<String>{
+import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
+
+public class VarcharDataType implements DataType<String> {
 
     private final Integer maxLength;
 
@@ -18,5 +20,16 @@ public class VarcharDataType implements DataType<String>{
     @Override
     public String deserialize(String value) {
         return value.substring(0, this.maxLength);
+    }
+
+    @Override
+    public boolean isCompatible(String value) throws MismatchedDataTypeException {
+        return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        return o != null && getClass() == o.getClass();
     }
 }

@@ -2,6 +2,7 @@ package com.fdg.fakedatagenerator.entities;
 
 
 import com.fdg.fakedatagenerator.column.Column;
+import com.fdg.fakedatagenerator.datatypes.DataType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
@@ -35,11 +36,9 @@ public class Entity {
      * @param columnName the column name
      * @param columnValue the column value
      */
-    @SuppressWarnings("unchecked")
     public <T> void setColumnValue(String columnName, T columnValue) {
-        Optional<Column<?>> column = getColumnByName(columnName);
-        if (column.isPresent()) {
-            if (columnValue == null || column.get().getDataType().isInstance(columnValue)) {
+        Optional<Column<?>> column = getColumnByName(columnName); if (column.isPresent()) {
+            if (columnValue == null || column.get().getDataType().isCompatible(String.valueOf(columnValue))) {
                 this.columnValueMapping.add(column.get(), columnValue);
             } else {
                 throw new IllegalArgumentException("Value is not compatible with the column's data type.");
@@ -56,13 +55,9 @@ public class Entity {
      * @return the string
      */
     public String toRecord() {
-        StringBuilder string = new StringBuilder();
-        for (Column<?> column : this.columnValueMapping.getMap().keySet()) {
-            Object value = this.columnValueMapping.get(column);
-            string.append(value).append(",");
-        }
-        string.deleteCharAt(string.length() - 1);
-        return string.toString();
+        StringBuilder string = new StringBuilder(); for (Column<?> column : this.columnValueMapping.getMap().keySet()) {
+            Object value = this.columnValueMapping.get(column); string.append(value).append(",");
+        } string.deleteCharAt(string.length() - 1); return string.toString();
     }
 
     /**
@@ -77,15 +72,12 @@ public class Entity {
             if (Objects.equals(columnName, column.getName())) {
                 return Optional.of(column);
             }
-        }
-        return Optional.empty();
+        } return Optional.empty();
     }
 
-    public <T> Optional<T> getValue(String columnName) {
-        Optional<Column<?>> optionalColumn = getColumnByName(columnName);
-        return optionalColumn.map(column -> {
-            @SuppressWarnings("unchecked") Column<T> typedColumn = (Column<T>) column;
-            return this.getColumnValueMapping().get(typedColumn);
+    public Optional<Object> getValue(String columnName) {
+        Optional<Column<?>> optionalColumn = getColumnByName(columnName); return optionalColumn.map(column -> {
+            return this.getColumnValueMapping().get(column);
         });
     }
 
@@ -93,11 +85,9 @@ public class Entity {
     public String toString() {
         StringBuilder string = new StringBuilder();
         for (Map.Entry<Column<?>, ?> entry : columnValueMapping.getMap().entrySet()) {
-            Column<?> column = entry.getKey();
-            Object value = entry.getValue();
+            Column<?> column = entry.getKey(); Object value = entry.getValue();
             string.append(column.toString()).append("\nValue: ").append(value).append("\n====================\n");
-        }
-        return string.toString();
+        } return string.toString();
     }
 
     /**
@@ -125,8 +115,7 @@ public class Entity {
          * @return the builder
          */
         public Builder addColumn(Column<?> column) {
-            this.columnValueMapping.add(column, null);
-            return this;
+            this.columnValueMapping.add(column, null); return this;
         }
 
         /**
@@ -137,24 +126,18 @@ public class Entity {
          *
          * @return the builder
          */
-        public <T> Builder withColumnValue(String columnName, T value) throws ClassCastException {
+        public Builder withColumnValue(String columnName, Object value) throws ClassCastException {
             if (value == null) {
                 throw new IllegalArgumentException("Value cannot be null if calling this method");
-            }
-            for (Column<?> column : this.columnValueMapping.getMap().keySet()) {
-                if (column.getName().equals(columnName) && column.getDataType().isInstance(value)) {
-                    @SuppressWarnings("unchecked")
-                    // Since the column type cannot be handled at compile time, this unchecked cast must be here.
-                    Column<T> correctColumn = (Column<T>) column;
-                    this.columnValueMapping.add(correctColumn, value);
+            } for (Column<?> column : this.columnValueMapping.getMap().keySet()) {
+                if (column.getName().equals(columnName) && column.getDataType().isCompatible(String.valueOf(value))) {
+                    this.columnValueMapping.add(column, value);
                     return this;
                 }
-                if (column.getName().equals(columnName) && !column.getDataType().isInstance(value)) {
-                    throw new IllegalArgumentException("Value does not match the column type of " + column.getDataType()
-                                                                                                          .getSimpleName() + " of the column: " + columnName);
+                if (column.getName().equals(columnName) && !column.getDataType().isCompatible(String.valueOf(value))) {
+                    throw new IllegalArgumentException("Value does not match the column type of " + column.getDataType() + " of the column: " + columnName);
                 }
-            }
-            return this;
+            } return this;
         }
 
         private boolean existsColumn(String columnName) {
@@ -162,8 +145,7 @@ public class Entity {
                 if (column.getName().equals(columnName)) {
                     return true;
                 }
-            }
-            return false;
+            } return false;
         }
 
         /**

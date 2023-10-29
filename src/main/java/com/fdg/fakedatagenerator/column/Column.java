@@ -4,6 +4,7 @@ package com.fdg.fakedatagenerator.column;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.serializers.column.ColumnDeserializer;
 import com.fdg.fakedatagenerator.serializers.column.ColumnSerializer;
 import com.fdg.fakedatagenerator.validators.ColumnValidators.ColumnValidator;
@@ -22,22 +23,22 @@ import java.util.Set;
 @Getter
 @JsonSerialize(using = ColumnSerializer.class)
 @JsonDeserialize(using = ColumnDeserializer.class)
-public class Column<T> {
+public class Column<T extends DataType<?>> {
     @JsonProperty("name")
     private final @NotNull String name;
     @JsonProperty("dataType")
-    private final @NotNull Class<T> dataType;
+    private final @NotNull T dataType;
     @JsonProperty("constraints")
     private final Set<ColumnValidator> constraints = new HashSet<>();
 
 
-    public Column(String columnName, Class<T> dataType) {
+    public Column(String columnName, T dataType) {
         NameValidator.validate(columnName);
         this.name = columnName;
         this.dataType = dataType;
     }
 
-    public Column(String columnName, Class<T> dataType, @JsonProperty("constraints") ColumnValidator... constraints) {
+    public Column(String columnName, T dataType, @JsonProperty("constraints") ColumnValidator... constraints) {
         this(columnName, dataType);
         for (ColumnValidator constraint : constraints) {
             this.addConstraint(constraint);
@@ -82,7 +83,7 @@ public class Column<T> {
 
     @Override
     public String toString() {
-        StringBuilder string = new StringBuilder("Column: " + this.name + "\nData Type: " + this.dataType.getSimpleName());
+        StringBuilder string = new StringBuilder("Column: " + this.name + "\nData Type: " + this.dataType);
         if (!this.constraints.isEmpty()) {
             for (ColumnValidator constraint : this.constraints) {
                 string.append("\nValidator: ").append(constraint);

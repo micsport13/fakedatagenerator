@@ -3,6 +3,7 @@ package com.fdg.fakedatagenerator.table;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.column.Column;
+import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.entities.Entity;
 import com.fdg.fakedatagenerator.schema.Schema;
 import com.fdg.fakedatagenerator.serializers.table.TableDeserializer;
@@ -48,7 +49,7 @@ public class Table {
      * @param column the column
      * @param tableConstraints the table constraints
      */
-    public <T> void addTableConstraint(Column<T> column, TableValidator... tableConstraints) {
+    public void addTableConstraint(Column<?> column, TableValidator... tableConstraints) {
         var schemaColumns = this.schema.getTableConstraints();
         if (schemaColumns.containsKey(column)) {
             Set<TableValidator> columnConstraints = schemaColumns.get(column);
@@ -58,7 +59,6 @@ public class Table {
                 this.schema.getTableConstraints().get(column).addAll(Set.of(Objects.requireNonNull(tableConstraints, "Must provide a table constraint")));
             }
         }
-
     }
 
     /**

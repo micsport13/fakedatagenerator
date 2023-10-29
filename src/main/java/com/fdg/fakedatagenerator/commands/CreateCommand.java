@@ -1,6 +1,8 @@
 package com.fdg.fakedatagenerator.commands;
 
 import com.fdg.fakedatagenerator.column.Column;
+import com.fdg.fakedatagenerator.datatypes.DataType;
+import com.fdg.fakedatagenerator.datatypes.factories.DataTypeFactory;
 import com.fdg.fakedatagenerator.schema.Schema;
 import com.fdg.fakedatagenerator.validators.ColumnValidators.ColumnValidator;
 import com.fdg.fakedatagenerator.validators.ColumnValidators.ColumnValidatorFactory;
@@ -10,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.command.annotation.Command;
 import org.springframework.shell.command.annotation.Option;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 @Log4j2
 @Command(command = "create", group = "Create")
@@ -24,16 +24,6 @@ public class CreateCommand {
         this.dataManager = dataManager;
     }
 
-    private static Class<?> getTypeFromClassname(String className) {
-        return switch (className.toLowerCase()) {
-            case "integer" -> Integer.class;
-            case "string" -> String.class;
-            case "boolean" -> Boolean.class;
-            // Add other data types if needed
-            default -> throw new IllegalArgumentException("Unknown data type class: " + className);
-        };
-    }
-
     @Command(command = "table", description = "Create a table")
     public void createTable(Scanner scanner) {
         System.out.print("Enter table name: ");
@@ -43,8 +33,7 @@ public class CreateCommand {
         for (Schema schema : this.dataManager.getSchemas()) {
             System.out.print(i + ". ");
             schema.getColumns()
-                  .forEach(column -> System.out.println(column.getName() + ", " + column.getDataType()
-                                                                                        .getSimpleName()));
+                  .forEach(column -> System.out.println(column.getName() + ", " + column.getDataType().toString()));
         }
 
         System.out.println("Enter schema index: ");
@@ -63,7 +52,7 @@ public class CreateCommand {
         System.out.println("Available columns: ");
         int i = 0;
         for (Column<?> column : this.dataManager.getColumns()) {
-            System.out.println(i + ". " + column.getName() + " " + column.getDataType().getSimpleName());
+            System.out.println(i + ". " + column.getName() + " " + column.getDataType().toString());
             i++;
         }
 
@@ -90,9 +79,12 @@ public class CreateCommand {
     }
 
     @Command(command = "column", description = "Create a column")
-    public void createColumn(String columnName, String dataType, @Option(required = false) String constraints) {
+    public void createColumn(String columnName, String dataType,
+                             @Option(required = false) Boolean hasParameters,
+                             @Option(required = false) String constraints) {
         // Assuming you have a method to convert String data type to Class type
-        Class<?> columnType = getTypeFromClassname(dataType);
+        Map<String, Object> parameters = new HashMap<>();
+        DataType<?> columnType = DataTypeFactory.create(dataType, parameters);
         if (constraints == null) {
             this.dataManager.addColumn(new Column<>(columnName, columnType));
             return;

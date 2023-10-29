@@ -64,7 +64,7 @@ public class Schema implements Validator {
               .append(entry.getKey().getName())
               .append("\n")
               .append("\tData type: ")
-              .append(entry.getKey().getDataType().getSimpleName())
+              .append(entry.getKey().getDataType())
               .append("\n")
               .append("\tConstraints: ")
               .append(entry.getValue().toString())

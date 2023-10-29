@@ -1,6 +1,7 @@
 package com.fdg.fakedatagenerator.entities;
 
 import com.fdg.fakedatagenerator.column.Column;
+import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
@@ -19,7 +20,7 @@ class EntityTest {
      */
     @Test
     public void entityConstructor_WithCorrectValues_ResultsInCorrectEntity() {
-        Column<Integer> idColumn = new Column<>("id", Integer.class);
+        Column<IntegerDataType> idColumn = new Column<>("id", new IntegerDataType());
         Entity entity = new Entity.Builder(idColumn).withColumnValue("id", 1).build();
         int id = (int) entity.getValue("id").orElseThrow(NoSuchElementException::new);
         assertEquals(1, id);
@@ -31,7 +32,7 @@ class EntityTest {
 
     @Test
     public void entityConstructor_WithNoProvidedColumnValues_ResultsInEntityWithNullInColumn() {
-        Column<Integer> idColumn = new Column<>("id", Integer.class);
+        Column<IntegerDataType> idColumn = new Column<>("id", new IntegerDataType());
         Entity entity = new Entity.Builder(idColumn).build();
         assertTrue(entity.getValue("id").isEmpty());
         assertNull(entity.getColumnValueMapping().get(idColumn));

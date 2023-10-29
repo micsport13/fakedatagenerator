@@ -1,6 +1,9 @@
 package com.fdg.fakedatagenerator.table;
 
 import com.fdg.fakedatagenerator.column.Column;
+import com.fdg.fakedatagenerator.datatypes.DataType;
+import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
+import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 import com.fdg.fakedatagenerator.entities.Entity;
 import com.fdg.fakedatagenerator.exceptions.UniqueConstraintException;
 import com.fdg.fakedatagenerator.validators.TableValidators.UniqueValidator;
@@ -32,9 +35,10 @@ class TableTest {
     @BeforeEach
     public void setUp() {
         this.table = new Table("TableTest");
-        this.testEntity = new Entity.Builder(new Column<>("id", Integer.class), new Column<>("name", String.class)).withColumnValue("id", 1)
-                                                                                                                   .withColumnValue("name", "Dave")
-                                                                                                                   .build();
+        this.testEntity = new Entity.Builder(new Column<>("id", new IntegerDataType()), new Column<>("name",
+                new VarcharDataType())).withColumnValue("id", 1)
+                                       .withColumnValue("name", "Dave")
+                                       .build();
     }
 
     /**
@@ -75,9 +79,10 @@ class TableTest {
      */
     @Test
     public void add_MultipleEntitiesOnUniqueColumn_ThrowsNoException() {
-        Entity testEntity2 = new Entity.Builder(new Column<>("id", Integer.class), new Column<>("name", String.class)).withColumnValue("id", 2)
-                                                                                                                      .withColumnValue("name", "John")
-                                                                                                                      .build();
+        Entity testEntity2 = new Entity.Builder(new Column<>("id", new IntegerDataType()), new Column<>("name",
+                new VarcharDataType())).withColumnValue("id", 2)
+                                       .withColumnValue("name", "John")
+                                       .build();
         Optional<Column<?>> column = this.testEntity.getColumnByName("name");
         if (column.isPresent()) {
             this.table.addTableConstraint(column.get(), new UniqueValidator());

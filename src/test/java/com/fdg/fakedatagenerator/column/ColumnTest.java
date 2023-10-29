@@ -1,5 +1,6 @@
 package com.fdg.fakedatagenerator.column;
 
+import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.validators.ColumnValidators.ColumnCheckValidator;
 import com.fdg.fakedatagenerator.validators.ColumnValidators.ColumnValidator;
 import com.fdg.fakedatagenerator.validators.ColumnValidators.NotNullValidator;
@@ -29,7 +30,7 @@ public class ColumnTest {
      */
     @BeforeEach
     public void setup() {
-        intColumn = new Column<>("int", Integer.class);
+        intColumn = new Column<>("int", new IntegerDataType());
     }
 
 
@@ -61,7 +62,7 @@ public class ColumnTest {
     // Testing equality of columns
     @Test
     public void equals_WithAnotherColumnOfSameNameAndType_ColumnsAreEqual() {
-        Column<Integer> column = new Column<>("int", Integer.class);
+        Column<IntegerDataType> column = new Column<>("int", new IntegerDataType());
         assertEquals(intColumn, column);
     }
 

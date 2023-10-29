@@ -1,6 +1,8 @@
 package com.fdg.fakedatagenerator.commands;
 
 import com.fdg.fakedatagenerator.column.Column;
+import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
+import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 import com.fdg.fakedatagenerator.schema.Schema;
 import com.fdg.fakedatagenerator.serializers.ColumnConfig;
 import com.fdg.fakedatagenerator.serializers.SchemaConfig;
@@ -36,9 +38,9 @@ public class ConfigCommand {
     public static void writeConfig(String path) {
         try { // TODO: Write entire configuration, not just column/schema
 
-            Column<?> column = new Column<>("Alma", String.class, new NotNullValidator());
+            Column<VarcharDataType> column = new Column<>("Alma", new VarcharDataType(), new NotNullValidator());
             ColumnConfig.writeConfig("src/main/resources/testColumn.yml", column);
-            Column<Integer> column2 = new Column<Integer>("id", Integer.class, new NotNullValidator());
+            Column<IntegerDataType> column2 = new Column<>("id", new IntegerDataType(), new NotNullValidator());
             Schema testSchema = new Schema(column, column2);
             testSchema.addColumn(column, new UniqueValidator());
             SchemaConfig.writeConfig(path, testSchema);
