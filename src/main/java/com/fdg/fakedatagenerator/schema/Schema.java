@@ -10,10 +10,7 @@ import com.fdg.fakedatagenerator.validators.TableValidators.TableValidator;
 import com.fdg.fakedatagenerator.validators.Validator;
 import lombok.Getter;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @JsonSerialize(using = SchemaSerializer.class)
@@ -36,11 +33,11 @@ public class Schema implements Validator {
         }
     }
 
-    public Column<?> getColumn(String columnName) {
+    public Optional<Column<?>> getColumn(String columnName) {
         for (Column<?> column : this.getColumns()) {
-            if (column.getName().equals(columnName)) return column;
+            if (column.getName().equals(columnName)) return Optional.of(column);
         }
-        throw new IllegalArgumentException("Column with name " + columnName + " not found.");
+        return Optional.empty();
     }
 
     public Set<Column<?>> getColumns() {

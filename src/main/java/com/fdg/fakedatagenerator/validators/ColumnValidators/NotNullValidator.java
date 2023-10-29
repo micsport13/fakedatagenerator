@@ -10,7 +10,7 @@ public class NotNullValidator implements com.fdg.fakedatagenerator.validators.Co
     @Override
     public void validate(Object value) {
         if (value == null) {
-            throw new NotNullConstraintException(NotNullValidator.class.getSimpleName() + ": Value cannot be null");
+            throw new NotNullConstraintException(NotNullValidator.class.getSimpleName() + ": Value cannot be null"); // TODO: Violates LSP, can't throw exception here or need to include at interface level
         }
     }
 

@@ -9,5 +9,5 @@ public interface Validator {
      *
      * @param value the value
      */
-    void validate(Object value);
+    void validate(Object value) throws RuntimeException;
 }

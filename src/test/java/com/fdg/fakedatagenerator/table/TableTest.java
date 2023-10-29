@@ -6,6 +6,7 @@ import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 import com.fdg.fakedatagenerator.entities.Entity;
 import com.fdg.fakedatagenerator.exceptions.UniqueConstraintException;
+import com.fdg.fakedatagenerator.schema.Schema;
 import com.fdg.fakedatagenerator.validators.TableValidators.UniqueValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +35,8 @@ class TableTest {
      */
     @BeforeEach
     public void setUp() {
-        this.table = new Table("TableTest");
+        Schema schema = new Schema(new Column<>("id", new IntegerDataType()), new Column<>("name", new VarcharDataType()));
+        this.table = new Table("TableTest", schema);
         this.testEntity = new Entity.Builder(new Column<>("id", new IntegerDataType()), new Column<>("name",
                 new VarcharDataType())).withColumnValue("id", 1)
                                        .withColumnValue("name", "Dave")

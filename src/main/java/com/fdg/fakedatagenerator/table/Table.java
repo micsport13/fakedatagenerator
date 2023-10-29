@@ -3,7 +3,6 @@ package com.fdg.fakedatagenerator.table;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.column.Column;
-import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.entities.Entity;
 import com.fdg.fakedatagenerator.schema.Schema;
 import com.fdg.fakedatagenerator.serializers.table.TableDeserializer;
@@ -28,16 +27,6 @@ public class Table {
     private final Schema schema;
     private final List<Entity> entities = new ArrayList<>();
 
-    /**
-     * Instantiates a new Table.
-     *
-     * @param name the name
-     */
-    public Table(String name) {
-        this.name = name;
-        this.schema = new Schema();
-    }
-
     public Table(String name, Schema schema) {
         this.name = name;
         this.schema = schema;
@@ -56,7 +45,9 @@ public class Table {
             if (columnConstraints.containsAll(Arrays.asList(tableConstraints))) {
                 System.out.println("Constraint already exists for column " + column.getName());
             } else {
-                this.schema.getTableConstraints().get(column).addAll(Set.of(Objects.requireNonNull(tableConstraints, "Must provide a table constraint")));
+                this.schema.getTableConstraints()
+                           .get(column)
+                           .addAll(Set.of(Objects.requireNonNull(tableConstraints, "Must provide a table constraint")));
             }
         }
     }
@@ -84,8 +75,24 @@ public class Table {
      * @param entity the entity
      */
     public void add(Entity entity) {
-        if (isValidEntity(entity)) {
+        if (isValidEntity(entity)) { // TODO: Fix if schema doesn't match entity
             entities.add(entity);
+        } else {
+            throw new IllegalArgumentException("Entity is not valid for table " + this.name);
+        }
+    }
+
+    public void addColumn(Column<?> column, TableValidator... tableConstraints) {
+        this.schema.addColumn(column, tableConstraints);
+    }
+
+    public void dropColumn(String columnName) {
+        Optional<Column<?>> column = this.schema.getColumn(columnName);
+        if (column.isPresent()) {
+            this.schema.getTableConstraints().remove(column.get());
+            this.entities.forEach(entity -> entity.getColumnValueMapping().getMap().remove(column.get()));
+        } else {
+            throw new IllegalArgumentException("Column with name " + columnName + " not found.");
         }
     }
 

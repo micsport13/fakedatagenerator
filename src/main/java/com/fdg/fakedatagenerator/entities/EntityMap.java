@@ -19,9 +19,8 @@ public class EntityMap {
         if (value != null) {
             DataType<?> dataType = column.getDataType();
             return (T) dataType.deserialize(value.toString());
-        } else {
-            return null; // Handle the case where the value is null
         }
+        return null; // Handle the case where the value is null
     }
 
     public Map<Column<?>, Object> getMap() {
