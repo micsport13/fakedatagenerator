@@ -1,5 +1,6 @@
 package com.fdg.fakedatagenerator.validators.ColumnValidators;
 
+import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.exceptions.CheckConstraintException;
 import com.fdg.fakedatagenerator.validators.TableValidators.TableCheckValidator;
 import lombok.Getter;
@@ -16,11 +17,10 @@ import java.util.Set;
 @Getter
 public final class ColumnCheckValidator implements ColumnValidator {
     private final Number min;
-    //TODO: Figure out how to keep this generic yet converts to the datatype class for precision
     private final Number max; // TODO: Figure out how to keep this generic yet converts to the datatype for precision
     private final Set<String> acceptedValues;
 
-    private <T> ColumnCheckValidator(CheckConstraintBuilder<T> builder) {
+    private <T extends DataType<?>> ColumnCheckValidator(CheckConstraintBuilder<T> builder) {
         this.min = builder.min;
         this.max = builder.max;
         this.acceptedValues = builder.acceptedValues;
@@ -124,7 +124,7 @@ public final class ColumnCheckValidator implements ColumnValidator {
     /**
      * The type Check constraint builder.
      */
-    public final static class CheckConstraintBuilder<T> {
+    public final static class CheckConstraintBuilder<T extends DataType<?>> {
         private final T dataType;
         private final Set<String> acceptedValues = new HashSet<>();
         private Number min; // TODO: Figure out how to keep this generic yet converts to the datatype for precision

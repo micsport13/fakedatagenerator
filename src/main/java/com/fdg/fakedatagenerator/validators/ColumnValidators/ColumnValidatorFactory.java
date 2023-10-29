@@ -1,5 +1,7 @@
 package com.fdg.fakedatagenerator.validators.ColumnValidators;
 
+import com.fdg.fakedatagenerator.datatypes.DataType;
+import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 import com.fdg.fakedatagenerator.validators.ConstraintType;
 
 public class ColumnValidatorFactory {
@@ -13,7 +15,7 @@ public class ColumnValidatorFactory {
         };
     }
 
-    public static <T extends Number> ColumnValidator createValidator(Class<T> dataType, T minValue, T maxValue) {
+    public static <T extends Number> ColumnValidator createValidator(DataType<T> dataType, T minValue, T maxValue) {
         if (dataType == null) {
             throw new IllegalArgumentException("Data type cannot be null");
         }
@@ -34,8 +36,8 @@ public class ColumnValidatorFactory {
         if (firstAcceptedValue == null) {
             throw new IllegalArgumentException("Must provide at least one acceptable value");
         }
-        return new ColumnCheckValidator.CheckConstraintBuilder<>(String.class).withAcceptedValues(firstAcceptedValue, acceptedValues)
-                                                                              .build();
+        return new ColumnCheckValidator.CheckConstraintBuilder<>(new VarcharDataType()).withAcceptedValues(firstAcceptedValue, acceptedValues)
+                                                                                     .build();
     }
 
 

@@ -10,6 +10,7 @@ import java.io.IOException;
 
 @Log4j2
 public class SchemaSerializer extends StdSerializer<Schema> {
+    // TODO: Standardize these field names for the yml file
     public SchemaSerializer() {
         this(null);
     }

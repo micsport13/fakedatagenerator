@@ -1,5 +1,5 @@
 ---
 name: "Alma"
-dataType: "String"
+dataType: "varchar"
 constraints:
  - "com.fdg.fakedatagenerator.validators.ColumnValidators.NotNullValidator"

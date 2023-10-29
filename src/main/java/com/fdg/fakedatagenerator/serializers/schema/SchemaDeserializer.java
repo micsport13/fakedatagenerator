@@ -10,6 +10,7 @@ import java.io.IOException;
 
 @Log4j2
 public class SchemaDeserializer extends StdDeserializer<Schema> {
+    // TODO: Standardize these field names for the yml file
     protected SchemaDeserializer(Class<?> vc) {
         super(vc);
     }

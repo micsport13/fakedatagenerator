@@ -11,6 +11,7 @@ import java.io.IOException;
 @Log4j2
 
 public class ColumnSerializer extends StdSerializer<Column<?>> {
+    // TODO: Standardize these field names for the yml file
     public ColumnSerializer() {
         this(null);
     }

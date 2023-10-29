@@ -10,6 +10,7 @@ import java.io.IOException;
 
 @Log4j2
 public class TableDeserializer extends StdDeserializer<Table> {
+    // TODO: Standardize these field names for the yml file
     protected TableDeserializer(Class<Table> t) {
         super(t);
     }

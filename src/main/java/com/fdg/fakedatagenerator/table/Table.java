@@ -106,7 +106,7 @@ public class Table {
                                                                                  .get(tableConstraints.getKey())));
             }
         }
-        return true;
+        return this.getSchema().getColumns().containsAll(entity.getColumnValueMapping().getMap().keySet());
     }
 
     @Override

@@ -10,6 +10,7 @@ import java.io.IOException;
 
 @Log4j2
 public class TableSerializer extends StdSerializer<Table> {
+    // TODO: Standardize these field names for the yml file
     public TableSerializer() {
         this(null);
     }

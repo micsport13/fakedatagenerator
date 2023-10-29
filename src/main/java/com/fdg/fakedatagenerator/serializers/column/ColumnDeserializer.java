@@ -14,11 +14,13 @@ import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Stream;
 
 @Log4j2
 public class ColumnDeserializer extends StdDeserializer<Column<?>> {
+    // TODO: Standardize these field names for the yml file
     public ColumnDeserializer() {
         this(null);
     }
@@ -31,15 +33,21 @@ public class ColumnDeserializer extends StdDeserializer<Column<?>> {
     public Column<?> deserialize(JsonParser jsonParser,
                                                    DeserializationContext deserializationContext) throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-        String columnName = node.get("columnName").asText();
+        String columnName = node.get("name").asText();
         DataType<?> dataType = null;
         try {
             log.info("Deserializing column: " + columnName);
-            Map<String, Object> parameters = Stream.of(node.get("parameters").fields())
-                    .collect(HashMap::new, (map, entry) -> map.put(entry.next().getKey(),
-                                    entry.next().getValue().asText()),
-                            HashMap::putAll);
-            dataType = DataTypeFactory.create(node.get("dataType").asText(), parameters);
+            Iterator<Map.Entry<String, JsonNode>> paramNode = node.get("parameters").fields();  // TODO: Check if null before trying to get fields
+            if (paramNode != null ) {
+                Map<String, Object> parameters = Stream.of(paramNode)
+                                                       .collect(HashMap::new, (map, entry) -> map.put(entry.next()
+                                                                                                           .getKey(),
+                                                                       entry.next().getValue().asText()),
+                                                               HashMap::putAll);
+                dataType = DataTypeFactory.create(node.get("dataType").asText(), parameters);
+            } else {
+                dataType = DataTypeFactory.create(node.get("dataType").asText(), null);
+            }
         } catch (Exception e) {
             log.error(e);
         }
@@ -49,7 +57,5 @@ public class ColumnDeserializer extends StdDeserializer<Column<?>> {
                     return ColumnValidatorFactory.createValidator(constraint);
                 }).toArray(ColumnValidator[]::new);
         return new Column<>(columnName, dataType, constraints);
-        // parameterization
-        // fix
     }
 }
