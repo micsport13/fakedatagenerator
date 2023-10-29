@@ -4,9 +4,9 @@ import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.datatypes.factories.DataTypeFactory;
 import com.fdg.fakedatagenerator.schema.Schema;
+import com.fdg.fakedatagenerator.validators.ColumnLevelConstraints;
 import com.fdg.fakedatagenerator.validators.ColumnValidators.ColumnValidator;
 import com.fdg.fakedatagenerator.validators.ColumnValidators.ColumnValidatorFactory;
-import com.fdg.fakedatagenerator.validators.ConstraintType;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.command.annotation.Command;
@@ -48,9 +48,10 @@ public class CreateCommand {
     }
 
     @Command(command = "schema", description = "Create a schema")
-    private Schema createSchema(Scanner scanner, List<Column<?>> columns) {
+    private Schema createSchema(Scanner scanner) {
         System.out.println("Available columns: ");
         int i = 0;
+        List<Column<?>> columns = this.dataManager.getColumns();
         for (Column<?> column : this.dataManager.getColumns()) {
             System.out.println(i + ". " + column.getName() + " " + column.getDataType().toString());
             i++;
@@ -79,25 +80,25 @@ public class CreateCommand {
     }
 
     @Command(command = "column", description = "Create a column")
-    public void createColumn(String columnName, String dataType,
+    public void createColumn(String name, String dataType,
                              @Option(required = false) Boolean hasParameters,
                              @Option(required = false) String constraints) {
         // Assuming you have a method to convert String data type to Class type
         Map<String, Object> parameters = new HashMap<>();
         DataType<?> columnType = DataTypeFactory.create(dataType, parameters);
         if (constraints == null) {
-            this.dataManager.addColumn(new Column<>(columnName, columnType));
+            this.dataManager.addColumn(new Column<>(name, columnType));
             return;
         }
         switch (constraints.toUpperCase()) {
-            case "NOT_NULL" -> {
-                log.info("Created column with name: " + columnName + " and type: " + columnType + " and constraint: NotNull");
-                this.dataManager.addColumn(new Column<>(columnName, columnType, ColumnValidatorFactory.createValidator(ConstraintType.NOT_NULL)));
+            case "NOT_NULL", "NOTNULL" -> {
+                log.info("Created column with name: " + name + " and type: " + columnType + " and constraint: NotNull");
+                this.dataManager.addColumn(new Column<>(name, columnType, ColumnValidatorFactory.createValidator(ColumnLevelConstraints.NOT_NULL)));
             }
             case "CHECK" -> {
-                ColumnValidator checkConstraint = ColumnValidatorFactory.createValidator("Test");
-                log.info("Created column with name: " + columnName + " and type: " + columnType + " and constraint: " + checkConstraint);// TODO: Either accepted values or numbers
-                this.dataManager.addColumn(new Column<>(columnName, columnType, checkConstraint));
+                ColumnValidator checkConstraint = ColumnValidatorFactory.createValidator("Test"); // TODO: Read in potential check constraint values
+                log.info("Created column with name: " + name + " and type: " + columnType + " and constraint: " + checkConstraint);// TODO: Either accepted values or numbers
+                this.dataManager.addColumn(new Column<>(name, columnType, checkConstraint));
             }
             default -> {
                 throw new IllegalArgumentException("Constraint options: NOT_NULL, CHECK");

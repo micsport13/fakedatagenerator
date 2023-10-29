@@ -7,9 +7,9 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.datatypes.factories.DataTypeFactory;
+import com.fdg.fakedatagenerator.validators.ColumnLevelConstraints;
 import com.fdg.fakedatagenerator.validators.ColumnValidators.ColumnValidator;
 import com.fdg.fakedatagenerator.validators.ColumnValidators.ColumnValidatorFactory;
-import com.fdg.fakedatagenerator.validators.ConstraintType;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
@@ -53,7 +53,7 @@ public class ColumnDeserializer extends StdDeserializer<Column<?>> {
         }
         ColumnValidator[] constraints =
                 Stream.of(node.get("constraints").fields()).map(entry -> {
-                    ConstraintType constraint = ConstraintType.valueOf(entry.next().getValue().asText().toLowerCase());
+                    ColumnLevelConstraints constraint = ColumnLevelConstraints.valueOf(entry.next().getValue().asText().toLowerCase());
                     return ColumnValidatorFactory.createValidator(constraint);
                 }).toArray(ColumnValidator[]::new);
         return new Column<>(columnName, dataType, constraints);

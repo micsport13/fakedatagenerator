@@ -1,5 +1,12 @@
 ---
-name: "Alma"
-dataType: "varchar"
-constraints:
- - "com.fdg.fakedatagenerator.validators.ColumnValidators.NotNullValidator"
+columns:
+  - name: "Alma"
+    dataType: "com.fdg.fakedatagenerator.datatypes.VarcharDataType@26586b74"
+    constraints:
+      - "com.fdg.fakedatagenerator.validators.ColumnValidators.NotNullValidator"
+    table_constraints:
+      - "com.fdg.fakedatagenerator.validators.TableValidators.UniqueValidator"
+  - name: "id"
+    dataType: "com.fdg.fakedatagenerator.datatypes.IntegerDataType@68868328"
+    constraints:
+      - "com.fdg.fakedatagenerator.validators.ColumnValidators.NotNullValidator"

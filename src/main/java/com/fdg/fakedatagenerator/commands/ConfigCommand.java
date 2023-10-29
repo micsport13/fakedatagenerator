@@ -36,17 +36,18 @@ public class ConfigCommand {
 
     @Command(command = "save", description = "Write configuration to file")
     public static void writeConfig(String path) {
+        throw new UnsupportedOperationException("Not implemented yet");
+        /*
         try { // TODO: Write entire configuration, not just column/schema
-
-            Column<VarcharDataType> column = new Column<>("Alma", new VarcharDataType(), new NotNullValidator());
-            ColumnConfig.writeConfig("src/main/resources/testColumn.yml", column);
-            Column<IntegerDataType> column2 = new Column<>("id", new IntegerDataType(), new NotNullValidator());
-            Schema testSchema = new Schema(column, column2);
-            testSchema.addColumn(column, new UniqueValidator());
-            SchemaConfig.writeConfig(path, testSchema);
         } catch (IOException e) {
             log.error(e);
-        }
+        }*/
+    }
+    @Command(command = "print", description = "Prints out the current sessions configurations")
+    public void printConfig() {
+        System.out.println("Current session configurations:");
+        this.dataManager.getTables().forEach(System.out::println);
+        this.dataManager.getSchemas().forEach(System.out::println);
     }
 }
 

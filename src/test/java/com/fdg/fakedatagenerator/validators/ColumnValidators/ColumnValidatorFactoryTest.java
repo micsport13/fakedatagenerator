@@ -2,7 +2,7 @@ package com.fdg.fakedatagenerator.validators.ColumnValidators;
 
 import com.fdg.fakedatagenerator.datatypes.DecimalDataType;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
-import com.fdg.fakedatagenerator.validators.ConstraintType;
+import com.fdg.fakedatagenerator.validators.ColumnLevelConstraints;
 import com.fdg.fakedatagenerator.validators.Validator;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ public class ColumnValidatorFactoryTest {
 
     @Test
     public void createValidator_WithValidInput_ReturnsCorrectValidator() {
-        assertTrue(ColumnValidatorFactory.createValidator(ConstraintType.NOT_NULL) instanceof NotNullValidator);
+        assertTrue(ColumnValidatorFactory.createValidator(ColumnLevelConstraints.NOT_NULL) instanceof NotNullValidator);
     }
 
     @Test

@@ -2,16 +2,16 @@ package com.fdg.fakedatagenerator.validators.ColumnValidators;
 
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
-import com.fdg.fakedatagenerator.validators.ConstraintType;
+import com.fdg.fakedatagenerator.validators.ColumnLevelConstraints;
 
 public class ColumnValidatorFactory {
 
-    public static ColumnValidator createValidator(ConstraintType constraintType) {
+    public static ColumnValidator createValidator(ColumnLevelConstraints constraintType) {
         return switch (constraintType) {
             case CHECK ->
-                    throw new UnsupportedOperationException("When creating a column check constraint, you must provide parameters");
+                    throw new IllegalArgumentException("When creating a column check constraint, you must provide parameters");
             case NOT_NULL -> new NotNullValidator();
-            default -> null;
+            default -> throw new IllegalArgumentException("Invalid constraint type");
         };
     }
 
@@ -32,7 +32,7 @@ public class ColumnValidatorFactory {
     }
 
     @SafeVarargs
-    public static <U extends String> ColumnValidator createValidator(U firstAcceptedValue, U... acceptedValues) {
+    public static <U extends String> ColumnValidator createValidator(U firstAcceptedValue, U... acceptedValues) { // TODO: Incorrectly assigning values, potentially revisit this constructor
         if (firstAcceptedValue == null) {
             throw new IllegalArgumentException("Must provide at least one acceptable value");
         }
