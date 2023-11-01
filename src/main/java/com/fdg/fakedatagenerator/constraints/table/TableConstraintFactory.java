@@ -6,7 +6,7 @@ import com.fdg.fakedatagenerator.constraints.TableLevelConstraints;
 
 public class TableConstraintFactory {
 
-    public static Constraint createValidator(TableLevelConstraints constraintType) {
+    public static Constraint createConstraint(TableLevelConstraints constraintType) {
         return switch (constraintType) {
             case PRIMARY_KEY -> new PrimaryKeyConstraint();
             case FOREIGN_KEY ->
@@ -18,7 +18,7 @@ public class TableConstraintFactory {
     }
 
 
-    public static Constraint createValidator(TableLevelConstraints constraintType, Table foreignTable, String columnName) {
+    public static Constraint createConstraint(TableLevelConstraints constraintType, Table foreignTable, String columnName) {
         if (constraintType != TableLevelConstraints.FOREIGN_KEY) {
             throw new IllegalArgumentException("Cannot pass a table to a non-foreign key constraint");
         }

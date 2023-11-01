@@ -93,10 +93,10 @@ public class CreateCommand {
         switch (constraints.toUpperCase()) {
             case "NOT_NULL", "NOTNULL" -> {
                 log.info("Created column with name: " + name + " and type: " + columnType + " and constraint: NotNull");
-                this.dataManager.addColumn(new Column<>(name, columnType, ColumnConstraintFactory.createValidator(ColumnLevelConstraints.NOT_NULL)));
+                this.dataManager.addColumn(new Column<>(name, columnType, ColumnConstraintFactory.createConstraint(ColumnLevelConstraints.NOT_NULL)));
             }
             case "CHECK" -> {
-                ColumnConstraint checkConstraint = ColumnConstraintFactory.createValidator("Test"); // TODO: Read in potential check constraint values
+                ColumnConstraint checkConstraint = ColumnConstraintFactory.createConstraint("Test"); // TODO: Read in potential check constraint values
                 log.info("Created column with name: " + name + " and type: " + columnType + " and constraint: " + checkConstraint);// TODO: Either accepted values or numbers
                 this.dataManager.addColumn(new Column<>(name, columnType, checkConstraint));
             }

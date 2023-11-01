@@ -54,7 +54,7 @@ public class ColumnDeserializer extends StdDeserializer<Column<?>> {
         ColumnConstraint[] constraints =
                 Stream.of(node.get("constraints").fields()).map(entry -> {
                     ColumnLevelConstraints constraint = ColumnLevelConstraints.valueOf(entry.next().getValue().asText().toLowerCase());
-                    return ColumnConstraintFactory.createValidator(constraint);
+                    return ColumnConstraintFactory.createConstraint(constraint);
                 }).toArray(ColumnConstraint[]::new);
         return new Column<>(columnName, dataType, constraints);
     }

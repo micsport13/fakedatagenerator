@@ -5,14 +5,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class NotNullConstraintTest {
-    private final NotNullConstraint notNullValidator = new NotNullConstraint();
+    private final NotNullConstraint notNullConstraint = new NotNullConstraint();
 
     /**
      * Null input throws not null constraint exception.
      */
     @Test
     public void validate_nullInput_ThrowsNotNullConstraintException() {
-        Assertions.assertThrows(NotNullConstraintException.class, () -> notNullValidator.validate(null));
+        Assertions.assertThrows(NotNullConstraintException.class, () -> notNullConstraint.validate(null));
     }
 
     /**
@@ -20,6 +20,6 @@ class NotNullConstraintTest {
      */
     @Test
     public void notNullInputThrowsNoException() {
-        Assertions.assertDoesNotThrow(() -> notNullValidator.validate(1));
+        Assertions.assertDoesNotThrow(() -> notNullConstraint.validate(1));
     }
 }

@@ -6,7 +6,7 @@ import com.fdg.fakedatagenerator.constraints.ColumnLevelConstraints;
 
 public class ColumnConstraintFactory {
 
-    public static ColumnConstraint createValidator(ColumnLevelConstraints constraintType) {
+    public static ColumnConstraint createConstraint(ColumnLevelConstraints constraintType) {
         return switch (constraintType) {
             case CHECK ->
                     throw new IllegalArgumentException("When creating a column check constraint, you must provide parameters");
@@ -15,7 +15,7 @@ public class ColumnConstraintFactory {
         };
     }
 
-    public static <T extends Number> ColumnConstraint createValidator(DataType<T> dataType, T minValue, T maxValue) {
+    public static <T extends Number> ColumnConstraint createConstraint(DataType<T> dataType, T minValue, T maxValue) {
         if (dataType == null) {
             throw new IllegalArgumentException("Data type cannot be null");
         }
@@ -32,7 +32,7 @@ public class ColumnConstraintFactory {
     }
 
     @SafeVarargs
-    public static <U extends String> ColumnConstraint createValidator(U firstAcceptedValue, U... acceptedValues) { // TODO: Incorrectly assigning values, potentially revisit this constructor
+    public static <U extends String> ColumnConstraint createConstraint(U firstAcceptedValue, U... acceptedValues) { // TODO: Incorrectly assigning values, potentially revisit this constructor
         if (firstAcceptedValue == null) {
             throw new IllegalArgumentException("Must provide at least one acceptable value");
         }

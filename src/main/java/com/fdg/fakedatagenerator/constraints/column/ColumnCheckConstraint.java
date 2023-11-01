@@ -106,16 +106,16 @@ public final class ColumnCheckConstraint implements ColumnConstraint {
 
     @Override
     public boolean conflictsWith(ColumnConstraint other) {
-        if (other instanceof ColumnCheckConstraint otherCheckValidator) {
+        if (other instanceof ColumnCheckConstraint otherCheckConstraint) {
 
-            if (otherCheckValidator.getMin() != null && this.max != null) {
-                return otherCheckValidator.getMin().doubleValue() > this.max.doubleValue();
+            if (otherCheckConstraint.getMin() != null && this.max != null) {
+                return otherCheckConstraint.getMin().doubleValue() > this.max.doubleValue();
             }
-            if (otherCheckValidator.getMax() != null && this.max != null) {
-                return otherCheckValidator.getMax().doubleValue() < this.min.doubleValue();
+            if (otherCheckConstraint.getMax() != null && this.max != null) {
+                return otherCheckConstraint.getMax().doubleValue() < this.min.doubleValue();
             }
-            if (otherCheckValidator.getAcceptedValues() != null) {
-                return !this.acceptedValues.equals(otherCheckValidator.getAcceptedValues());
+            if (otherCheckConstraint.getAcceptedValues() != null) {
+                return !this.acceptedValues.equals(otherCheckConstraint.getAcceptedValues());
             }
         }
         return false;

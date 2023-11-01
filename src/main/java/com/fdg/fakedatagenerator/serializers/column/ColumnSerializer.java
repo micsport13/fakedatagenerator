@@ -27,8 +27,8 @@ public class ColumnSerializer extends StdSerializer<Column<?>> {
         jsonGenerator.writeStringField("name", column.getName());
         jsonGenerator.writeStringField("dataType", column.getDataType().toString());
         jsonGenerator.writeArrayFieldStart("constraints");
-        for (var columnValidator : column.getConstraints()) {
-            jsonGenerator.writeString(columnValidator.getClass().getName());
+        for (var columnConstraint : column.getConstraints()) {
+            jsonGenerator.writeString(columnConstraint.getClass().getName());
         }
         jsonGenerator.writeEndArray();
         jsonGenerator.writeEndObject();
