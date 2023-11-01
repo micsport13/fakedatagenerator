@@ -3,11 +3,11 @@ package com.fdg.fakedatagenerator.table;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.column.Column;
+import com.fdg.fakedatagenerator.constraints.table.TableConstraint;
 import com.fdg.fakedatagenerator.entities.Entity;
 import com.fdg.fakedatagenerator.schema.Schema;
 import com.fdg.fakedatagenerator.serializers.table.TableDeserializer;
 import com.fdg.fakedatagenerator.serializers.table.TableSerializer;
-import com.fdg.fakedatagenerator.validators.TableValidators.TableValidator;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
@@ -38,10 +38,10 @@ public class Table {
      * @param column the column
      * @param tableConstraints the table constraints
      */
-    public void addTableConstraint(Column<?> column, TableValidator... tableConstraints) {
+    public void addTableConstraint(Column<?> column, TableConstraint... tableConstraints) {
         var schemaColumns = this.schema.getTableConstraints();
         if (schemaColumns.containsKey(column)) {
-            Set<TableValidator> columnConstraints = schemaColumns.get(column);
+            Set<TableConstraint> columnConstraints = schemaColumns.get(column);
             if (columnConstraints.containsAll(Arrays.asList(tableConstraints))) {
                 System.out.println("Constraint already exists for column " + column.getName());
             } else {
@@ -82,7 +82,7 @@ public class Table {
         }
     }
 
-    public void addColumn(Column<?> column, TableValidator... tableConstraints) {
+    public void addColumn(Column<?> column, TableConstraint... tableConstraints) {
         this.schema.addColumn(column, tableConstraints);
     }
 
@@ -105,8 +105,8 @@ public class Table {
      * @return the boolean
      */
     public boolean isValidEntity(Entity entity) {
-        for (Map.Entry<Column<?>, Set<TableValidator>> tableConstraints : this.schema.getTableConstraints()
-                                                                                     .entrySet()) {
+        for (Map.Entry<Column<?>, Set<TableConstraint>> tableConstraints : this.schema.getTableConstraints()
+                                                                                      .entrySet()) {
             if (tableConstraints.getValue() != null) {
                 tableConstraints.getValue()
                                 .forEach(constraint -> constraint.validate(entity.getColumnValueMapping()

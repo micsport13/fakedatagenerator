@@ -1,7 +1,6 @@
-package com.fdg.fakedatagenerator.validators.TableValidators;
+package com.fdg.fakedatagenerator.constraints.table;
 
 import com.fdg.fakedatagenerator.column.Column;
-import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.schema.Schema;
 import com.fdg.fakedatagenerator.table.Table;
@@ -11,7 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
  * The type Foreign key constraint test.
  */
 class ForeignKeyConstraintTest {
-    private ForeignKeyValidator foreignKeyValidator;
+    private ForeignKeyConstraint foreignKeyConstraint;
     private Table foreignTable;
     private String foreignColumnName;
 
@@ -21,7 +20,7 @@ class ForeignKeyConstraintTest {
         this.foreignTable = new Table("foreignTable", schema);
 
         this.foreignColumnName = "foreignColumn";
-        this.foreignKeyValidator = new ForeignKeyValidator(foreignTable, foreignColumnName);
+        this.foreignKeyConstraint = new ForeignKeyConstraint(foreignTable, foreignColumnName);
     }
 
 }

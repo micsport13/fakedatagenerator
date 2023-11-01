@@ -1,4 +1,4 @@
-package com.fdg.fakedatagenerator.validators.TableValidators;
+package com.fdg.fakedatagenerator.constraints.table;
 
 import com.fdg.fakedatagenerator.exceptions.PrimaryKeyConstraintException;
 
@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * The type Primary key constraint.
  */
-public class PrimaryKeyValidator implements TableValidator {
+public class PrimaryKeyConstraint implements TableConstraint {
     private final Set<Object> primaryKeyValues = new HashSet<>();
 
     private void addValue(Object value) {

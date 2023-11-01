@@ -1,4 +1,4 @@
-package com.fdg.fakedatagenerator.validators.TableValidators;
+package com.fdg.fakedatagenerator.constraints.table;
 
 import com.fdg.fakedatagenerator.exceptions.UniqueConstraintException;
 
@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * The type Unique constraint.
  */
-public class UniqueValidator implements TableValidator {
+public class UniqueConstraint implements TableConstraint {
     private final Set<Object> uniqueValues = new HashSet<>(); //
 
     private void addValue(Object value) {
@@ -18,7 +18,7 @@ public class UniqueValidator implements TableValidator {
     @Override
     public void validate(Object value) {
         if (this.uniqueValues.contains(value)) {
-            throw new UniqueConstraintException(UniqueValidator.class.getSimpleName() + ": Value already exists in the unique constraint");
+            throw new UniqueConstraintException(UniqueConstraint.class.getSimpleName() + ": Value already exists in the unique constraint");
         }
         this.addValue(value);
     }
@@ -31,7 +31,7 @@ public class UniqueValidator implements TableValidator {
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
-        return obj instanceof UniqueValidator;
+        return obj instanceof UniqueConstraint;
     }
 
     @Override

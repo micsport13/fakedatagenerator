@@ -1,4 +1,4 @@
-package com.fdg.fakedatagenerator.validators;
+package com.fdg.fakedatagenerator.constraints;
 
 public enum ColumnLevelConstraints {
     NOT_NULL,

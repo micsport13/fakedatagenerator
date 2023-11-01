@@ -1,4 +1,4 @@
-package com.fdg.fakedatagenerator.validators.TableValidators;
+package com.fdg.fakedatagenerator.constraints.table;
 
 /**
  * The type Table check constraint test.

@@ -1,4 +1,4 @@
-package com.fdg.fakedatagenerator.validators.ColumnValidators;
+package com.fdg.fakedatagenerator.constraints.column;
 
 import com.fdg.fakedatagenerator.exceptions.NotNullConstraintException;
 
@@ -6,11 +6,11 @@ import com.fdg.fakedatagenerator.exceptions.NotNullConstraintException;
  * The type Not null constraint.
  */
 
-public class NotNullValidator implements com.fdg.fakedatagenerator.validators.ColumnValidators.ColumnValidator {
+public class NotNullConstraint implements ColumnConstraint {
     @Override
     public void validate(Object value) {
         if (value == null) {
-            throw new NotNullConstraintException(NotNullValidator.class.getSimpleName() + ": Value cannot be null"); // TODO: Violates LSP, can't throw exception here or need to include at interface level
+            throw new NotNullConstraintException(NotNullConstraint.class.getSimpleName() + ": Value cannot be null"); // TODO: Violates LSP, can't throw exception here or need to include at interface level
         }
     }
 
@@ -22,7 +22,7 @@ public class NotNullValidator implements com.fdg.fakedatagenerator.validators.Co
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        return o instanceof NotNullValidator;
+        return o instanceof NotNullConstraint;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class NotNullValidator implements com.fdg.fakedatagenerator.validators.Co
     }
 
     @Override
-    public boolean conflictsWith(ColumnValidator other) {
+    public boolean conflictsWith(ColumnConstraint other) {
         return false;
     }
 }

@@ -1,8 +1,8 @@
-package com.fdg.fakedatagenerator.validators.ColumnValidators;
+package com.fdg.fakedatagenerator.constraints.column;
 
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.exceptions.CheckConstraintException;
-import com.fdg.fakedatagenerator.validators.TableValidators.TableCheckValidator;
+import com.fdg.fakedatagenerator.constraints.table.TableCheckConstraint;
 import lombok.Getter;
 
 import java.util.HashSet;
@@ -11,16 +11,16 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Check Validator Column
- * Not to be confused with {@link TableCheckValidator}
+ * Check Constraint Column
+ * Not to be confused with {@link TableCheckConstraint}
  */
 @Getter
-public final class ColumnCheckValidator implements ColumnValidator {
+public final class ColumnCheckConstraint implements ColumnConstraint {
     private final Number min;
     private final Number max; // TODO: Figure out how to keep this generic yet converts to the datatype for precision
     private final Set<String> acceptedValues;
 
-    private <T extends DataType<?>> ColumnCheckValidator(CheckConstraintBuilder<T> builder) {
+    private <T extends DataType<?>> ColumnCheckConstraint(CheckConstraintBuilder<T> builder) {
         this.min = builder.min;
         this.max = builder.max;
         this.acceptedValues = builder.acceptedValues;
@@ -67,7 +67,7 @@ public final class ColumnCheckValidator implements ColumnValidator {
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
-        if (!(o instanceof ColumnCheckValidator columnCheckConstraint)) {
+        if (!(o instanceof ColumnCheckConstraint columnCheckConstraint)) {
             return false;
         }
         if (this.min != null && this.max != null && columnCheckConstraint.min != null && columnCheckConstraint.max != null) {
@@ -105,8 +105,8 @@ public final class ColumnCheckValidator implements ColumnValidator {
     }
 
     @Override
-    public boolean conflictsWith(ColumnValidator other) {
-        if (other instanceof ColumnCheckValidator otherCheckValidator) {
+    public boolean conflictsWith(ColumnConstraint other) {
+        if (other instanceof ColumnCheckConstraint otherCheckValidator) {
 
             if (otherCheckValidator.getMin() != null && this.max != null) {
                 return otherCheckValidator.getMin().doubleValue() > this.max.doubleValue();
@@ -188,11 +188,11 @@ public final class ColumnCheckValidator implements ColumnValidator {
          *
          * @return the column check constraint
          */
-        public ColumnCheckValidator build() {
+        public ColumnCheckConstraint build() {
             if (!this.acceptedValues.isEmpty() && (this.min != null || this.max != null)) {
                 throw new IllegalArgumentException("Only one of accepted values or range can be specified");
             }
-            return new ColumnCheckValidator(this);
+            return new ColumnCheckConstraint(this);
         }
     }
 }

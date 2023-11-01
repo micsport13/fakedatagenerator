@@ -1,13 +1,7 @@
 package com.fdg.fakedatagenerator.commands;
 
 import com.fdg.fakedatagenerator.column.Column;
-import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
-import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
-import com.fdg.fakedatagenerator.schema.Schema;
 import com.fdg.fakedatagenerator.serializers.ColumnConfig;
-import com.fdg.fakedatagenerator.serializers.SchemaConfig;
-import com.fdg.fakedatagenerator.validators.ColumnValidators.NotNullValidator;
-import com.fdg.fakedatagenerator.validators.TableValidators.UniqueValidator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.command.annotation.Command;

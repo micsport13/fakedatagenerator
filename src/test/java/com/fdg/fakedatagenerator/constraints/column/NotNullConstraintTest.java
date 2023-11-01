@@ -1,11 +1,11 @@
-package com.fdg.fakedatagenerator.validators.ColumnValidators;
+package com.fdg.fakedatagenerator.constraints.column;
 
 import com.fdg.fakedatagenerator.exceptions.NotNullConstraintException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class NotNullValidatorTest {
-    private final NotNullValidator notNullValidator = new NotNullValidator();
+class NotNullConstraintTest {
+    private final NotNullConstraint notNullValidator = new NotNullConstraint();
 
     /**
      * Null input throws not null constraint exception.

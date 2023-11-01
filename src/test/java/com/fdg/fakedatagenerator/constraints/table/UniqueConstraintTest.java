@@ -1,4 +1,4 @@
-package com.fdg.fakedatagenerator.validators.TableValidators;
+package com.fdg.fakedatagenerator.constraints.table;
 
 import com.fdg.fakedatagenerator.exceptions.UniqueConstraintException;
 import org.junit.jupiter.api.Assertions;
@@ -8,18 +8,18 @@ import org.junit.jupiter.api.Test;
 /**
  * The type Unique constraint test.
  */
-class UniqueValidatorTest {
+class UniqueConstraintTest {
     /**
      * The Unique constraint.
      */
-    UniqueValidator uniqueConstraint;
+    UniqueConstraint uniqueConstraint;
 
     /**
      * Sets up.
      */
     @BeforeEach
     public void setUp() {
-        this.uniqueConstraint = new UniqueValidator();
+        this.uniqueConstraint = new UniqueConstraint();
     }
 
     /**

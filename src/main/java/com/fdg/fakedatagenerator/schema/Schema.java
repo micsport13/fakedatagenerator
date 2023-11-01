@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.column.Column;
+import com.fdg.fakedatagenerator.constraints.table.TableConstraint;
 import com.fdg.fakedatagenerator.serializers.schema.SchemaDeserializer;
 import com.fdg.fakedatagenerator.serializers.schema.SchemaSerializer;
-import com.fdg.fakedatagenerator.validators.TableValidators.TableValidator;
-import com.fdg.fakedatagenerator.validators.Validator;
+import com.fdg.fakedatagenerator.constraints.Constraint;
 import lombok.Getter;
 
 import java.util.*;
@@ -15,9 +15,9 @@ import java.util.*;
 @Getter
 @JsonSerialize(using = SchemaSerializer.class)
 @JsonDeserialize(using = SchemaDeserializer.class)
-public class Schema implements Validator {
+public class Schema implements Constraint {
     @JsonProperty("table_constraints")
-    private final Map<Column<?>, Set<TableValidator>> tableConstraints = new LinkedHashMap<>();
+    private final Map<Column<?>, Set<TableConstraint>> tableConstraints = new LinkedHashMap<>();
 
     public Schema(Column<?>... columns) {
         for (Column<?> column : columns) {
@@ -25,11 +25,11 @@ public class Schema implements Validator {
         }
     }
 
-    public void addColumn(Column<?> column, TableValidator... tableValidators) { // TODO: Validate constraints if existing
+    public void addColumn(Column<?> column, TableConstraint... tableConstraints) { // TODO: Validate constraints if existing
         if (this.tableConstraints.get(column) != null) {
-            this.tableConstraints.get(column).addAll(Set.of(tableValidators));
+            this.tableConstraints.get(column).addAll(Set.of(tableConstraints));
         } else {
-            this.tableConstraints.put(column, new HashSet<>(Set.of(tableValidators)));
+            this.tableConstraints.put(column, new HashSet<>(Set.of(tableConstraints)));
         }
     }
 
@@ -46,9 +46,9 @@ public class Schema implements Validator {
 
     @Override
     public void validate(Object value) {
-        for (Map.Entry<Column<?>, Set<TableValidator>> entry : this.tableConstraints.entrySet()) {
-            for (TableValidator tableValidator : entry.getValue()) {
-                tableValidator.validate(value);
+        for (Map.Entry<Column<?>, Set<TableConstraint>> entry : this.tableConstraints.entrySet()) {
+            for (TableConstraint tableConstraint : entry.getValue()) {
+                tableConstraint.validate(value);
             }
         }
     }
@@ -56,7 +56,7 @@ public class Schema implements Validator {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Schema: \n");
-        for (Map.Entry<Column<?>, Set<TableValidator>> entry : this.tableConstraints.entrySet()) {
+        for (Map.Entry<Column<?>, Set<TableConstraint>> entry : this.tableConstraints.entrySet()) {
             sb.append("\tName: ")
               .append(entry.getKey().getName())
               .append("\n")

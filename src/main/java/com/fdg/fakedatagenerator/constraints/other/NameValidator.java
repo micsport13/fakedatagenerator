@@ -1,4 +1,4 @@
-package com.fdg.fakedatagenerator.validators.OtherValidators;
+package com.fdg.fakedatagenerator.constraints.other;
 
 import java.util.regex.Pattern;
 

@@ -4,12 +4,12 @@ package com.fdg.fakedatagenerator.column;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fdg.fakedatagenerator.constraints.column.ColumnConstraint;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.serializers.column.ColumnDeserializer;
 import com.fdg.fakedatagenerator.serializers.column.ColumnSerializer;
-import com.fdg.fakedatagenerator.validators.ColumnValidators.ColumnValidator;
-import com.fdg.fakedatagenerator.validators.OtherValidators.NameValidator;
-import com.fdg.fakedatagenerator.validators.Validator;
+import com.fdg.fakedatagenerator.constraints.other.NameValidator;
+import com.fdg.fakedatagenerator.constraints.Constraint;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
@@ -29,7 +29,7 @@ public class Column<T extends DataType<?>> {
     @JsonProperty("dataType")
     private final @NotNull T dataType;
     @JsonProperty("constraints")
-    private final Set<ColumnValidator> constraints = new HashSet<>();
+    private final Set<ColumnConstraint> constraints = new HashSet<>();
 
 
     public Column(String columnName, T dataType) {
@@ -38,9 +38,9 @@ public class Column<T extends DataType<?>> {
         this.dataType = dataType;
     }
 
-    public Column(String columnName, T dataType, @JsonProperty("constraints") ColumnValidator... constraints) {
+    public Column(String columnName, T dataType, @JsonProperty("constraints") ColumnConstraint... constraints) {
         this(columnName, dataType);
-        for (ColumnValidator constraint : constraints) {
+        for (ColumnConstraint constraint : constraints) {
             this.addConstraint(constraint);
         }
     }
@@ -50,8 +50,8 @@ public class Column<T extends DataType<?>> {
      *
      * @param columnConstraint the column constraint
      */
-    public void addConstraint(ColumnValidator columnConstraint) {
-        for (ColumnValidator constraint : this.constraints) {
+    public void addConstraint(ColumnConstraint columnConstraint) {
+        for (ColumnConstraint constraint : this.constraints) {
             if (constraint.conflictsWith(columnConstraint)) {
                 throw new IllegalArgumentException("Constraint conflicts with existing constraints");
             }
@@ -61,8 +61,8 @@ public class Column<T extends DataType<?>> {
 
 
     public boolean isValid(T value) {  // TODO: Should this be a boolean?
-        for (Validator validator : this.constraints) {
-            validator.validate(value); // TODO: this will no longer throw an exception because it violates LSP
+        for (Constraint constraint : this.constraints) {
+            constraint.validate(value); // TODO: this will no longer throw an exception because it violates LSP
         }
         return true;
     }
@@ -85,8 +85,8 @@ public class Column<T extends DataType<?>> {
     public String toString() {
         StringBuilder string = new StringBuilder("Column: " + this.name + "\nData Type: " + this.dataType);
         if (!this.constraints.isEmpty()) {
-            for (ColumnValidator constraint : this.constraints) {
-                string.append("\nValidator: ").append(constraint);
+            for (ColumnConstraint constraint : this.constraints) {
+                string.append("\nConstraint: ").append(constraint);
             }
         }
         return string.toString();

@@ -1,4 +1,4 @@
-package com.fdg.fakedatagenerator.validators.TableValidators;
+package com.fdg.fakedatagenerator.constraints.table;
 
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.table.Table;
@@ -6,11 +6,11 @@ import com.fdg.fakedatagenerator.table.Table;
 /**
  * The type Table check constraint.
  */
-public class TableCheckValidator implements TableValidator {
+public class TableCheckConstraint implements TableConstraint {
     private final Column otherColumn;
     private final Table currentTable;
 
-    public TableCheckValidator(Table table, Column tableColumn) {
+    public TableCheckConstraint(Table table, Column tableColumn) {
         this.otherColumn = tableColumn;
         this.currentTable = table;
     }

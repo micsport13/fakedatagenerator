@@ -1,13 +1,12 @@
 package com.fdg.fakedatagenerator.table;
 
 import com.fdg.fakedatagenerator.column.Column;
-import com.fdg.fakedatagenerator.datatypes.DataType;
+import com.fdg.fakedatagenerator.constraints.table.UniqueConstraint;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 import com.fdg.fakedatagenerator.entities.Entity;
 import com.fdg.fakedatagenerator.exceptions.UniqueConstraintException;
 import com.fdg.fakedatagenerator.schema.Schema;
-import com.fdg.fakedatagenerator.validators.TableValidators.UniqueValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -69,7 +68,7 @@ class TableTest {
     public void addTableConstraint_WithUniqueColumn_ThrowsNoException() {
         Optional<Column<?>> column = this.testEntity.getColumnByName("name");
         if (column.isPresent()) {
-            this.table.addTableConstraint(column.get(), new UniqueValidator());
+            this.table.addTableConstraint(column.get(), new UniqueConstraint());
             this.table.add(this.testEntity);
         } else {
             Assertions.fail("Column not found");
@@ -87,7 +86,7 @@ class TableTest {
                                        .build();
         Optional<Column<?>> column = this.testEntity.getColumnByName("name");
         if (column.isPresent()) {
-            this.table.addTableConstraint(column.get(), new UniqueValidator());
+            this.table.addTableConstraint(column.get(), new UniqueConstraint());
             this.table.add(testEntity);
             Assertions.assertDoesNotThrow(() -> this.table.add(testEntity2));
         } else {
@@ -102,7 +101,7 @@ class TableTest {
     public void add_MultipleMembersWithNonUniqueIntoUniqueColumn_ValuesThrowsException() {
         Optional<Column<?>> column = this.testEntity.getColumnByName("name");
         if (column.isPresent()) {
-            this.table.addTableConstraint(column.get(), new UniqueValidator());
+            this.table.addTableConstraint(column.get(), new UniqueConstraint());
             this.table.add(this.testEntity);
             Assertions.assertThrows(UniqueConstraintException.class, () -> this.table.add(testEntity));
         } else {

@@ -1,9 +1,9 @@
-package com.fdg.fakedatagenerator.validators;
+package com.fdg.fakedatagenerator.constraints;
 
 /**
- * The interface Validator.
+ * The interface Constraint.
  */
-public interface Validator {
+public interface Constraint {
     /**
      * Is valid boolean.
      *

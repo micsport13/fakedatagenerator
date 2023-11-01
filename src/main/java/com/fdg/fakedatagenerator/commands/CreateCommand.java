@@ -1,12 +1,12 @@
 package com.fdg.fakedatagenerator.commands;
 
 import com.fdg.fakedatagenerator.column.Column;
+import com.fdg.fakedatagenerator.constraints.column.ColumnConstraint;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.datatypes.factories.DataTypeFactory;
 import com.fdg.fakedatagenerator.schema.Schema;
-import com.fdg.fakedatagenerator.validators.ColumnLevelConstraints;
-import com.fdg.fakedatagenerator.validators.ColumnValidators.ColumnValidator;
-import com.fdg.fakedatagenerator.validators.ColumnValidators.ColumnValidatorFactory;
+import com.fdg.fakedatagenerator.constraints.ColumnLevelConstraints;
+import com.fdg.fakedatagenerator.constraints.column.ColumnConstraintFactory;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.command.annotation.Command;
@@ -93,10 +93,10 @@ public class CreateCommand {
         switch (constraints.toUpperCase()) {
             case "NOT_NULL", "NOTNULL" -> {
                 log.info("Created column with name: " + name + " and type: " + columnType + " and constraint: NotNull");
-                this.dataManager.addColumn(new Column<>(name, columnType, ColumnValidatorFactory.createValidator(ColumnLevelConstraints.NOT_NULL)));
+                this.dataManager.addColumn(new Column<>(name, columnType, ColumnConstraintFactory.createValidator(ColumnLevelConstraints.NOT_NULL)));
             }
             case "CHECK" -> {
-                ColumnValidator checkConstraint = ColumnValidatorFactory.createValidator("Test"); // TODO: Read in potential check constraint values
+                ColumnConstraint checkConstraint = ColumnConstraintFactory.createValidator("Test"); // TODO: Read in potential check constraint values
                 log.info("Created column with name: " + name + " and type: " + columnType + " and constraint: " + checkConstraint);// TODO: Either accepted values or numbers
                 this.dataManager.addColumn(new Column<>(name, columnType, checkConstraint));
             }

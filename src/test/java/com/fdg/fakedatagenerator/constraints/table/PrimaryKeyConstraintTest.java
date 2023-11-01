@@ -1,4 +1,4 @@
-package com.fdg.fakedatagenerator.validators.TableValidators;
+package com.fdg.fakedatagenerator.constraints.table;
 
 import com.fdg.fakedatagenerator.exceptions.PrimaryKeyConstraintException;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,29 +11,29 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * The type Primary key constraint test.
  */
 class PrimaryKeyConstraintTest {
-    private PrimaryKeyValidator primaryKeyValidator;
+    private PrimaryKeyConstraint primaryKeyConstraint;
 
     @BeforeEach
     void setUp() {
-        this.primaryKeyValidator = new PrimaryKeyValidator();
+        this.primaryKeyConstraint = new PrimaryKeyConstraint();
     }
 
     @Test
     void validate_addValueNotInPrimaryKey_ThrowsNoException() {
-        assertDoesNotThrow(() -> primaryKeyValidator.validate(1));
+        assertDoesNotThrow(() -> primaryKeyConstraint.validate(1));
     }
 
     @Test
     void validate_addMultipleValuesNotInPrimaryKey_ThrowsNoException() {
-        assertDoesNotThrow(() -> primaryKeyValidator.validate(1));
-        assertDoesNotThrow(() -> primaryKeyValidator.validate(2));
-        assertDoesNotThrow(() -> primaryKeyValidator.validate(3));
+        assertDoesNotThrow(() -> primaryKeyConstraint.validate(1));
+        assertDoesNotThrow(() -> primaryKeyConstraint.validate(2));
+        assertDoesNotThrow(() -> primaryKeyConstraint.validate(3));
     }
 
     @Test
     void validate_addExistingValueToPrimaryKey_ThrowsPrimaryKeyConstraintException() {
-        primaryKeyValidator.validate(1);
-        assertThrows(PrimaryKeyConstraintException.class, () -> primaryKeyValidator.validate(1));
+        primaryKeyConstraint.validate(1);
+        assertThrows(PrimaryKeyConstraintException.class, () -> primaryKeyConstraint.validate(1));
     }
 
 

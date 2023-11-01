@@ -1,4 +1,4 @@
-package com.fdg.fakedatagenerator.validators.TableValidators;
+package com.fdg.fakedatagenerator.constraints.table;
 
 import com.fdg.fakedatagenerator.exceptions.ForeignKeyConstraintException;
 import com.fdg.fakedatagenerator.table.Table;
@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * The type Foreign key constraint.
  */
-public class ForeignKeyValidator implements TableValidator {
+public class ForeignKeyConstraint implements TableConstraint {
     private final Set<Object> foreignKeyValues = new HashSet<>();
     private final Table foreignTable;
     private final String foreignColumnName;
@@ -20,7 +20,7 @@ public class ForeignKeyValidator implements TableValidator {
      * @param foreignTable the foreign table
      * @param foreignColumnName the foreign column
      */
-    public ForeignKeyValidator(Table foreignTable, String foreignColumnName) {
+    public ForeignKeyConstraint(Table foreignTable, String foreignColumnName) {
         this.foreignTable = foreignTable;
         this.foreignColumnName = foreignColumnName;
     }

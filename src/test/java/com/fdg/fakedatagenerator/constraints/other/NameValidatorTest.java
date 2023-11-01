@@ -1,4 +1,4 @@
-package com.fdg.fakedatagenerator.validators.OtherValidators;
+package com.fdg.fakedatagenerator.constraints.other;
 
 import org.junit.jupiter.api.Test;
 
