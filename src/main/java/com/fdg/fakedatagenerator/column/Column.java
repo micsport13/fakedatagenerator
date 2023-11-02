@@ -23,7 +23,7 @@ import java.util.Set;
 @Getter
 @JsonSerialize(using = ColumnSerializer.class)
 @JsonDeserialize(using = ColumnDeserializer.class)
-public class Column<T extends DataType<?>> {
+public class Column<T extends DataType<?>> { // TODO: Does this need types?
     @JsonProperty("name")
     private final @NotNull String name;
     @JsonProperty("dataType")
