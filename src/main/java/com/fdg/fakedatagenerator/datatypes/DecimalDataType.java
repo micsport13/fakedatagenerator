@@ -21,7 +21,7 @@ public class DecimalDataType implements DataType<Double> {
     }
 
     @Override
-    public String serialize(Double value) {
+    public String store(Double value) {
         if (value == null) {
             return null;
         }
@@ -31,7 +31,7 @@ public class DecimalDataType implements DataType<Double> {
     }
 
     @Override
-    public Double deserialize(String value) throws DeserializationException {
+    public Double cast(String value) throws DeserializationException {
         if (value == null) {
             return null;
         } try {

@@ -13,12 +13,12 @@ public class VarcharDataType implements DataType<String> {
         this.maxLength = maxLength;
     }
     @Override
-    public String serialize(String value) {
+    public String store(String value) {
         return value;
     }
 
     @Override
-    public String deserialize(String value) {
+    public String cast(String value) {
         return value.substring(0, this.maxLength);
     }
 

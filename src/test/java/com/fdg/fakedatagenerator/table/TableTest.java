@@ -4,7 +4,7 @@ import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.constraints.table.UniqueConstraint;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
-import com.fdg.fakedatagenerator.entities.Entity;
+import com.fdg.fakedatagenerator.row.Row;
 import com.fdg.fakedatagenerator.exceptions.UniqueConstraintException;
 import com.fdg.fakedatagenerator.schema.Schema;
 import org.junit.jupiter.api.Assertions;
@@ -23,11 +23,11 @@ class TableTest {
     TODO: Testing validations
         Check state (Correct columns, correct table constraints, name of table)
         Table name validation
-        Check adding entities to make sure correct error is thrown.
+        Check adding row to make sure correct error is thrown.
         Check schema definition and schema order
      */
     private Table table;
-    private Entity testEntity;
+    private Row testRow;
 
     /**
      * Sets up.
@@ -36,7 +36,7 @@ class TableTest {
     public void setUp() {
         Schema schema = new Schema(new Column<>("id", new IntegerDataType()), new Column<>("name", new VarcharDataType()));
         this.table = new Table("TableTest", schema);
-        this.testEntity = new Entity.Builder(new Column<>("id", new IntegerDataType()), new Column<>("name",
+        this.testRow = new Row.Builder(new Column<>("id", new IntegerDataType()), new Column<>("name",
                 new VarcharDataType())).withColumnValue("id", 1)
                                        .withColumnValue("name", "Dave")
                                        .build();
@@ -47,8 +47,8 @@ class TableTest {
      */
     @Test
     public void add_WithValidEntity_SuccessfullyAddedToTable() {
-        this.testEntity.setColumnValue("id", 1);
-        this.table.add(testEntity);
+        this.testRow.setColumnValue("id", 1);
+        this.table.add(testRow);
     }
 
     /**
@@ -56,8 +56,8 @@ class TableTest {
      */
     @Test
     public void add_WithMultipleEntities_AllAddedSucessfullyToTable() {
-        this.table.add(this.testEntity);
-        this.table.add(this.testEntity);
+        this.table.add(this.testRow);
+        this.table.add(this.testRow);
         assertEquals(2, this.table.getEntities().size());
     }
 
@@ -66,10 +66,10 @@ class TableTest {
      */
     @Test
     public void addTableConstraint_WithUniqueColumn_ThrowsNoException() {
-        Optional<Column<?>> column = this.testEntity.getColumnByName("name");
+        Optional<Column<?>> column = this.testRow.getColumnByName("name");
         if (column.isPresent()) {
             this.table.addTableConstraint(column.get(), new UniqueConstraint());
-            this.table.add(this.testEntity);
+            this.table.add(this.testRow);
         } else {
             Assertions.fail("Column not found");
         }
@@ -80,15 +80,15 @@ class TableTest {
      */
     @Test
     public void add_MultipleEntitiesOnUniqueColumn_ThrowsNoException() {
-        Entity testEntity2 = new Entity.Builder(new Column<>("id", new IntegerDataType()), new Column<>("name",
+        Row testRow2 = new Row.Builder(new Column<>("id", new IntegerDataType()), new Column<>("name",
                 new VarcharDataType())).withColumnValue("id", 2)
                                        .withColumnValue("name", "John")
                                        .build();
-        Optional<Column<?>> column = this.testEntity.getColumnByName("name");
+        Optional<Column<?>> column = this.testRow.getColumnByName("name");
         if (column.isPresent()) {
             this.table.addTableConstraint(column.get(), new UniqueConstraint());
-            this.table.add(testEntity);
-            Assertions.assertDoesNotThrow(() -> this.table.add(testEntity2));
+            this.table.add(testRow);
+            Assertions.assertDoesNotThrow(() -> this.table.add(testRow2));
         } else {
             Assertions.fail("Column not found");
         }
@@ -99,11 +99,11 @@ class TableTest {
      */
     @Test
     public void add_MultipleMembersWithNonUniqueIntoUniqueColumn_ValuesThrowsException() {
-        Optional<Column<?>> column = this.testEntity.getColumnByName("name");
+        Optional<Column<?>> column = this.testRow.getColumnByName("name");
         if (column.isPresent()) {
             this.table.addTableConstraint(column.get(), new UniqueConstraint());
-            this.table.add(this.testEntity);
-            Assertions.assertThrows(UniqueConstraintException.class, () -> this.table.add(testEntity));
+            this.table.add(this.testRow);
+            Assertions.assertThrows(UniqueConstraintException.class, () -> this.table.add(testRow));
         } else {
             Assertions.fail("Column not found");
         }

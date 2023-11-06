@@ -4,12 +4,12 @@ import com.fdg.fakedatagenerator.column.Column;
 
 public class IntegerDataType implements DataType<Integer> {
     @Override
-    public String serialize(Integer value) {
+    public String store(Integer value) {
         return value.toString();
     }
 
     @Override
-    public Integer deserialize(String value) {
+    public Integer cast(String value) {
         return Integer.parseInt(value);
     }
 

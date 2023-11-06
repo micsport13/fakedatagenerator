@@ -4,9 +4,9 @@ import com.fdg.fakedatagenerator.exceptions.DeserializationException;
 
 
 public interface DataType<T> { // TODO: Does this need types?
-    String serialize(T value);
+    String store(T value);
 
-    T deserialize(String value) throws DeserializationException;
+    T cast(String value) throws DeserializationException;
 
     boolean isCompatible(String value);
 }

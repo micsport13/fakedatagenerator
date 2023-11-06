@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.constraints.table.TableConstraint;
-import com.fdg.fakedatagenerator.entities.Entity;
+import com.fdg.fakedatagenerator.row.Row;
 import com.fdg.fakedatagenerator.schema.Schema;
 import com.fdg.fakedatagenerator.serializers.table.TableDeserializer;
 import com.fdg.fakedatagenerator.serializers.table.TableSerializer;
@@ -25,7 +25,7 @@ public class Table {
 
     @Getter
     private final Schema schema;
-    private final List<Entity> entities = new ArrayList<>();
+    private final List<Row> entities = new ArrayList<>();
 
     public Table(String name, Schema schema) {
         this.name = name;
@@ -53,18 +53,18 @@ public class Table {
     }
 
     /**
-     * Gets entities.
+     * Gets row.
      *
-     * @return the entities
+     * @return the row
      */
-    public List<Entity> getEntities() {
+    public List<Row> getEntities() {
         return new ArrayList<>(entities);
     }
 
     public List<Object> getColumnValues(String columnName) {
         List<Object> columnValues = new ArrayList<>();
-        for (Entity entity : entities) {
-            columnValues.add(entity.getValue(columnName));
+        for (Row row : entities) {
+            columnValues.add(row.getValue(columnName));
         }
         return columnValues;
     }
@@ -72,13 +72,13 @@ public class Table {
     /**
      * Add.
      *
-     * @param entity the entity
+     * @param row the row
      */
-    public void add(Entity entity) {
-        if (isValidEntity(entity)) { // TODO: Fix if schema doesn't match entity
-            entities.add(entity);
+    public void add(Row row) {
+        if (isValidEntity(row)) { // TODO: Fix if schema doesn't match row
+            entities.add(row);
         } else {
-            throw new IllegalArgumentException("Entity is not valid for table " + this.name);
+            throw new IllegalArgumentException("Row is not valid for table " + this.name);
         }
     }
 
@@ -90,7 +90,7 @@ public class Table {
         Optional<Column<?>> column = this.schema.getColumn(columnName);
         if (column.isPresent()) {
             this.schema.getTableConstraints().remove(column.get());
-            this.entities.forEach(entity -> entity.getColumnValueMapping().getMap().remove(column.get()));
+            this.entities.forEach(row -> row.getColumnValueMapping().remove(column.get()));
         } else {
             throw new IllegalArgumentException("Column with name " + columnName + " not found.");
         }
@@ -98,22 +98,22 @@ public class Table {
 
 
     /**
-     * Is valid entity boolean.
+     * Is valid row boolean.
      *
-     * @param entity the entity
+     * @param row the row
      *
      * @return the boolean
      */
-    public boolean isValidEntity(Entity entity) {
+    public boolean isValidEntity(Row row) {
         for (Map.Entry<Column<?>, Set<TableConstraint>> tableConstraints : this.schema.getTableConstraints()
                                                                                       .entrySet()) {
             if (tableConstraints.getValue() != null) {
                 tableConstraints.getValue()
-                                .forEach(constraint -> constraint.validate(entity.getColumnValueMapping()
-                                                                                 .get(tableConstraints.getKey())));
+                                .forEach(constraint -> constraint.validate(row.getColumnValueMapping()
+                                                                              .get(tableConstraints.getKey())));
             }
         }
-        return this.getSchema().getColumns().containsAll(entity.getColumnValueMapping().getMap().keySet());
+        return this.getSchema().getColumns().containsAll(row.getColumnValueMapping().keySet());
     }
 
     @Override
@@ -130,8 +130,8 @@ public class Table {
             sb.append(column.getName()).append(",");
         }
         sb.append("\n");
-        for (Entity entity : entities) {
-            sb.append(entity.toRecord()).append("\n");
+        for (Row row : entities) {
+            sb.append(row.toRecord()).append("\n");
         }
         return sb.toString();
     }
