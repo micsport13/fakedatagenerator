@@ -1,7 +1,5 @@
 package com.fdg.fakedatagenerator.datatypes;
 
-import com.fdg.fakedatagenerator.column.Column;
-
 public class IntegerDataType implements DataType<Integer> {
     @Override
     public String store(Integer value) {
