@@ -13,17 +13,20 @@ public class VarcharDataType implements DataType<String> {
         this.maxLength = maxLength;
     }
     @Override
-    public String store(String value) {
-        return value;
+    public String store(Object value) {
+        if (value == null) {
+            return null;
+        }
+        return value.toString().substring(0, this.maxLength);
     }
 
     @Override
-    public String cast(String value) {
-        return value.substring(0, this.maxLength);
+    public String cast(Object value) {
+        return value.toString().substring(0, this.maxLength);
     }
 
     @Override
-    public boolean isCompatible(String value) throws MismatchedDataTypeException {
+    public boolean validate(String value) throws MismatchedDataTypeException {
         return true;
     }
 

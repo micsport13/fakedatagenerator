@@ -27,7 +27,7 @@ public class Row {
 
   public <T> void setColumnValue(Column<?> column, T columnValue) {
     if (columnValue == null
-        || column.getDataType().isCompatible(String.valueOf(columnValue))) {
+        || column.getDataType().validate(String.valueOf(columnValue))) {
       this.columnValueMapping.put(column, columnValue);
     } else {
       throw new MismatchedDataTypeException(
@@ -44,7 +44,7 @@ public class Row {
     Optional<Column<?>> column = getColumnByName(columnName);
     if (column.isPresent()) {
       if (columnValue == null
-          || column.get().getDataType().isCompatible(String.valueOf(columnValue))) {
+          || column.get().getDataType().validate(String.valueOf(columnValue))) {
         this.columnValueMapping.put(column.get(), columnValue);
       } else {
         throw new MismatchedDataTypeException(
@@ -169,12 +169,12 @@ public class Row {
       }
       for (Column<?> column : this.columnValueMapping.keySet()) {
         if (column.getName().equals(columnName)
-            && column.getDataType().isCompatible(String.valueOf(value))) {
+            && column.getDataType().validate(String.valueOf(value))) {
           this.columnValueMapping.put(column, value);
           return this;
         }
         if (column.getName().equals(columnName)
-            && !column.getDataType().isCompatible(String.valueOf(value))) {
+            && !column.getDataType().validate(String.valueOf(value))) {
           throw new IllegalArgumentException(
               "Value does not match the column type of "
                   + column.getDataType()
