@@ -2,8 +2,8 @@ package com.fdg.fakedatagenerator.datatypes;
 
 import com.fdg.fakedatagenerator.exceptions.DeserializationException;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
-
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -12,10 +12,12 @@ import java.util.Objects;
 public class DecimalDataType implements DataType<BigDecimal> {
   private final Integer precision;
   private final Integer scale;
+  private RoundingMode roundingMode;
 
   public DecimalDataType() {
     this.precision = 18;
     this.scale = 0;
+    this.roundingMode = RoundingMode.HALF_UP;
   }
 
   public DecimalDataType(Integer precision, Integer scale) {
@@ -23,7 +25,13 @@ public class DecimalDataType implements DataType<BigDecimal> {
       throw new IllegalArgumentException("Scale cannot be greater than precision.");
     }
     this.precision = precision;
-    this.scale = Objects.requireNonNullElse(scale, 0);
+    this.scale = scale;
+    this.roundingMode = RoundingMode.HALF_UP;
+  }
+
+  public DecimalDataType(Integer precision, Integer scale, RoundingMode roundingMode) {
+    this(precision, scale);
+    this.roundingMode = Objects.requireNonNullElse(roundingMode, RoundingMode.HALF_UP);
   }
 
   @Override
@@ -32,12 +40,9 @@ public class DecimalDataType implements DataType<BigDecimal> {
       return null;
     }
     try {
-      // Parse the string back to a double value
-      DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
-      DecimalFormat format = new DecimalFormat(getFormatString(), symbols);
-      format.setParseBigDecimal(true); // Handle precise decimals
-      return format.parse(value.toString()).toString();
-    } catch (Exception e) {
+        BigDecimal decimalValue = new BigDecimal(value.toString());
+        return decimalValue.setScale(this.scale, this.roundingMode).toString();
+    } catch (NumberFormatException e) {
       throw new MismatchedDataTypeException("Error deserializing decimal value: " + value);
     }
   }
@@ -46,15 +51,13 @@ public class DecimalDataType implements DataType<BigDecimal> {
   public BigDecimal cast(Object value) throws DeserializationException {
     if (value == null) {
       return null;
+    } else {
+      try {
+        return new BigDecimal(value.toString()).setScale(this.scale, RoundingMode.HALF_UP);
+      } catch (NumberFormatException e) {
+        throw new DeserializationException("Error deserializing decimal value: " + value);
+      }
     }
-    return new BigDecimal(value.toString());
-    /*
-    try {
-      // TODO: Fix this function
-    } catch (Exception e) {
-      // Handle parsing errors
-      throw new DeserializationException("Error deserializing decimal value: " + value);
-    }*/
   }
 
   @Override
@@ -68,14 +71,6 @@ public class DecimalDataType implements DataType<BigDecimal> {
       // Handle parsing errors
       return false;
     }*/
-  }
-
-  private String getFormatString() {
-    // TODO: Fix this function
-    if (precision == null || scale == null || scale >= precision) {
-      return "0"; // Default format, no precision or scale
-    }
-    return "#." + "0".repeat(Math.max(0, scale));
   }
 
   @Override

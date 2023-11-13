@@ -24,16 +24,16 @@ public class IntegerDataType implements DataType<Integer> {
         if (value == null) {
             return null;
         }
-        if (value instanceof Number) {
-            return ((Number) value).intValue();
-        } else if (value instanceof String) {
+        if (value instanceof Integer) {
+            return (Integer) value;
+        } else {
             try {
-                return Integer.valueOf((String) value);
+                double doubleValue = Double.parseDouble(value.toString());
+                return (int) doubleValue;
             } catch (NumberFormatException e) {
                 throw new DeserializationException("Error deserializing integer value: " + value);
             }
         }
-        throw new DeserializationException("Error deserializing integer value: " + value);
     }
 
     @Override
