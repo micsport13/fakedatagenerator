@@ -9,7 +9,6 @@ import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.exceptions.CheckConstraintException;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
 import com.fdg.fakedatagenerator.exceptions.NotNullConstraintException;
-import com.fdg.fakedatagenerator.exceptions.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -103,20 +102,20 @@ public class ColumnTest {
   // IsValid
   @Test
   public void isValid_WithValidValue_ReturnsTrue() {
-    assertDoesNotThrow(() -> intColumn.isValid(1));
+    assertDoesNotThrow(() -> intColumn.validate(1));
   }
 
   @Test
   public void isValid_WithNullValueInNotNullColumn_ReturnsFalse() {
     Column<IntegerDataType> column =
         new Column<>("int", new IntegerDataType(), new NotNullConstraint());
-    assertThrows(NotNullConstraintException.class, () -> column.isValid(null));
+    assertThrows(NotNullConstraintException.class, () -> column.validate(null));
   }
 
   @Test
   public void isValid_WithNullValueInNullableColumn_ReturnsTrue() {
     Column<IntegerDataType> column = new Column<>("int", new IntegerDataType());
-    assertDoesNotThrow(() -> column.isValid(null));
+    assertDoesNotThrow(() -> column.validate(null));
   }
 
   @Test
@@ -125,11 +124,11 @@ public class ColumnTest {
         new ColumnCheckConstraint.Builder<>(new IntegerDataType()).withMaximumValue(10).build();
     Column<IntegerDataType> column =
         new Column<>("int", new IntegerDataType(), columnCheckConstraint);
-    assertThrows(CheckConstraintException.class, () -> column.isValid(11));
+    assertThrows(CheckConstraintException.class, () -> column.validate(11));
   }
 
   @Test
   public void isValid_WithInvalidValue_ReturnsFalse() {
-    assertThrows(MismatchedDataTypeException.class, () -> this.intColumn.isValid("test"));
+    assertThrows(MismatchedDataTypeException.class, () -> this.intColumn.validate("test"));
   }
 }

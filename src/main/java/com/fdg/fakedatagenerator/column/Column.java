@@ -59,7 +59,7 @@ public class Column<T extends DataType<?>> { // TODO: Does this need types?
     }
 
 
-    public void isValid(Object value) {  // TODO: Should this be a boolean?
+    public void validate(Object value) {  // TODO: Should this be a boolean?
         for (Constraint constraint : this.constraints) {
             constraint.validate(value); // TODO: this will no longer throw an exception because it violates LSP
         }
