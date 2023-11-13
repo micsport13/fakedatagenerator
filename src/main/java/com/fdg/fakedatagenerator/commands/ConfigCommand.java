@@ -2,11 +2,10 @@ package com.fdg.fakedatagenerator.commands;
 
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.serializers.ColumnConfig;
+import java.io.IOException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.command.annotation.Command;
-
-import java.io.IOException;
 
 @Log4j2
 @Command(command = "config", group = "Config")

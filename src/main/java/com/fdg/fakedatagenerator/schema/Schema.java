@@ -4,13 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.column.Column;
+import com.fdg.fakedatagenerator.constraints.Constraint;
 import com.fdg.fakedatagenerator.constraints.table.TableConstraint;
 import com.fdg.fakedatagenerator.serializers.schema.SchemaDeserializer;
 import com.fdg.fakedatagenerator.serializers.schema.SchemaSerializer;
-import com.fdg.fakedatagenerator.constraints.Constraint;
-import lombok.Getter;
-
 import java.util.*;
+import lombok.Getter;
 
 @Getter
 @JsonSerialize(using = SchemaSerializer.class)

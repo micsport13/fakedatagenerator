@@ -4,10 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fdg.fakedatagenerator.schema.Schema;
-import lombok.extern.log4j.Log4j2;
-
 import java.io.File;
 import java.io.IOException;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class SchemaConfig {

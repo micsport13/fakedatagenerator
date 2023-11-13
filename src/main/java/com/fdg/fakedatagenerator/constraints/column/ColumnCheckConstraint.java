@@ -1,14 +1,13 @@
 package com.fdg.fakedatagenerator.constraints.column;
 
+import com.fdg.fakedatagenerator.constraints.table.TableCheckConstraint;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.exceptions.CheckConstraintException;
-import com.fdg.fakedatagenerator.constraints.table.TableCheckConstraint;
-import lombok.Getter;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import lombok.Getter;
 
 /**
  * Check Constraint Column
@@ -20,7 +19,7 @@ public final class ColumnCheckConstraint implements ColumnConstraint {
     private final Number max; // TODO: Figure out how to keep this generic yet converts to the datatype for precision
     private final Set<String> acceptedValues;
 
-    private <T extends DataType<?>> ColumnCheckConstraint(CheckConstraintBuilder<T> builder) {
+    private <T extends DataType<?>> ColumnCheckConstraint(Builder<T> builder) {
         this.min = builder.min;
         this.max = builder.max;
         this.acceptedValues = builder.acceptedValues;
@@ -124,7 +123,7 @@ public final class ColumnCheckConstraint implements ColumnConstraint {
     /**
      * The type Check constraint builder.
      */
-    public final static class CheckConstraintBuilder<T extends DataType<?>> {
+    public final static class Builder<T extends DataType<?>> {
         private final T dataType;
         private final Set<String> acceptedValues = new HashSet<>();
         private Number min; // TODO: Figure out how to keep this generic yet converts to the datatype for precision
@@ -133,7 +132,7 @@ public final class ColumnCheckConstraint implements ColumnConstraint {
         /**
          * Instantiates a new Check constraint builder.
          */
-        public CheckConstraintBuilder(T dataType) {
+        public Builder(T dataType) {
             this.dataType = dataType;
         }
 
@@ -144,7 +143,7 @@ public final class ColumnCheckConstraint implements ColumnConstraint {
          *
          * @return the check constraint builder
          */
-        public <U extends Number> CheckConstraintBuilder<T> withMinimumValue(U minimumValue) {
+        public <U extends Number> Builder<T> withMinimumValue(U minimumValue) {
             this.min = Objects.requireNonNull(minimumValue);
             return this;
         }
@@ -156,7 +155,7 @@ public final class ColumnCheckConstraint implements ColumnConstraint {
          *
          * @return the check constraint builder
          */
-        public <U extends Number> CheckConstraintBuilder<T> withMaximumValue(U maximumValue) {
+        public <U extends Number> Builder<T> withMaximumValue(U maximumValue) {
             this.max = Objects.requireNonNull(maximumValue);
             return this;
         }
@@ -170,14 +169,14 @@ public final class ColumnCheckConstraint implements ColumnConstraint {
          *
          * @return the check constraint builder
          */
-        public <U extends Number> CheckConstraintBuilder<T> withRange(U lowerBound, U upperBound) {
+        public <U extends Number> Builder<T> withRange(U lowerBound, U upperBound) {
             this.min = Objects.requireNonNull(lowerBound);
             this.max = Objects.requireNonNull(upperBound);
             return this;
         }
 
         @SafeVarargs
-        public final <U extends String> CheckConstraintBuilder<T> withAcceptedValues(U firstAcceptedValue, U... acceptedValues) {
+        public final <U extends String> Builder<T> withAcceptedValues(U firstAcceptedValue, U... acceptedValues) {
             this.acceptedValues.add(Objects.requireNonNull(firstAcceptedValue));
             this.acceptedValues.addAll(List.of(acceptedValues));
             return this;

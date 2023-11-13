@@ -6,22 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.command.annotation.Command;
 import org.springframework.shell.command.annotation.Option;
 
-/**
- * The type Data generator.
- */
-
+/** The type Data generator. */
 public class DataGenerator {
-    private static final Logger logger = LogManager.getLogger(DataGenerator.class);
-    @Autowired
-    private final DataManager dataManager;
+  private static final Logger logger = LogManager.getLogger(DataGenerator.class);
+  @Autowired private final DataManager dataManager;
 
-    public DataGenerator(DataManager dataManager) {
-        this.dataManager = dataManager;
-    }
+  public DataGenerator(DataManager dataManager) {
+    this.dataManager = dataManager;
+  }
 
-
-    @Command(command = "generate")
-    public void generateData(Integer numEntities, @Option(required = false) String filePath) {
-        this.dataManager.generateData(numEntities, filePath);
-    }
+  @Command(command = "generate")
+  public void generateData(Integer numEntities, @Option(required = false) String filePath) {
+    this.dataManager.generateData(numEntities, filePath);
+  }
 }

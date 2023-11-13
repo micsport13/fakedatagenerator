@@ -1,9 +1,9 @@
 package com.fdg.fakedatagenerator.constraints.other;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 class NameValidatorTest {
 
@@ -21,5 +21,10 @@ class NameValidatorTest {
         assertThrows(IllegalArgumentException.class, () -> NameValidator.validate("@ColumnName"));
         assertThrows(IllegalArgumentException.class, () -> NameValidator.validate("# ColumnName"));
         assertThrows(IllegalArgumentException.class, () -> NameValidator.validate(" ColumnName"));
+    }
+
+    @Test
+    public void validate_withNameLongerThan31Characters_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> NameValidator.validate("ThisNameIsLongerThan31Characters"));
     }
 }

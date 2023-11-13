@@ -4,13 +4,13 @@ import com.fdg.fakedatagenerator.exceptions.DeserializationException;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
 import java.util.Objects;
+import lombok.Getter;
 
 public class DecimalDataType implements DataType<BigDecimal> {
+  @Getter
   private final Integer precision;
+  @Getter
   private final Integer scale;
   private RoundingMode roundingMode;
 

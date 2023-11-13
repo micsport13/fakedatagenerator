@@ -9,12 +9,10 @@ import org.springframework.shell.command.annotation.CommandScan;
 @CommandScan(basePackages = "com.fdg.fakedatagenerator.commands")
 public class FakedatageneratorApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(FakedatageneratorApplication.class, args);
-    }
+  Faker faker = new Faker();
+  String name = faker.name().fullName(); // Miss Samanta Schmidt
 
-
-    Faker faker = new Faker();
-    String name = faker.name().fullName(); // Miss Samanta Schmidt
-
+  public static void main(String[] args) {
+    SpringApplication.run(FakedatageneratorApplication.class, args);
+  }
 }

@@ -1,7 +1,6 @@
 package com.fdg.fakedatagenerator.constraints.table;
 
 import com.fdg.fakedatagenerator.exceptions.PrimaryKeyConstraintException;
-
 import java.util.HashSet;
 import java.util.Set;
 

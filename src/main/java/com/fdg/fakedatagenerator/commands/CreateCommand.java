@@ -1,18 +1,17 @@
 package com.fdg.fakedatagenerator.commands;
 
 import com.fdg.fakedatagenerator.column.Column;
+import com.fdg.fakedatagenerator.constraints.ColumnLevelConstraints;
 import com.fdg.fakedatagenerator.constraints.column.ColumnConstraint;
+import com.fdg.fakedatagenerator.constraints.column.ColumnConstraintFactory;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.datatypes.factories.DataTypeFactory;
 import com.fdg.fakedatagenerator.schema.Schema;
-import com.fdg.fakedatagenerator.constraints.ColumnLevelConstraints;
-import com.fdg.fakedatagenerator.constraints.column.ColumnConstraintFactory;
+import java.util.*;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.command.annotation.Command;
 import org.springframework.shell.command.annotation.Option;
-
-import java.util.*;
 
 @Log4j2
 @Command(command = "create", group = "Create")

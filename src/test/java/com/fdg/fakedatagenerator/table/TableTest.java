@@ -1,19 +1,18 @@
 package com.fdg.fakedatagenerator.table;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.constraints.table.UniqueConstraint;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
-import com.fdg.fakedatagenerator.row.Row;
 import com.fdg.fakedatagenerator.exceptions.UniqueConstraintException;
+import com.fdg.fakedatagenerator.row.Row;
 import com.fdg.fakedatagenerator.schema.Schema;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * The type Table test.

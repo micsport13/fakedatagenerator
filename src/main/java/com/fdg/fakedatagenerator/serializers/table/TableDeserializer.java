@@ -10,14 +10,15 @@ import java.io.IOException;
 
 @Log4j2
 public class TableDeserializer extends StdDeserializer<Table> {
-    // TODO: Standardize these field names for the yml file
-    protected TableDeserializer(Class<Table> t) {
-        super(t);
-    }
+  // TODO: Standardize these field names for the yml file
+  protected TableDeserializer(Class<Table> t) {
+    super(t);
+  }
 
-    @Override
-    public Table deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-        log.info("Deserializing table");
-        return null;
-    }
+  @Override
+  public Table deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+      throws IOException {
+    log.info("Deserializing table");
+    return null;
+  }
 }

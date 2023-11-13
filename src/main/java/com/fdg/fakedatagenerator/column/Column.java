@@ -4,17 +4,16 @@ package com.fdg.fakedatagenerator.column;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fdg.fakedatagenerator.constraints.Constraint;
 import com.fdg.fakedatagenerator.constraints.column.ColumnConstraint;
+import com.fdg.fakedatagenerator.constraints.other.NameValidator;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.serializers.column.ColumnDeserializer;
 import com.fdg.fakedatagenerator.serializers.column.ColumnSerializer;
-import com.fdg.fakedatagenerator.constraints.other.NameValidator;
-import com.fdg.fakedatagenerator.constraints.Constraint;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-
 import java.util.HashSet;
 import java.util.Set;
+import lombok.Getter;
 
 /**
  * Column class
@@ -60,11 +59,11 @@ public class Column<T extends DataType<?>> { // TODO: Does this need types?
     }
 
 
-    public boolean isValid(T value) {  // TODO: Should this be a boolean?
+    public void isValid(Object value) {  // TODO: Should this be a boolean?
         for (Constraint constraint : this.constraints) {
             constraint.validate(value); // TODO: this will no longer throw an exception because it violates LSP
         }
-        return true;
+        this.getDataType().store(value);
     }
 
     @Override

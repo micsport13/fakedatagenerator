@@ -5,18 +5,17 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fdg.fakedatagenerator.column.Column;
-import com.fdg.fakedatagenerator.datatypes.DataType;
-import com.fdg.fakedatagenerator.datatypes.factories.DataTypeFactory;
 import com.fdg.fakedatagenerator.constraints.ColumnLevelConstraints;
 import com.fdg.fakedatagenerator.constraints.column.ColumnConstraint;
 import com.fdg.fakedatagenerator.constraints.column.ColumnConstraintFactory;
-import lombok.extern.log4j.Log4j2;
-
+import com.fdg.fakedatagenerator.datatypes.DataType;
+import com.fdg.fakedatagenerator.datatypes.factories.DataTypeFactory;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Stream;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class ColumnDeserializer extends StdDeserializer<Column<?>> {

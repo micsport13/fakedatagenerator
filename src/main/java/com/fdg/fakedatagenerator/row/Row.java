@@ -26,14 +26,13 @@ public class Row {
   }
 
   public <T> void setColumnValue(Column<?> column, T columnValue) {
-    if (columnValue == null
-        || column.getDataType().validate(String.valueOf(columnValue))) {
+    if (columnValue == null || column.getDataType().validate(String.valueOf(columnValue))) {
       this.columnValueMapping.put(column, columnValue);
     } else {
-      throw new MismatchedDataTypeException(
-          "Value is not compatible with the column's data type.");
+      throw new MismatchedDataTypeException("Value is not compatible with the column's data type.");
     }
   }
+
   /**
    * Sets column value.
    *
@@ -43,8 +42,7 @@ public class Row {
   public <T> void setColumnValue(String columnName, T columnValue) {
     Optional<Column<?>> column = getColumnByName(columnName);
     if (column.isPresent()) {
-      if (columnValue == null
-          || column.get().getDataType().validate(String.valueOf(columnValue))) {
+      if (columnValue == null || column.get().getDataType().validate(String.valueOf(columnValue))) {
         this.columnValueMapping.put(column.get(), columnValue);
       } else {
         throw new MismatchedDataTypeException(

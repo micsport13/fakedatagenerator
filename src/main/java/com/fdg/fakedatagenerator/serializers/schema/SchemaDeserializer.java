@@ -10,14 +10,15 @@ import java.io.IOException;
 
 @Log4j2
 public class SchemaDeserializer extends StdDeserializer<Schema> {
-    // TODO: Standardize these field names for the yml file
-    protected SchemaDeserializer(Class<?> vc) {
-        super(vc);
-    }
+  // TODO: Standardize these field names for the yml file
+  protected SchemaDeserializer(Class<?> vc) {
+    super(vc);
+  }
 
-    @Override
-    public Schema deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-        log.info("Deserializing schema");
-        return null;
-    }
+  @Override
+  public Schema deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+      throws IOException {
+    log.info("Deserializing schema");
+    return null;
+  }
 }

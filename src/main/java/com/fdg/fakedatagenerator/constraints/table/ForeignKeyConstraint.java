@@ -2,7 +2,6 @@ package com.fdg.fakedatagenerator.constraints.table;
 
 import com.fdg.fakedatagenerator.exceptions.ForeignKeyConstraintException;
 import com.fdg.fakedatagenerator.table.Table;
-
 import java.util.HashSet;
 import java.util.Set;
 

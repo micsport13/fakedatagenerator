@@ -1,12 +1,11 @@
 package com.fdg.fakedatagenerator.row;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
-import org.junit.jupiter.api.Test;
-
 import java.util.NoSuchElementException;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * The type Row test.

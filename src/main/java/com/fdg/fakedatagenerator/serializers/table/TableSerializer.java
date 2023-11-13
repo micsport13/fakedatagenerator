@@ -10,18 +10,20 @@ import java.io.IOException;
 
 @Log4j2
 public class TableSerializer extends StdSerializer<Table> {
-    // TODO: Standardize these field names for the yml file
-    public TableSerializer() {
-        this(null);
-    }
+  // TODO: Standardize these field names for the yml file
+  public TableSerializer() {
+    this(null);
+  }
 
-    protected TableSerializer(Class<Table> t) {
-        super(t);
-    }
+  protected TableSerializer(Class<Table> t) {
+    super(t);
+  }
 
-    @Override
-    public void serialize(Table table, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-        log.info("Serializing table: " + table.getName());
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+  @Override
+  public void serialize(
+      Table table, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
+      throws IOException {
+    log.info("Serializing table: " + table.getName());
+    throw new UnsupportedOperationException("Not implemented yet");
+  }
 }
