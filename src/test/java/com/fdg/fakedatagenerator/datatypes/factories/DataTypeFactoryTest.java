@@ -66,4 +66,23 @@ class DataTypeFactoryTest {
         assertEquals(10, varcharDataType.getMaxLength());
     }
 
+    @Test
+    public void create_VarcharDataTypeFromString_CreatesVarcharDataType() {
+        assertEquals(VarcharDataType.class, DataTypeFactory.create("varchar", inputParameters).getClass());
+        assertEquals(VarcharDataType.class, DataTypeFactory.create("VARCHAR", inputParameters).getClass());
+        assertEquals(VarcharDataType.class, DataTypeFactory.create("Varchar", inputParameters).getClass());
+    }
+
+    @Test
+    public void create_DecimalDataTypeFromString_CreatesDecimalDatatype() {
+        assertEquals(DecimalDataType.class, DataTypeFactory.create("decimal", inputParameters).getClass());
+        assertEquals(DecimalDataType.class, DataTypeFactory.create("DECIMAL", inputParameters).getClass());
+        assertEquals(DecimalDataType.class, DataTypeFactory.create("Decimal", inputParameters).getClass());
+    }
+    @Test
+    public void create_IntegerDataTypeFromString_CreatesIntegerDatatype() {
+        assertEquals(IntegerDataType.class, DataTypeFactory.create("INT", inputParameters).getClass());
+        assertEquals(IntegerDataType.class, DataTypeFactory.create("Integer", inputParameters).getClass());
+        assertEquals(IntegerDataType.class, DataTypeFactory.create("int", inputParameters).getClass());
+    }
 }

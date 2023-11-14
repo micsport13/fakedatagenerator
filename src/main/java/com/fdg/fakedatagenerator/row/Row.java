@@ -58,7 +58,7 @@ public class Row {
     Object value = columnValueMapping.get(column);
     if (value != null) {
       DataType<?> dataType = column.getDataType();
-      return (T) dataType.cast(value.toString()); // TODO: Does this need to have types?
+      return (T) dataType.cast(value); // TODO: Does this need to have types?
     }
     return null; // Handle the case where the value is null
   }
@@ -70,7 +70,7 @@ public class Row {
       Column<?> column = columnOptional.get();
       Object value = columnValueMapping.get(column);
       DataType<?> dataType = column.getDataType();
-      return (T) dataType.cast(value.toString()); // TODO: Does this need to have types?
+      return (T) dataType.cast(value); // TODO: Does this need to have types?
     }
     return null; // Handle the case where the value is null
   }

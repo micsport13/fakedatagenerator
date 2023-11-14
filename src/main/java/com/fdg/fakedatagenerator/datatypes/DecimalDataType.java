@@ -78,4 +78,9 @@ public class DecimalDataType implements DataType<BigDecimal> {
     if (this == o) return true;
     return o != null && getClass() == o.getClass();
   }
+
+  @Override
+  public String toString() {
+    return String.format("Decimal(%1$d, %2$d)", this.precision, this.scale);
+  }
 }

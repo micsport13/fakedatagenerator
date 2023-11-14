@@ -7,6 +7,9 @@ import com.fdg.fakedatagenerator.column.Column;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Parameter;
+import java.util.Arrays;
 
 @Log4j2
 public class ColumnSerializer extends StdSerializer<Column<?>> {
@@ -26,7 +29,20 @@ public class ColumnSerializer extends StdSerializer<Column<?>> {
     log.info("Serializing column: " + column);
     jsonGenerator.writeStartObject();
     jsonGenerator.writeStringField("name", column.getName());
-    jsonGenerator.writeStringField("dataType", column.getDataType().toString());
+    jsonGenerator.writeObjectFieldStart("dataType");
+    jsonGenerator.writeStringField("typeName", column.getDataType().toString());
+    jsonGenerator.writeObjectFieldStart("parameters");
+    for (Field field : column.getDataType().getClass().getDeclaredFields()) {
+      field.setAccessible(true);
+      try {
+        jsonGenerator.writeObjectField(field.getName(), field.get(column.getDataType()));
+      } catch (IllegalAccessException e) {
+        log.error(e);
+        throw new RuntimeException(e);
+      }
+    }
+    jsonGenerator.writeEndObject();
+    jsonGenerator.writeEndObject();
     jsonGenerator.writeArrayFieldStart("constraints");
     for (var columnConstraint : column.getConstraints()) {
       jsonGenerator.writeString(columnConstraint.getClass().getName());

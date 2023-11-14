@@ -1,4 +1,4 @@
----
+ ---
 columns:
   - name: "Alma"
     dataType: "com.fdg.fakedatagenerator.datatypes.VarcharDataType@26586b74"

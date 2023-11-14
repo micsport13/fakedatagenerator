@@ -24,7 +24,8 @@ public class CreateCommand {
     }
 
     @Command(command = "table", description = "Create a table")
-    public void createTable(Scanner scanner) {
+    public void createTable() {
+        Scanner scanner = new Scanner(System.in);
         System.out.print("Enter table name: ");
         String tableName = scanner.next();
         System.out.println("Available schemas: ");
@@ -32,7 +33,8 @@ public class CreateCommand {
         for (Schema schema : this.dataManager.getSchemas()) {
             System.out.print(i + ". ");
             schema.getColumns()
-                  .forEach(column -> System.out.println(column.getName() + ", " + column.getDataType().toString()));
+                  .forEach(column -> System.out.println("Name: " + column.getName() + ", Data Type: " + column.getDataType().toString()));
+            i++;
         }
 
         System.out.println("Enter schema index: ");
@@ -47,12 +49,13 @@ public class CreateCommand {
     }
 
     @Command(command = "schema", description = "Create a schema")
-    private Schema createSchema(Scanner scanner) {
+    private void createSchema() {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Available columns: ");
         int i = 0;
         List<Column<?>> columns = this.dataManager.getColumns();
         for (Column<?> column : this.dataManager.getColumns()) {
-            System.out.println(i + ". " + column.getName() + " " + column.getDataType().toString());
+            System.out.println(i + ". Name: " + column.getName() + " Data Type:" + column.getDataType().toString());
             i++;
         }
 
@@ -75,16 +78,15 @@ public class CreateCommand {
         }
 
         log.info("Created schema with columns: " + selectedColumns);
-        return new Schema(selectedColumns.toArray(new Column[0]));
+        this.dataManager.addSchema(selectedColumns.toArray(new Column[0]));
     }
 
     @Command(command = "column", description = "Create a column")
     public void createColumn(String name, String dataType,
-                             @Option(required = false) Boolean hasParameters,
-                             @Option(required = false) String constraints) {
+                             @Option(required = false) String constraints) { // TODO: Allow different flag name?
         // Assuming you have a method to convert String data type to Class type
         Map<String, Object> parameters = new HashMap<>();
-        DataType<?> columnType = DataTypeFactory.create(dataType, parameters);
+        DataType<?> columnType = DataTypeFactory.create(dataType, parameters); // TODO: Add parameter
         if (constraints == null) {
             this.dataManager.addColumn(new Column<>(name, columnType));
             return;

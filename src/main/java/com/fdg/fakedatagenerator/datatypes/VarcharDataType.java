@@ -47,4 +47,10 @@ public class VarcharDataType implements DataType<String> {
     if (this == o) return true;
     return o != null && getClass() == o.getClass();
   }
+
+  @Override
+  public String toString() {
+
+    return String.format("Varchar(%d)", this.maxLength);
+  }
 }

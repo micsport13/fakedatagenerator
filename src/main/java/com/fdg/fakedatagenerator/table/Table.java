@@ -24,7 +24,7 @@ public class Table {
 
     @Getter
     private final Schema schema;
-    private final List<Row> entities = new ArrayList<>();
+    private final transient List<Row> entities = new ArrayList<>();
 
     public Table(String name, Schema schema) {
         this.name = name;

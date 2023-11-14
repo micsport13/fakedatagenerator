@@ -1,10 +1,10 @@
 package com.fdg.fakedatagenerator.serializers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fdg.fakedatagenerator.column.Column;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -17,7 +17,7 @@ public class ColumnConfig {
 
   public static void writeConfig(String filePath, Column<?> column) throws IOException {
     ObjectMapper objectMapper =
-        YAMLMapper.builder().enable(YAMLGenerator.Feature.INDENT_ARRAYS).build();
+        YAMLMapper.builder().enable(YAMLGenerator.Feature.INDENT_ARRAYS).disable(SerializationFeature.FAIL_ON_EMPTY_BEANS).build();
     objectMapper.writeValue(new File(filePath), column);
   }
 }

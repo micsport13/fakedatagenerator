@@ -50,4 +50,9 @@ public class IntegerDataType implements DataType<Integer> {
     if (this == o) return true;
     return o != null && getClass() == o.getClass();
   }
+
+  @Override
+  public String toString() {
+    return "Integer";
+  }
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.constraints.Constraint;
 import com.fdg.fakedatagenerator.constraints.table.TableConstraint;
+import com.fdg.fakedatagenerator.serializers.column.ColumnSerializer;
 import com.fdg.fakedatagenerator.serializers.schema.SchemaDeserializer;
 import com.fdg.fakedatagenerator.serializers.schema.SchemaSerializer;
 import java.util.*;
@@ -14,7 +15,7 @@ import lombok.Getter;
 @Getter
 @JsonSerialize(using = SchemaSerializer.class)
 @JsonDeserialize(using = SchemaDeserializer.class)
-public class Schema implements Constraint {
+public class Schema {
     @JsonProperty("table_constraints")
     private final Map<Column<?>, Set<TableConstraint>> tableConstraints = new LinkedHashMap<>();
 
@@ -43,7 +44,6 @@ public class Schema implements Constraint {
         return this.tableConstraints.keySet();
     }
 
-    @Override
     public void validate(Object value) {
         for (Map.Entry<Column<?>, Set<TableConstraint>> entry : this.tableConstraints.entrySet()) {
             for (TableConstraint tableConstraint : entry.getValue()) {
