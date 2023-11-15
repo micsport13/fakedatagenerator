@@ -1,5 +1,6 @@
 package com.fdg.fakedatagenerator.datatypes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fdg.fakedatagenerator.exceptions.DeserializationException;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ public class DecimalDataType implements DataType<BigDecimal> {
   private final Integer precision;
   @Getter
   private final Integer scale;
+  @JsonIgnore
   private RoundingMode roundingMode;
 
   public DecimalDataType() {

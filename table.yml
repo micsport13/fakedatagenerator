@@ -1,0 +1,10 @@
+---
+name: "test"
+schema:
+  columns:
+    - name: "test"
+      dataType:
+        typeName: "Integer"
+        parameters: {}
+      constraints:
+        - "ColumnCheckConstraint"
