@@ -9,15 +9,13 @@ import java.io.File;
 import java.io.IOException;
 
 public class ColumnConfig {
+  public static final ObjectMapper objectMapper = YAMLMapper.builder().enable(YAMLGenerator.Feature.INDENT_ARRAYS).disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER).build();
 
   public static Column<?> loadConfig(String filePath) throws IOException {
-    ObjectMapper objectMapper = new YAMLMapper();
     return objectMapper.readValue(new File(filePath), Column.class);
   }
 
   public static void writeConfig(String filePath, Column<?> column) throws IOException {
-    ObjectMapper objectMapper =
-        YAMLMapper.builder().enable(YAMLGenerator.Feature.INDENT_ARRAYS).disable(SerializationFeature.FAIL_ON_EMPTY_BEANS).build();
     objectMapper.writeValue(new File(filePath), column);
   }
 }

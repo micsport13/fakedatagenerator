@@ -55,4 +55,8 @@ public class IntegerDataType implements DataType<Integer> {
   public String toString() {
     return "Integer";
   }
+
+  public String serialize() {
+    return "Integer";
+  }
 }

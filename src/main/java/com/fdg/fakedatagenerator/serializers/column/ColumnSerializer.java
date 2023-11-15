@@ -1,53 +1,55 @@
 package com.fdg.fakedatagenerator.serializers.column;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fdg.fakedatagenerator.column.Column;
-import lombok.extern.log4j.Log4j2;
-
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.Parameter;
-import java.util.Arrays;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class ColumnSerializer extends StdSerializer<Column<?>> {
+public class ColumnSerializer extends JsonSerializer<Column<?>> {
   // TODO: Standardize these field names for the yml file
   public ColumnSerializer() {
     this(null);
   }
 
   protected ColumnSerializer(Class<Column<?>> t) {
-    super(t);
+    super();
   }
 
   @Override
   public void serialize(
-      Column column, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
+      Column column, JsonGenerator ymlGenerator, SerializerProvider serializerProvider)
       throws IOException {
     log.info("Serializing column: " + column);
-    jsonGenerator.writeStartObject();
-    jsonGenerator.writeStringField("name", column.getName());
-    jsonGenerator.writeObjectFieldStart("dataType");
-    jsonGenerator.writeStringField("typeName", column.getDataType().toString());
-    jsonGenerator.writeObjectFieldStart("parameters");
-    for (Field field : column.getDataType().getClass().getDeclaredFields()) {
-      field.setAccessible(true);
-      try {
-        jsonGenerator.writeObjectField(field.getName(), field.get(column.getDataType()));
-      } catch (IllegalAccessException e) {
-        log.error(e);
-        throw new RuntimeException(e);
+    ymlGenerator.writeStartObject();
+    ymlGenerator.writeStringField("name", column.getName());
+    ymlGenerator.writeObjectFieldStart("dataType");
+    ymlGenerator.writeStringField("typeName", column.getDataType().serialize());
+    if (column.getDataType().getClass().getDeclaredFields().length != 0) {
+      ymlGenerator.writeObjectFieldStart("parameters");
+      for (Field field : column.getDataType().getClass().getDeclaredFields()) {
+        field.setAccessible(true);
+        try {
+          ymlGenerator.writeObjectField(field.getName(), field.get(column.getDataType()));
+        } catch (IllegalAccessException e) {
+          log.error(e);
+          throw new RuntimeException(e);
+        }
       }
+      ymlGenerator.writeEndObject();
     }
-    jsonGenerator.writeEndObject();
-    jsonGenerator.writeEndObject();
-    jsonGenerator.writeArrayFieldStart("constraints");
-    for (var columnConstraint : column.getConstraints()) {
-      jsonGenerator.writeString(columnConstraint.getClass().getName());
+    ymlGenerator.writeEndObject();
+    if (!column.getConstraints().isEmpty()) {
+      ymlGenerator.writeArrayFieldStart("constraints");
+      for (var columnConstraint : column.getConstraints()) {
+        ymlGenerator.writeString(columnConstraint.getClass().getSimpleName());
+      }
+      ymlGenerator.writeEndArray();
     }
-    jsonGenerator.writeEndArray();
-    jsonGenerator.writeEndObject();
+    ymlGenerator.writeEndObject();
   }
 }

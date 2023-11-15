@@ -53,4 +53,8 @@ public class VarcharDataType implements DataType<String> {
 
     return String.format("Varchar(%d)", this.maxLength);
   }
+
+  public String serialize() {
+    return "Varchar";
+  }
 }

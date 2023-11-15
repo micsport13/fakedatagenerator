@@ -83,4 +83,8 @@ public class DecimalDataType implements DataType<BigDecimal> {
   public String toString() {
     return String.format("Decimal(%1$d, %2$d)", this.precision, this.scale);
   }
+
+  public String serialize() {
+    return "Decimal";
+  }
 }
