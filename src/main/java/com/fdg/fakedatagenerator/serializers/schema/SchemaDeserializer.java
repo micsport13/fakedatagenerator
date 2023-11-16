@@ -4,9 +4,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fdg.fakedatagenerator.schema.Schema;
-import lombok.extern.log4j.Log4j2;
-
 import java.io.IOException;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class SchemaDeserializer extends StdDeserializer<Schema> {
@@ -17,7 +16,7 @@ public class SchemaDeserializer extends StdDeserializer<Schema> {
 
   @Override
   public Schema deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-      throws IOException { //TODO: Work on updating this to match serializer
+      throws IOException { // TODO: Work on updating this to match serializer
     log.info("Deserializing schema");
     return null;
   }

@@ -3,10 +3,8 @@ package com.fdg.fakedatagenerator.serializers.column;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fdg.fakedatagenerator.column.Column;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -27,26 +25,11 @@ public class ColumnSerializer extends JsonSerializer<Column<?>> {
     log.info("Serializing column: " + column);
     ymlGenerator.writeStartObject();
     ymlGenerator.writeStringField("name", column.getName());
-    ymlGenerator.writeObjectFieldStart("dataType");
-    ymlGenerator.writeStringField("typeName", column.getDataType().serialize());
-    if (column.getDataType().getClass().getDeclaredFields().length != 0) {
-      ymlGenerator.writeObjectFieldStart("parameters");
-      for (Field field : column.getDataType().getClass().getDeclaredFields()) {
-        field.setAccessible(true);
-        try {
-          ymlGenerator.writeObjectField(field.getName(), field.get(column.getDataType()));
-        } catch (IllegalAccessException e) {
-          log.error(e);
-          throw new RuntimeException(e);
-        }
-      }
-      ymlGenerator.writeEndObject();
-    }
-    ymlGenerator.writeEndObject();
+    ymlGenerator.writeObjectField("type",column.getDataType());
     if (!column.getConstraints().isEmpty()) {
       ymlGenerator.writeArrayFieldStart("constraints");
       for (var columnConstraint : column.getConstraints()) {
-        ymlGenerator.writeString(columnConstraint.getClass().getSimpleName());
+        ymlGenerator.writeObject(columnConstraint);
       }
       ymlGenerator.writeEndArray();
     }

@@ -9,5 +9,6 @@ public interface DataType<T> { // TODO: Does this need types?
   T cast(Object value) throws DeserializationException;
 
   String serialize();
+
   boolean validate(String value);
 }

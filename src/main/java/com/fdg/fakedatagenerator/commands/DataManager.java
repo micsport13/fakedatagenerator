@@ -3,18 +3,17 @@ package com.fdg.fakedatagenerator.commands;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.schema.Schema;
 import com.fdg.fakedatagenerator.table.Table;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import net.datafaker.Faker;
 import org.springframework.shell.command.annotation.Option;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @Service

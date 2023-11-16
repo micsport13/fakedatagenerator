@@ -1,30 +1,18 @@
 package com.fdg.fakedatagenerator.serializers.column;
 
-import com.fasterxml.jackson.core.JsonGenerator;
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationConfig;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.DefaultSerializerProvider;
-import com.fasterxml.jackson.databind.ser.SerializerFactory;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.constraints.column.NotNullConstraint;
 import com.fdg.fakedatagenerator.datatypes.DecimalDataType;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
-import com.fdg.fakedatagenerator.serializers.ColumnConfig;
-import org.junit.jupiter.api.BeforeAll;
+import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
+import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ColumnSerializerTest {
 
@@ -47,14 +35,14 @@ class ColumnSerializerTest {
     String expectedYaml =
         """
             name: "intColumn"
-            dataType:
-              typeName: "Integer"
+            type:
+              name: "integer"
             """;
     assertEquals(expectedYaml, yaml);
   }
 
   @Test
-  public void serialize_ColumnSerializationWithParameters_OutputsCorrectSerialization()
+  public void serialize_DecimalDataTypeColumnWithNotNullConstraint_OutputsCorrectSerialization()
       throws IOException {
     Column<DecimalDataType> decColumn =
         new Column<>("decColumn", new DecimalDataType(38, 20), new NotNullConstraint());
@@ -63,15 +51,33 @@ class ColumnSerializerTest {
     String expectedYaml =
         """
                 name: "decColumn"
-                dataType:
-                  typeName: "Decimal"
+                type:
+                  name: "decimal"
                   parameters:
                     precision: 38
                     scale: 20
-                    roundingMode: "HALF_UP"
                 constraints:
-                  - "NotNullConstraint"
+                  - "not_null"
                 """;
+    assertEquals(expectedYaml, yaml);
+  }
+
+  @Test
+  public void serialize_VarcharDataTypeWithNotNullConstraints_OutputsCorrectSerialization() throws IOException {
+    Column<VarcharDataType> varcharDataTypeColumn =
+        new Column<>("varcharColumn", new VarcharDataType(40), new NotNullConstraint());
+    String yaml = objectMapper.writeValueAsString(varcharDataTypeColumn);
+    // Assert
+    String expectedYaml =
+            """
+                    name: "varcharColumn"
+                    type:
+                      name: "varchar"
+                      parameters:
+                        max_length: 40
+                    constraints:
+                      - "not_null"
+                    """;
     assertEquals(expectedYaml, yaml);
   }
 }

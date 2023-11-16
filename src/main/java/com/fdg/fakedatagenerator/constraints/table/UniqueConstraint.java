@@ -1,11 +1,13 @@
 package com.fdg.fakedatagenerator.constraints.table;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.exceptions.UniqueConstraintException;
-
+import com.fdg.fakedatagenerator.serializers.constraints.table.UniqueConstraintSerializer;
 import java.util.HashSet;
 import java.util.Set;
 
 /** The type Unique constraint. */
+@JsonSerialize(using = UniqueConstraintSerializer.class)
 public class UniqueConstraint implements TableConstraint {
   private final Set<Object> uniqueValues = new HashSet<>(); //
 

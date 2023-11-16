@@ -16,94 +16,119 @@ import org.springframework.shell.command.annotation.Option;
 @Log4j2
 @Command(command = "create", group = "Create")
 public class CreateCommand {
-    @Autowired
-    private final DataManager dataManager;
+  @Autowired private final DataManager dataManager;
 
-    public CreateCommand(DataManager dataManager) {
-        this.dataManager = dataManager;
+  public CreateCommand(DataManager dataManager) {
+    this.dataManager = dataManager;
+  }
+
+  @Command(command = "table", description = "Create a table")
+  public void createTable() {
+    Scanner scanner = new Scanner(System.in);
+    System.out.print("Enter table name: ");
+    String tableName = scanner.next();
+    System.out.println("Available schemas: ");
+    int i = 0;
+    for (Schema schema : this.dataManager.getSchemas()) {
+      System.out.print(i + ". ");
+      schema
+          .getColumns()
+          .forEach(
+              column ->
+                  System.out.println(
+                      "Name: "
+                          + column.getName()
+                          + ", Data Type: "
+                          + column.getDataType().toString()));
+      i++;
     }
 
-    @Command(command = "table", description = "Create a table")
-    public void createTable() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter table name: ");
-        String tableName = scanner.next();
-        System.out.println("Available schemas: ");
-        int i = 0;
-        for (Schema schema : this.dataManager.getSchemas()) {
-            System.out.print(i + ". ");
-            schema.getColumns()
-                  .forEach(column -> System.out.println("Name: " + column.getName() + ", Data Type: " + column.getDataType().toString()));
-            i++;
-        }
+    System.out.println("Enter schema index: ");
+    int schemaIndex = scanner.nextInt();
+    if (schemaIndex >= 0 && schemaIndex < this.dataManager.getSchemas().size()) {
+      Schema schema = this.dataManager.getSchemas().get(schemaIndex);
+      this.dataManager.addTable(tableName, schema);
+    } else {
+      System.out.println("Invalid index: " + schemaIndex);
+    }
+  }
 
-        System.out.println("Enter schema index: ");
-        int schemaIndex = scanner.nextInt();
-        if (schemaIndex >= 0 && schemaIndex < this.dataManager.getSchemas().size()) {
-            Schema schema = this.dataManager.getSchemas().get(schemaIndex);
-            this.dataManager.addTable(tableName, schema);
+  @Command(command = "schema", description = "Create a schema")
+  private void createSchema() {
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Available columns: ");
+    int i = 0;
+    List<Column<?>> columns = this.dataManager.getColumns();
+    for (Column<?> column : this.dataManager.getColumns()) {
+      System.out.println(
+          i + ". Name: " + column.getName() + " Data Type:" + column.getDataType().toString());
+      i++;
+    }
+
+    System.out.println("Enter column indices separated by space: ");
+    String[] inputs = scanner.nextLine().split(" ");
+
+    List<Column<?>> selectedColumns = new ArrayList<>();
+
+    for (String input : inputs) {
+      try {
+        int index = Integer.parseInt(input);
+        if (index >= 0 && index < columns.size()) {
+          selectedColumns.add(columns.get(index));
         } else {
-            System.out.println("Invalid index: " + schemaIndex);
+          System.out.println("Invalid index: " + index);
         }
-
+      } catch (NumberFormatException e) {
+        System.out.println("Invalid input: " + input);
+      }
     }
 
-    @Command(command = "schema", description = "Create a schema")
-    private void createSchema() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Available columns: ");
-        int i = 0;
-        List<Column<?>> columns = this.dataManager.getColumns();
-        for (Column<?> column : this.dataManager.getColumns()) {
-            System.out.println(i + ". Name: " + column.getName() + " Data Type:" + column.getDataType().toString());
-            i++;
-        }
+    log.info("Created schema with columns: " + selectedColumns);
+    this.dataManager.addSchema(selectedColumns.toArray(new Column[0]));
+  }
 
-        System.out.println("Enter column indices separated by space: ");
-        String[] inputs = scanner.nextLine().split(" ");
-
-        List<Column<?>> selectedColumns = new ArrayList<>();
-
-        for (String input : inputs) {
-            try {
-                int index = Integer.parseInt(input);
-                if (index >= 0 && index < columns.size()) {
-                    selectedColumns.add(columns.get(index));
-                } else {
-                    System.out.println("Invalid index: " + index);
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input: " + input);
-            }
-        }
-
-        log.info("Created schema with columns: " + selectedColumns);
-        this.dataManager.addSchema(selectedColumns.toArray(new Column[0]));
+  @Command(command = "column", description = "Create a column")
+  public void createColumn(
+      String name,
+      String dataType,
+      @Option(required = false) String constraints) { // TODO: Allow different flag name?
+    // Assuming you have a method to convert String data type to Class type
+    Map<String, Object> parameters = new HashMap<>();
+    DataType<?> columnType = DataTypeFactory.create(dataType, parameters); // TODO: Add parameter
+    if (constraints == null) {
+      this.dataManager.addColumn(new Column<>(name, columnType));
+      return;
     }
-
-    @Command(command = "column", description = "Create a column")
-    public void createColumn(String name, String dataType,
-                             @Option(required = false) String constraints) { // TODO: Allow different flag name?
-        // Assuming you have a method to convert String data type to Class type
-        Map<String, Object> parameters = new HashMap<>();
-        DataType<?> columnType = DataTypeFactory.create(dataType, parameters); // TODO: Add parameter
-        if (constraints == null) {
-            this.dataManager.addColumn(new Column<>(name, columnType));
-            return;
-        }
-        switch (constraints.toUpperCase()) {
-            case "NOT_NULL", "NOTNULL" -> {
-                log.info("Created column with name: " + name + " and type: " + columnType + " and constraint: NotNull");
-                this.dataManager.addColumn(new Column<>(name, columnType, ColumnConstraintFactory.createConstraint(ColumnLevelConstraints.NOT_NULL)));
-            }
-            case "CHECK" -> {
-                ColumnConstraint checkConstraint = ColumnConstraintFactory.createConstraint("Test"); // TODO: Read in potential check constraint values
-                log.info("Created column with name: " + name + " and type: " + columnType + " and constraint: " + checkConstraint);// TODO: Either accepted values or numbers
-                this.dataManager.addColumn(new Column<>(name, columnType, checkConstraint));
-            }
-            default -> {
-                throw new IllegalArgumentException("Constraint options: NOT_NULL, CHECK");
-            }
-        }
+    switch (constraints.toUpperCase()) {
+      case "NOT_NULL", "NOTNULL" -> {
+        log.info(
+            "Created column with name: "
+                + name
+                + " and type: "
+                + columnType
+                + " and constraint: NotNull");
+        this.dataManager.addColumn(
+            new Column<>(
+                name,
+                columnType,
+                ColumnConstraintFactory.createConstraint(ColumnLevelConstraints.NOT_NULL)));
+      }
+      case "CHECK" -> {
+        ColumnConstraint checkConstraint =
+            ColumnConstraintFactory.createConstraint(
+                "Test"); // TODO: Read in potential check constraint values
+        log.info(
+            "Created column with name: "
+                + name
+                + " and type: "
+                + columnType
+                + " and constraint: "
+                + checkConstraint); // TODO: Either accepted values or numbers
+        this.dataManager.addColumn(new Column<>(name, columnType, checkConstraint));
+      }
+      default -> {
+        throw new IllegalArgumentException("Constraint options: NOT_NULL, CHECK");
+      }
     }
+  }
 }

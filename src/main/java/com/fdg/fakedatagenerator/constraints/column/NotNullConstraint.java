@@ -1,8 +1,11 @@
 package com.fdg.fakedatagenerator.constraints.column;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.exceptions.NotNullConstraintException;
+import com.fdg.fakedatagenerator.serializers.constraints.column.NotNullConstraintSerializer;
 
 /** The type Not null constraint. */
+@JsonSerialize(using = NotNullConstraintSerializer.class)
 public class NotNullConstraint implements ColumnConstraint {
   @Override
   public void validate(Object value) {
@@ -10,7 +13,7 @@ public class NotNullConstraint implements ColumnConstraint {
       throw new NotNullConstraintException(
           NotNullConstraint.class.getSimpleName()
               + ": Value cannot be null"); // TODO: Violates LSP, can't throw exception here or need
-                                           // to include at interface level
+      // to include at interface level
     }
   }
 

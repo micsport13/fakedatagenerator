@@ -1,11 +1,11 @@
 package com.fdg.fakedatagenerator.constraints.table;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.fdg.fakedatagenerator.exceptions.PrimaryKeyConstraintException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /** The type Primary key constraint test. */
 class PrimaryKeyConstraintTest {

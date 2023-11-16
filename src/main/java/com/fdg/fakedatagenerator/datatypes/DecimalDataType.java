@@ -1,13 +1,16 @@
 package com.fdg.fakedatagenerator.datatypes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.exceptions.DeserializationException;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
+import com.fdg.fakedatagenerator.serializers.datatype.DecimalDataTypeSerializer;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 import lombok.Getter;
 
+@JsonSerialize(using= DecimalDataTypeSerializer.class)
 public class DecimalDataType implements DataType<BigDecimal> {
   @Getter
   private final Integer precision;
@@ -62,6 +65,10 @@ public class DecimalDataType implements DataType<BigDecimal> {
     }
   }
 
+  public String serialize() {
+    return "Decimal";
+  }
+
   @Override
   public boolean validate(String value) {
     return false;
@@ -84,9 +91,5 @@ public class DecimalDataType implements DataType<BigDecimal> {
   @Override
   public String toString() {
     return String.format("Decimal(%1$d, %2$d)", this.precision, this.scale);
-  }
-
-  public String serialize() {
-    return "Decimal";
   }
 }

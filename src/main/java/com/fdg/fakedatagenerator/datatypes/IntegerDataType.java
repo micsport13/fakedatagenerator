@@ -1,8 +1,11 @@
 package com.fdg.fakedatagenerator.datatypes;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.exceptions.DeserializationException;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
+import com.fdg.fakedatagenerator.serializers.datatype.IntegerDataTypeSerializer;
 
+@JsonSerialize(using = IntegerDataTypeSerializer.class)
 public class IntegerDataType implements DataType<Integer> {
 
   @Override
@@ -35,6 +38,10 @@ public class IntegerDataType implements DataType<Integer> {
     }
   }
 
+  public String serialize() {
+    return "Integer";
+  }
+
   @Override
   public boolean validate(String value) {
     try {
@@ -53,10 +60,6 @@ public class IntegerDataType implements DataType<Integer> {
 
   @Override
   public String toString() {
-    return "Integer";
-  }
-
-  public String serialize() {
     return "Integer";
   }
 }

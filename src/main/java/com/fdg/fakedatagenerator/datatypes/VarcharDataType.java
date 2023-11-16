@@ -1,11 +1,14 @@
 package com.fdg.fakedatagenerator.datatypes;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
+import com.fdg.fakedatagenerator.serializers.datatype.VarcharDataTypeSerializer;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Getter
 @Log4j2
+@JsonSerialize(using = VarcharDataTypeSerializer.class)
 public class VarcharDataType implements DataType<String> {
 
   private final Integer maxLength;
@@ -37,6 +40,10 @@ public class VarcharDataType implements DataType<String> {
     return value.toString().substring(0, this.maxLength);
   }
 
+  public String serialize() {
+    return "Varchar";
+  }
+
   @Override
   public boolean validate(String value) throws MismatchedDataTypeException {
     return true;
@@ -52,9 +59,5 @@ public class VarcharDataType implements DataType<String> {
   public String toString() {
 
     return String.format("Varchar(%d)", this.maxLength);
-  }
-
-  public String serialize() {
-    return "Varchar";
   }
 }

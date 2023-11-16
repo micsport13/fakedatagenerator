@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.column.Column;
-import com.fdg.fakedatagenerator.constraints.Constraint;
 import com.fdg.fakedatagenerator.constraints.table.TableConstraint;
-import com.fdg.fakedatagenerator.serializers.column.ColumnSerializer;
 import com.fdg.fakedatagenerator.serializers.schema.SchemaDeserializer;
 import com.fdg.fakedatagenerator.serializers.schema.SchemaSerializer;
 import java.util.*;
@@ -30,6 +28,14 @@ public class Schema {
             this.tableConstraints.get(column).addAll(Set.of(tableConstraints));
         } else {
             this.tableConstraints.put(column, new HashSet<>(Set.of(tableConstraints)));
+        }
+    }
+
+    public void addConstraint(Column<?> column, TableConstraint tableConstraint) {
+        for (var schemaColumn : this.tableConstraints.keySet()) {
+            if (schemaColumn.equals(column)) {
+                this.tableConstraints.get(schemaColumn).add(tableConstraint);
+            }
         }
     }
 
