@@ -10,7 +10,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class DataTypeFactoryTest {
-  private final Map<String, Object> inputParameters = new HashMap<>();
+  private final Map<String, String> inputParameters = new HashMap<>();
 
   @Test
   public void create_withVarcharDataType_ReturnsVarcharDataType() {
@@ -37,8 +37,8 @@ class DataTypeFactoryTest {
 
   @Test
   public void create_withCorrectDecimalParameters_ReturnsCorrectDecimalDataType() {
-    this.inputParameters.put("precision", 38);
-    this.inputParameters.put("scale", 18);
+    this.inputParameters.put("precision", String.valueOf(38));
+    this.inputParameters.put("scale", String.valueOf(18));
     DecimalDataType decimalDataType =
         (DecimalDataType) DataTypeFactory.create("decimal", inputParameters);
     assertEquals(38, decimalDataType.getPrecision());
@@ -47,7 +47,7 @@ class DataTypeFactoryTest {
 
   @Test
   public void create_withNoPrecisionAndScaleProvided_ThrowsIllegalArgumentException() {
-    this.inputParameters.put("scale", 18);
+    this.inputParameters.put("scale", String.valueOf(18));
     assertThrows(
         IllegalArgumentException.class,
         () -> {
@@ -57,8 +57,8 @@ class DataTypeFactoryTest {
 
   @Test
   public void create_withScaleGreaterThanPrecision_ThrowsIllegalArgumentException() {
-    this.inputParameters.put("precision", 10);
-    this.inputParameters.put("scale", 12);
+    this.inputParameters.put("precision", String.valueOf(10));
+    this.inputParameters.put("scale", String.valueOf(12));
     assertThrows(
         IllegalArgumentException.class,
         () -> {
@@ -78,7 +78,7 @@ class DataTypeFactoryTest {
 
   @Test
   public void create_VarcharDataTypeWithParameters_CreatesVarcharWithCorrectLength() {
-    this.inputParameters.put("maxLength", 10);
+    this.inputParameters.put("maxLength", String.valueOf(10));
     VarcharDataType varcharDataType =
         (VarcharDataType) DataTypeFactory.create("varchar", inputParameters);
     assertEquals(10, varcharDataType.getMaxLength());

@@ -93,7 +93,7 @@ public class CreateCommand {
       String dataType,
       @Option(required = false) String constraints) { // TODO: Allow different flag name?
     // Assuming you have a method to convert String data type to Class type
-    Map<String, Object> parameters = new HashMap<>();
+    Map<String, String> parameters = new HashMap<>();
     DataType<?> columnType = DataTypeFactory.create(dataType, parameters); // TODO: Add parameter
     if (constraints == null) {
       this.dataManager.addColumn(new Column<>(name, columnType));

@@ -65,10 +65,6 @@ public class DecimalDataType implements DataType<BigDecimal> {
     }
   }
 
-  public String serialize() {
-    return "Decimal";
-  }
-
   @Override
   public boolean validate(String value) {
     return false;
@@ -85,7 +81,10 @@ public class DecimalDataType implements DataType<BigDecimal> {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    return o != null && getClass() == o.getClass();
+    if (o instanceof DecimalDataType decimalDataType) {
+      return this.scale.equals(decimalDataType.getScale()) && this.precision.equals(((DecimalDataType) o).getPrecision());
+    }
+    return false;
   }
 
   @Override

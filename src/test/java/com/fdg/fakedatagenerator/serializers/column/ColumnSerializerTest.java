@@ -16,15 +16,15 @@ import org.junit.jupiter.api.Test;
 
 class ColumnSerializerTest {
 
-  ObjectMapper objectMapper;
-
-  @BeforeEach
-  public void setUp() {
-    this.objectMapper =
-        new YAMLMapper()
+  private static final ObjectMapper objectMapper =
+          new YAMLMapper()
             .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
             .enable(YAMLGenerator.Feature.INDENT_ARRAYS)
             .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR);
+
+  @BeforeEach
+  public void setUp() {
+
   }
 
   @Test
@@ -75,6 +75,23 @@ class ColumnSerializerTest {
                       name: "varchar"
                       parameters:
                         max_length: 40
+                    constraints:
+                      - "not_null"
+                    """;
+    assertEquals(expectedYaml, yaml);
+  }
+
+  @Test
+  public void serialize_IntegerDataTypeWithNotNullConstraints_OutputsCorrectSerialization() throws IOException {
+    Column<IntegerDataType> varcharDataTypeColumn =
+            new Column<>("integerColumn", new IntegerDataType(), new NotNullConstraint());
+    String yaml = objectMapper.writeValueAsString(varcharDataTypeColumn);
+    // Assert
+    String expectedYaml =
+            """
+                    name: "integerColumn"
+                    type:
+                      name: "integer"
                     constraints:
                       - "not_null"
                     """;

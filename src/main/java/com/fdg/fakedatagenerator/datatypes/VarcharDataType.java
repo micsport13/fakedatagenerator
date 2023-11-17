@@ -40,9 +40,6 @@ public class VarcharDataType implements DataType<String> {
     return value.toString().substring(0, this.maxLength);
   }
 
-  public String serialize() {
-    return "Varchar";
-  }
 
   @Override
   public boolean validate(String value) throws MismatchedDataTypeException {

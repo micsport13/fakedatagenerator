@@ -32,37 +32,40 @@ public class ColumnDeserializer extends StdDeserializer<Column<?>> {
   public Column<?> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
       throws IOException { // TODO: Work on updating this to match serializer
     JsonNode rootNode = jsonParser.getCodec().readTree(jsonParser);
-    String columnName = rootNode.path("schema").path("columns").get("name").asText();
+    String columnName = rootNode.get("name").asText();
     DataType<?> dataType = null;
     try {
       log.info("Deserializing column: " + columnName);
+      String typeName = rootNode.path("type").get("name").asText();
       Iterator<Map.Entry<String, JsonNode>> paramNode =
-          rootNode.get("parameters").fields(); // TODO: Check if null before trying to get fields
+          rootNode.path("type").get("parameters").fields();
       if (paramNode != null) {
-        Map<String, Object> parameters =
-            Stream.of(paramNode)
-                .collect(
-                    HashMap::new,
-                    (map, entry) ->
-                        map.put(entry.next().getKey(), entry.next().getValue().asText()),
-                    HashMap::putAll);
-        dataType = DataTypeFactory.create(rootNode.get("dataType").asText(), parameters);
+        Map<String, String> parameters = new HashMap<>();
+        while (paramNode.hasNext()) {
+          var currentEntry = paramNode.next();
+          parameters.put(currentEntry.getKey(), currentEntry.getValue().asText());
+        }
+        dataType = DataTypeFactory.create(typeName, parameters);
       } else {
-        dataType = DataTypeFactory.create(rootNode.get("dataType").asText(), null);
+        dataType = DataTypeFactory.create(typeName, null);
       }
     } catch (Exception e) {
       log.error(e);
     }
-    ColumnConstraint[] constraints =
-        Stream.of(rootNode.get("constraints").fields())
-            .map(
-                entry -> {
-                  ColumnLevelConstraints constraint =
-                      ColumnLevelConstraints.valueOf(
-                          entry.next().getValue().asText().toLowerCase());
-                  return ColumnConstraintFactory.createConstraint(constraint);
-                })
-            .toArray(ColumnConstraint[]::new);
-    return new Column<>(columnName, dataType, constraints);
+    if (rootNode.get("constraints") != null) {
+      ColumnConstraint[] constraints =
+          Stream.of(rootNode.get("constraints").fields())
+              .map(
+                  entry -> {
+                    ColumnLevelConstraints constraint =
+                        ColumnLevelConstraints.valueOf(
+                            entry.next().getValue().asText().toLowerCase());
+                    return ColumnConstraintFactory.createConstraint(constraint);
+                  })
+              .toArray(ColumnConstraint[]::new);
+      return new Column<>(columnName, dataType, constraints);
+    } else {
+      return new Column<>(columnName, dataType);
+    }
   }
 }

@@ -7,11 +7,11 @@ import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 import java.util.Map;
 
 public class DataTypeFactory {
-  public static DataType<?> create(String dataType, Map<String, Object> parameters) {
+  public static DataType<?> create(String dataType, Map<String, String> parameters) {
     switch (dataType.toLowerCase()) { // TODO: Fix defaults or create static parameters for defaults
       case "varchar":
         if (parameters.get("maxLength") != null) {
-          int maxLength = (int) parameters.get("maxLength");
+          int maxLength = Integer.parseInt(parameters.get("maxLength"));
           return new VarcharDataType(maxLength);
         } else {
           return new VarcharDataType();
@@ -23,11 +23,11 @@ public class DataTypeFactory {
           throw new IllegalArgumentException("If scale is given, precision must also be provided.");
         }
         if (parameters.get("scale") != null && parameters.get("precision") != null) {
-          scale = (int) parameters.get("scale");
-          precision = (int) parameters.get("precision");
+          scale = Integer.parseInt(parameters.get("scale"));
+          precision = Integer.parseInt(parameters.get("precision"));
         }
         if (parameters.get("precision") != null) {
-          precision = (int) parameters.get("precision");
+          precision = Integer.parseInt(parameters.get("precision"));
         }
         return new DecimalDataType(precision, scale);
       case "integer", "int":

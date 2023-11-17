@@ -38,10 +38,6 @@ public class IntegerDataType implements DataType<Integer> {
     }
   }
 
-  public String serialize() {
-    return "Integer";
-  }
-
   @Override
   public boolean validate(String value) {
     try {
