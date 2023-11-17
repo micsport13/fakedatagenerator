@@ -1,5 +1,6 @@
 package com.fdg.fakedatagenerator.constraints.column;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.constraints.table.TableCheckConstraint;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.exceptions.CheckConstraintException;
@@ -7,10 +8,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+
+import com.fdg.fakedatagenerator.serializers.constraints.column.ColumnCheckConstraintSerializer;
 import lombok.Getter;
 
 /** Check Constraint Column Not to be confused with {@link TableCheckConstraint} */
 @Getter
+@JsonSerialize(using = ColumnCheckConstraintSerializer.class)
 public final class ColumnCheckConstraint implements ColumnConstraint {
   private final Number min;
   private final Number

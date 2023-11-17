@@ -20,7 +20,8 @@ class ColumnSerializerTest {
           new YAMLMapper()
             .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
             .enable(YAMLGenerator.Feature.INDENT_ARRAYS)
-            .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR);
+            .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
+            .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES); ;
 
   @BeforeEach
   public void setUp() {
@@ -34,9 +35,9 @@ class ColumnSerializerTest {
     // Assert
     String expectedYaml =
         """
-            name: "intColumn"
+            name: intColumn
             type:
-              name: "integer"
+              name: integer
             """;
     assertEquals(expectedYaml, yaml);
   }
@@ -50,14 +51,14 @@ class ColumnSerializerTest {
     // Assert
     String expectedYaml =
         """
-                name: "decColumn"
+                name: decColumn
                 type:
-                  name: "decimal"
+                  name: decimal
                   parameters:
                     precision: 38
                     scale: 20
                 constraints:
-                  - "not_null"
+                  - not_null
                 """;
     assertEquals(expectedYaml, yaml);
   }
@@ -70,13 +71,13 @@ class ColumnSerializerTest {
     // Assert
     String expectedYaml =
             """
-                    name: "varcharColumn"
+                    name: varcharColumn
                     type:
-                      name: "varchar"
+                      name: varchar
                       parameters:
                         max_length: 40
                     constraints:
-                      - "not_null"
+                      - not_null
                     """;
     assertEquals(expectedYaml, yaml);
   }
@@ -89,11 +90,11 @@ class ColumnSerializerTest {
     // Assert
     String expectedYaml =
             """
-                    name: "integerColumn"
+                    name: integerColumn
                     type:
-                      name: "integer"
+                      name: integer
                     constraints:
-                      - "not_null"
+                      - not_null
                     """;
     assertEquals(expectedYaml, yaml);
   }

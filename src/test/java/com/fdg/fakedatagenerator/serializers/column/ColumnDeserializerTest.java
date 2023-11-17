@@ -20,15 +20,16 @@ class ColumnDeserializerTest {
       new YAMLMapper()
           .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
           .enable(YAMLGenerator.Feature.INDENT_ARRAYS)
-          .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR);
+          .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
+          .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES); ;
 
   @Test
   public void deserialize_GivenInputString_DeserializesToDecimalColumn() {
     String yamlString =
         """
-                        name: "decColumn"
+                        name: decColumn
                         type:
-                          name: "decimal"
+                          name: decimal
                           parameters:
                             precision: 38
                             scale: 20

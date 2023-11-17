@@ -23,5 +23,6 @@ public class TableSerializer extends StdSerializer<Table> {
     jsonGenerator.writeStringField("name", table.getName());
     jsonGenerator.writeObjectField("schema", table.getSchema());
     jsonGenerator.writeEndObject();
+
   }
 }

@@ -24,7 +24,6 @@ public class SchemaSerializer extends StdSerializer<Schema> {
       throws IOException {
     log.info("Serializing schema: " + schema.toString());
     jsonGenerator.writeStartObject();
-    jsonGenerator.writeObjectFieldStart("schema");
     jsonGenerator.writeArrayFieldStart("columns");
     for (var column : schema.getColumns()) {
       jsonGenerator.writeStartObject();
@@ -39,7 +38,6 @@ public class SchemaSerializer extends StdSerializer<Schema> {
       jsonGenerator.writeEndObject();
     }
     jsonGenerator.writeEndArray();
-    jsonGenerator.writeEndObject();
     jsonGenerator.writeEndObject();
   }
 }

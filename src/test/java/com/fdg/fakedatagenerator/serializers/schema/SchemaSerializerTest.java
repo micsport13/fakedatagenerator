@@ -3,8 +3,10 @@ package com.fdg.fakedatagenerator.serializers.schema;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.constraints.table.PrimaryKeyConstraint;
 import com.fdg.fakedatagenerator.constraints.table.UniqueConstraint;
@@ -25,7 +27,8 @@ class SchemaSerializerTest {
         new YAMLMapper()
             .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
             .enable(YAMLGenerator.Feature.INDENT_ARRAYS)
-            .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR);
+            .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
+            .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES);
   }
 
   @Test
@@ -40,22 +43,21 @@ class SchemaSerializerTest {
     // Assert
     String expectedYaml =
         """
-                    schema:
-                      columns:
-                        - column:
-                            name: "intColumn"
-                            type:
-                              name: "integer"
-                          table_constraints:
-                            - "primary_key"
-                        - column:
-                            name: "varcharColumn"
-                            type:
-                              name: "varchar"
-                              parameters:
-                                max_length: 1
-                          table_constraints:
-                            - "unique"
+                    columns:
+                      - column:
+                          name: intColumn
+                          type:
+                            name: integer
+                        table_constraints:
+                          - primary_key
+                      - column:
+                          name: varcharColumn
+                          type:
+                            name: varchar
+                            parameters:
+                              max_length: 1
+                        table_constraints:
+                          - unique
                     """;
     assertEquals(expectedYaml, yaml);
   }
