@@ -1,14 +1,16 @@
 package com.fdg.fakedatagenerator.commands;
 
-import com.fdg.fakedatagenerator.column.Column;
-import com.fdg.fakedatagenerator.serializers.ColumnConfig;
-import com.fdg.fakedatagenerator.serializers.TableConfig;
-import com.fdg.fakedatagenerator.table.Table;
+import com.fdg.fakedatagenerator.serializers.EntityConfig;
+
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
+
+import com.fdg.fakedatagenerator.table.Table;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.command.annotation.Command;
+import org.springframework.shell.command.annotation.Option;
 
 @Log4j2
 @Command(command = "config", group = "Config")
@@ -20,23 +22,26 @@ public class ConfigCommand {
   }
 
   @Command(command = "load", description = "Load configuration from file")
-  public static void loadConfig(String path) { // TODO: Load entire configuration, not just column
+  public void loadConfig(
+      @Option(longNames = "path", shortNames = 'p', required = true)
+          String path) {
     Path filePath = Path.of(System.getProperty("user.dir"), path);
     try {
-      Column<?> columnDeserialized = ColumnConfig.loadConfig(filePath.toString());
-      System.out.println(columnDeserialized);
+      List<Table> tables = EntityConfig.loadConfig(filePath.toString()); // TODO: Load all objects into the data manager
+      for (Table table: tables) {
+        dataManager.addTable(table);
+      }
     } catch (IOException e) {
       log.error(e);
     }
   }
 
   @Command(command = "save", description = "Write configuration to file")
-  public void writeConfig(String path) {
+  public void writeConfig(
+      @Option(longNames = "path", shortNames = 'p', required = true) String path) {
     Path filePath = Path.of(System.getProperty("user.dir"), path);
     try {
-      for (Table table : this.dataManager.getTables()) {
-        TableConfig.writeConfig(filePath.toString(), table);
-      }
+      EntityConfig.writeConfig(path, dataManager);
     } catch (IOException e) {
       log.error(e);
     }
@@ -46,7 +51,5 @@ public class ConfigCommand {
   public void printConfig() {
     System.out.println("Current session configurations:");
     this.dataManager.getTables().forEach(System.out::println);
-    this.dataManager.getSchemas().forEach(System.out::println);
-    this.dataManager.getColumns().forEach(System.out::println);
   }
 }

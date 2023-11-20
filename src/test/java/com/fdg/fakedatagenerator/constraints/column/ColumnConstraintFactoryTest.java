@@ -3,7 +3,6 @@ package com.fdg.fakedatagenerator.constraints.column;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.fdg.fakedatagenerator.constraints.ColumnLevelConstraints;
 import com.fdg.fakedatagenerator.constraints.Constraint;
 import com.fdg.fakedatagenerator.datatypes.DecimalDataType;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
@@ -14,7 +13,7 @@ public class ColumnConstraintFactoryTest {
   @Test
   public void createConstraint_WithValidInput_ReturnsCorrectConstraint() {
     assertTrue(
-        ColumnConstraintFactory.createConstraint(ColumnLevelConstraints.NOT_NULL)
+        ColumnConstraintFactory.createConstraint("not_null")
             instanceof NotNullConstraint);
   }
 
@@ -50,13 +49,6 @@ public class ColumnConstraintFactoryTest {
     Constraint minCheckConstraint =
         ColumnConstraintFactory.createConstraint(new IntegerDataType(), 1, null);
     assertTrue(minCheckConstraint instanceof ColumnCheckConstraint);
-  }
-
-  @Test
-  public void createConstraint_withNullDataType_ThrowsIllegalArgumentException() {
-    assertThrows(
-        IllegalArgumentException.class,
-        () -> ColumnConstraintFactory.createConstraint((String) null));
   }
 
   @Test

@@ -5,16 +5,14 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fdg.fakedatagenerator.column.Column;
-import com.fdg.fakedatagenerator.constraints.ColumnLevelConstraints;
+import com.fdg.fakedatagenerator.constraints.column.ColumnCheckConstraint;
 import com.fdg.fakedatagenerator.constraints.column.ColumnConstraint;
 import com.fdg.fakedatagenerator.constraints.column.ColumnConstraintFactory;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.datatypes.factories.DataTypeFactory;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.*;
+
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -37,9 +35,9 @@ public class ColumnDeserializer extends StdDeserializer<Column<?>> {
     try {
       log.info("Deserializing column: " + columnName);
       String typeName = rootNode.path("type").get("name").asText();
-      Iterator<Map.Entry<String, JsonNode>> paramNode =
-          rootNode.path("type").get("parameters").fields();
-      if (paramNode != null) {
+      if (rootNode.path("type").get("parameters") != null) {
+        Iterator<Map.Entry<String, JsonNode>> paramNode =
+            rootNode.path("type").get("parameters").fields();
         Map<String, String> parameters = new HashMap<>();
         while (paramNode.hasNext()) {
           var currentEntry = paramNode.next();
@@ -53,17 +51,15 @@ public class ColumnDeserializer extends StdDeserializer<Column<?>> {
       log.error(e);
     }
     if (rootNode.get("constraints") != null) {
-      ColumnConstraint[] constraints =
-          Stream.of(rootNode.get("constraints").fields())
-              .map(
-                  entry -> {
-                    ColumnLevelConstraints constraint =
-                        ColumnLevelConstraints.valueOf(
-                            entry.next().getValue().asText().toLowerCase());
-                    return ColumnConstraintFactory.createConstraint(constraint);
-                  })
-              .toArray(ColumnConstraint[]::new);
-      return new Column<>(columnName, dataType, constraints);
+      List<ColumnConstraint> constraints = new ArrayList<>();
+      for (Iterator<JsonNode> it = rootNode.get("constraints").iterator(); it.hasNext(); ) {
+        JsonNode node = it.next();
+        constraints.add(
+            node.get("check_constraint") != null
+                ? deserializationContext.readTreeAsValue(node, ColumnCheckConstraint.class)
+                : ColumnConstraintFactory.createConstraint(node.textValue()));
+      }
+      return new Column<>(columnName, dataType, constraints.toArray(new ColumnConstraint[0]));
     } else {
       return new Column<>(columnName, dataType);
     }

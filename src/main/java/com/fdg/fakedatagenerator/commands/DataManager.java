@@ -58,6 +58,10 @@ public class DataManager {
     this.tables.add(table);
   }
 
+  public void addTable(Table table) {
+    this.tables.add(table);
+  }
+
   public void addColumn(Column<?> column) {
     this.columns.add(column);
   }

@@ -31,7 +31,7 @@ public class ColumnCheckConstraintSerializer extends StdSerializer<ColumnCheckCo
     if (!columnCheckConstraint.getAcceptedValues().isEmpty()) {
       gen.writeArrayFieldStart("accepted_values");
       for (var acceptedValue: columnCheckConstraint.getAcceptedValues()) {
-        gen.writeString(acceptedValue);
+        gen.writeObject(acceptedValue);
       }
       gen.writeEndArray();
     }

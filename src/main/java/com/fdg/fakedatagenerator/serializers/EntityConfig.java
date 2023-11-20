@@ -1,0 +1,35 @@
+package com.fdg.fakedatagenerator.serializers;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import com.fdg.fakedatagenerator.column.Column;
+import com.fdg.fakedatagenerator.commands.DataManager;
+import com.fdg.fakedatagenerator.schema.Schema;
+import com.fdg.fakedatagenerator.table.Table;
+import lombok.extern.log4j.Log4j2;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+@Log4j2
+public class EntityConfig {
+  public static final ObjectMapper objectMapper =
+      new YAMLMapper()
+          .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
+          .disable(YAMLGenerator.Feature.INDENT_ARRAYS)
+          .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
+          .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES);
+
+  public static List<Table> loadConfig(String filePath) throws IOException {
+    return objectMapper.readValue(new File(filePath), new TypeReference<>(){});
+  }
+
+  public static void writeConfig(String filePath, DataManager dataManager) throws IOException {
+      objectMapper.writeValue(new File(filePath), dataManager.getTables());
+  }
+}

@@ -1,24 +1,24 @@
 package com.fdg.fakedatagenerator.constraints.column;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.constraints.table.TableCheckConstraint;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.exceptions.CheckConstraintException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
+import java.util.*;
+
+import com.fdg.fakedatagenerator.serializers.constraints.column.ColumnCheckConstraintDeserializer;
 import com.fdg.fakedatagenerator.serializers.constraints.column.ColumnCheckConstraintSerializer;
 import lombok.Getter;
 
 /** Check Constraint Column Not to be confused with {@link TableCheckConstraint} */
 @Getter
 @JsonSerialize(using = ColumnCheckConstraintSerializer.class)
+@JsonDeserialize(using = ColumnCheckConstraintDeserializer.class)
 public final class ColumnCheckConstraint implements ColumnConstraint {
   private final Number min;
-  private final Number
-      max; // TODO: Figure out how to keep this generic yet converts to the datatype for precision
+  private final Number max;
   private final Set<String> acceptedValues;
 
   private <T extends DataType<?>> ColumnCheckConstraint(Builder<T> builder) {
@@ -132,14 +132,32 @@ public final class ColumnCheckConstraint implements ColumnConstraint {
   public static final class Builder<T extends DataType<?>> {
     private final T dataType;
     private final Set<String> acceptedValues = new HashSet<>();
-    private Number
-        min; // TODO: Figure out how to keep this generic yet converts to the datatype for precision
-    private Number
-        max; // TODO: Figure out how to keep this generic yet converts to the datatype for precision
+    private Number min;
+    private Number max;
 
     /** Instantiates a new Check constraint builder. */
     public Builder(T dataType) {
       this.dataType = dataType;
+    }
+
+
+    /**
+     * With range check constraint builder.
+     *
+     * @param lowerBound the lower bound
+     * @param upperBound the upper bound
+     * @return the check constraint builder
+     */
+    public <U extends Number> Builder<T> withRange(U lowerBound, U upperBound) {
+      if (lowerBound == null && upperBound == null) {
+        throw new IllegalArgumentException("One of the bounds must be set if calling this method");
+      }
+      if (lowerBound != null && upperBound != null && lowerBound.doubleValue() > upperBound.doubleValue()) {
+        throw new IllegalArgumentException("Lower bound can not be greater than upper bound");
+      }
+      this.min = lowerBound;
+      this.max = upperBound;
+      return this;
     }
 
     /**
@@ -148,8 +166,9 @@ public final class ColumnCheckConstraint implements ColumnConstraint {
      * @param minimumValue the minimum value
      * @return the check constraint builder
      */
+
     public <U extends Number> Builder<T> withMinimumValue(U minimumValue) {
-      this.min = Objects.requireNonNull(minimumValue);
+      this.withRange(Objects.requireNonNull(minimumValue), null);
       return this;
     }
 
@@ -160,28 +179,25 @@ public final class ColumnCheckConstraint implements ColumnConstraint {
      * @return the check constraint builder
      */
     public <U extends Number> Builder<T> withMaximumValue(U maximumValue) {
-      this.max = Objects.requireNonNull(maximumValue);
+      this.withRange(null, Objects.requireNonNull(maximumValue));
       return this;
     }
 
-    /**
-     * With range check constraint builder.
-     *
-     * @param lowerBound the lower bound
-     * @param upperBound the upper bound
-     * @return the check constraint builder
-     */
-    public <U extends Number> Builder<T> withRange(U lowerBound, U upperBound) {
-      this.min = Objects.requireNonNull(lowerBound);
-      this.max = Objects.requireNonNull(upperBound);
-      return this;
-    }
 
     @SafeVarargs
     public final <U extends String> Builder<T> withAcceptedValues(
         U firstAcceptedValue, U... acceptedValues) {
       this.acceptedValues.add(Objects.requireNonNull(firstAcceptedValue));
       this.acceptedValues.addAll(List.of(acceptedValues));
+      return this;
+    }
+
+    public final <U extends String> Builder<T> withAcceptedValues(
+            Collection<U> acceptedValues) {
+      if (acceptedValues.isEmpty()) {
+        throw new IllegalArgumentException("Accepted values must have at least one value");
+      }
+      this.acceptedValues.addAll(acceptedValues);
       return this;
     }
 

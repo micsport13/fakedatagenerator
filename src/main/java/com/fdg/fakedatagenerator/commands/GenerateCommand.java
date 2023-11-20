@@ -7,11 +7,11 @@ import org.springframework.shell.command.annotation.Command;
 import org.springframework.shell.command.annotation.Option;
 
 /** The type Data generator. */
-public class DataGenerator {
-  private static final Logger logger = LogManager.getLogger(DataGenerator.class);
+public class GenerateCommand {
+  private static final Logger logger = LogManager.getLogger(GenerateCommand.class);
   @Autowired private final DataManager dataManager;
 
-  public DataGenerator(DataManager dataManager) {
+  public GenerateCommand(DataManager dataManager) {
     this.dataManager = dataManager;
   }
 

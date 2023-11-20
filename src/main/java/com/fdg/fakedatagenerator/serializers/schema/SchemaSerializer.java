@@ -9,7 +9,6 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class SchemaSerializer extends StdSerializer<Schema> {
-  // TODO: Standardize these field names for the yml file
   public SchemaSerializer() {
     this(null);
   }

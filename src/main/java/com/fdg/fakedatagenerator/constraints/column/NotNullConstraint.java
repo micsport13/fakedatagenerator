@@ -10,9 +10,7 @@ public class NotNullConstraint implements ColumnConstraint {
   @Override
   public void validate(Object value) {
     if (value == null) {
-      throw new NotNullConstraintException(
-          NotNullConstraint.class.getSimpleName()
-              + ": Value cannot be null"); // TODO: Violates LSP, can't throw exception here or need
+      throw new NotNullConstraintException(": Value cannot be null");
       // to include at interface level
     }
   }

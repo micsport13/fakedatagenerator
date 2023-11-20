@@ -11,6 +11,7 @@ import com.fdg.fakedatagenerator.serializers.column.ColumnDeserializer;
 import com.fdg.fakedatagenerator.serializers.column.ColumnSerializer;
 import jakarta.validation.constraints.NotNull;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import lombok.Getter;
 
@@ -18,7 +19,7 @@ import lombok.Getter;
 @Getter
 @JsonSerialize(using = ColumnSerializer.class)
 @JsonDeserialize(using = ColumnDeserializer.class)
-public class Column<T extends DataType<?>> { // TODO: Does this need types?
+public class Column<T extends DataType<?>> {
   @JsonProperty("name")
   private final @NotNull String name;
 
@@ -30,8 +31,8 @@ public class Column<T extends DataType<?>> { // TODO: Does this need types?
 
   public Column(String columnName, T dataType) {
     NameValidator.validate(columnName);
-    this.name = columnName;
-    this.dataType = dataType;
+    this.name = Objects.requireNonNull(columnName);
+    this.dataType = Objects.requireNonNull(dataType);
   }
 
   public Column(
@@ -56,10 +57,10 @@ public class Column<T extends DataType<?>> { // TODO: Does this need types?
     this.constraints.add(columnConstraint);
   }
 
-  public void validate(Object value) { // TODO: Should this be a boolean?
+  public void validate(Object value) {
     for (Constraint constraint : this.constraints) {
       constraint.validate(
-          value); // TODO: this will no longer throw an exception because it violates LSP
+          value);
     }
     this.getDataType().store(value);
   }
@@ -82,8 +83,9 @@ public class Column<T extends DataType<?>> { // TODO: Does this need types?
     StringBuilder string =
         new StringBuilder("Column: " + this.name + "\nData Type: " + this.dataType);
     if (!this.constraints.isEmpty()) {
+      string.append("\nConstraint: ");
       for (ColumnConstraint constraint : this.constraints) {
-        string.append("\nConstraint: ").append(constraint);
+        string.append(String.format("[%s]", constraint.toString()));
       }
     }
     return string.toString();

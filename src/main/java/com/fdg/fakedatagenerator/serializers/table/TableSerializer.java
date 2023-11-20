@@ -9,10 +9,14 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class TableSerializer extends StdSerializer<Table> {
-  // TODO: Standardize these field names for the yml file
+
   public TableSerializer() {
-    super(Table.class, false);
+    this(null);
   }
+  protected TableSerializer(Class<Table> t) {
+    super(t);
+  }
+  // TODO: Standardize these field names for the yml file
 
   @Override
   public void serialize(

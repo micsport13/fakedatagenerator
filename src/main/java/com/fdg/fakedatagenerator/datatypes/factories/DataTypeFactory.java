@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class DataTypeFactory {
   public static DataType<?> create(String dataType, Map<String, String> parameters) {
-    switch (dataType.toLowerCase()) { // TODO: Fix defaults or create static parameters for defaults
+    switch (dataType.toLowerCase()) {
       case "varchar":
         if (parameters.get("maxLength") != null) {
           int maxLength = Integer.parseInt(parameters.get("maxLength"));
