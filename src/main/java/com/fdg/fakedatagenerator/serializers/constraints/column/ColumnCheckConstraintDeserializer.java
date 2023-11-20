@@ -29,7 +29,10 @@ public class ColumnCheckConstraintDeserializer extends StdDeserializer<ColumnChe
   public ColumnCheckConstraint deserialize(
       JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
     JsonNode constraintNode = jsonParser.getCodec().readTree(jsonParser);
-    Iterator<Map.Entry<String, JsonNode>> fields = constraintNode.get("check_constraint").fields();
+    if (constraintNode.at("/check_constraint/parameters") == null) {
+      throw new IllegalArgumentException("Check constraints must have parameters, either min/max or accepted values");
+    }
+    Iterator<Map.Entry<String, JsonNode>> fields = constraintNode.at("/check_constraint/parameters").fields();
     Number minValue = null;
     Number maxValue = null;
     List<String> acceptedValues = new ArrayList<>();

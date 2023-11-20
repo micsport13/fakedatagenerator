@@ -11,10 +11,7 @@ import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.constraints.table.TableConstraint;
 import com.fdg.fakedatagenerator.schema.Schema;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -33,7 +30,7 @@ public class SchemaDeserializer extends StdDeserializer<Schema> {
       throws IOException { // TODO: Work on updating this to match serializer
     log.info("Deserializing schema");
     JsonNode rootNode = jsonParser.getCodec().readTree(jsonParser);
-    Map<Column<?>, Set<TableConstraint>> schemaMap = new HashMap<>();
+    Map<Column<?>, Set<TableConstraint>> schemaMap = new LinkedHashMap<>();
     JsonNode schemaNode = rootNode.get("columns");
     for (JsonNode node : schemaNode.findValues("column")) {
       Column<?> column = deserializationContext.readTreeAsValue(node, Column.class);

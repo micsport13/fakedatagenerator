@@ -3,6 +3,8 @@ package com.fdg.fakedatagenerator.serializers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fdg.fakedatagenerator.commands.DataManager;
@@ -19,7 +21,7 @@ public class EntityConfig {
       new YAMLMapper()
           .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
           .disable(YAMLGenerator.Feature.INDENT_ARRAYS)
-          .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
+          .disable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
           .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES).enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 
   public static List<Table> loadConfig(String filePath) throws IOException {
