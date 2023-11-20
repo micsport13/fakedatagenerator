@@ -34,7 +34,7 @@ public class SchemaDeserializer extends StdDeserializer<Schema> {
     log.info("Deserializing schema");
     JsonNode rootNode = jsonParser.getCodec().readTree(jsonParser);
     Map<Column<?>, Set<TableConstraint>> schemaMap = new HashMap<>();
-    JsonNode schemaNode = rootNode.path("schema").get("columns");
+    JsonNode schemaNode = rootNode.get("columns");
     for (JsonNode node : schemaNode.findValues("column")) {
       Column<?> column = deserializationContext.readTreeAsValue(node, Column.class);
       Set<TableConstraint> tableConstraints = new HashSet<>();

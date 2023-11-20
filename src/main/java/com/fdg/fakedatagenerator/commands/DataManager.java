@@ -27,9 +27,9 @@ public class DataManager {
   @Getter private final List<Schema> schemas = new ArrayList<>();
 
   public void generateData(Integer numEntities, @Option(required = false) String filePath) {
-    for (Table table : this.tables) {
-      // TODO: Figure out how to generate data for each table
-      writeToOutput(table.printTable(), filePath);
+    Table currentTable = this.tables.get(0);
+    for (Column<?> column : currentTable.getSchema().getColumns()){
+      // TODO: Figure out how to generate data
     }
   }
 

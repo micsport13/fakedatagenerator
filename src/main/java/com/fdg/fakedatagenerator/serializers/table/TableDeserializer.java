@@ -25,7 +25,7 @@ public class TableDeserializer extends StdDeserializer<Table> {
     log.info("Deserializing table");
     JsonNode rootNode = jsonParser.getCodec().readTree(jsonParser);
     String tableName = rootNode.get("name").asText();
-    Schema schema = jsonParser.readValueAs(Schema.class);
+    Schema schema = deserializationContext.readTreeAsValue(rootNode.get("schema"), Schema.class);
     return new Table(tableName, schema);
   }
 }
