@@ -10,10 +10,11 @@ import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.serializers.column.ColumnDeserializer;
 import com.fdg.fakedatagenerator.serializers.column.ColumnSerializer;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import lombok.Getter;
 
 /** Column class Contains a name, a data type, and a set of constraints */
 @Getter

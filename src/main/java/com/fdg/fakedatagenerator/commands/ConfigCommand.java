@@ -1,16 +1,15 @@
 package com.fdg.fakedatagenerator.commands;
 
 import com.fdg.fakedatagenerator.serializers.EntityConfig;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.List;
-
 import com.fdg.fakedatagenerator.table.Table;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.command.annotation.Command;
 import org.springframework.shell.command.annotation.Option;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.List;
 
 @Log4j2
 @Command(command = "config", group = "Config")

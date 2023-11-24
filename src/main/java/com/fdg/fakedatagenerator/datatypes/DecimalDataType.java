@@ -5,10 +5,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.exceptions.DeserializationException;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
 import com.fdg.fakedatagenerator.serializers.datatype.DecimalDataTypeSerializer;
+import lombok.Getter;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
-import lombok.Getter;
 
 @JsonSerialize(using= DecimalDataTypeSerializer.class)
 public class DecimalDataType implements DataType<BigDecimal> {

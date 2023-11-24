@@ -6,8 +6,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fdg.fakedatagenerator.schema.Schema;
 import com.fdg.fakedatagenerator.table.Table;
-import java.io.IOException;
 import lombok.extern.log4j.Log4j2;
+
+import java.io.IOException;
 
 @Log4j2
 public class TableDeserializer extends StdDeserializer<Table> {

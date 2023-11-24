@@ -3,17 +3,15 @@ package com.fdg.fakedatagenerator.serializers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fdg.fakedatagenerator.commands.DataManager;
 import com.fdg.fakedatagenerator.table.Table;
+import lombok.extern.log4j.Log4j2;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
-import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class EntityConfig {

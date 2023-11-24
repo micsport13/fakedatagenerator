@@ -1,13 +1,15 @@
 package com.fdg.fakedatagenerator.datatypes.factories;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.fdg.fakedatagenerator.datatypes.DecimalDataType;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
+import org.junit.jupiter.api.Test;
+
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class DataTypeFactoryTest {
   private final Map<String, String> inputParameters = new HashMap<>();

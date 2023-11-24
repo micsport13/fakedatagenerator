@@ -4,8 +4,9 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fdg.fakedatagenerator.column.Column;
-import java.io.IOException;
 import lombok.extern.log4j.Log4j2;
+
+import java.io.IOException;
 
 @Log4j2
 public class ColumnSerializer extends JsonSerializer<Column<?>> {

@@ -1,7 +1,6 @@
 package com.fdg.fakedatagenerator.constraints.table;
 
 import com.fdg.fakedatagenerator.constraints.Constraint;
-import com.fdg.fakedatagenerator.constraints.TableLevelConstraints;
 import com.fdg.fakedatagenerator.table.Table;
 
 public class TableConstraintFactory {

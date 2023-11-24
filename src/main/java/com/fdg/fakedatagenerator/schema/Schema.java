@@ -7,8 +7,9 @@ import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.constraints.table.TableConstraint;
 import com.fdg.fakedatagenerator.serializers.schema.SchemaDeserializer;
 import com.fdg.fakedatagenerator.serializers.schema.SchemaSerializer;
-import java.util.*;
 import lombok.Getter;
+
+import java.util.*;
 
 @Getter
 @JsonSerialize(using = SchemaSerializer.class)

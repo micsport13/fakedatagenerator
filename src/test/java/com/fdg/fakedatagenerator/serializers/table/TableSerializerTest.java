@@ -11,14 +11,11 @@ import com.fdg.fakedatagenerator.constraints.table.UniqueConstraint;
 import com.fdg.fakedatagenerator.datatypes.DecimalDataType;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
-import com.fdg.fakedatagenerator.exceptions.CheckConstraintException;
 import com.fdg.fakedatagenerator.schema.Schema;
 import com.fdg.fakedatagenerator.table.Table;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.yaml.snakeyaml.Yaml;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TableSerializerTest {
   private static final ObjectMapper objectMapper =

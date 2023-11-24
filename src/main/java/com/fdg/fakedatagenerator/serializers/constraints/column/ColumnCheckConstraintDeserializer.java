@@ -8,7 +8,6 @@ import com.fdg.fakedatagenerator.constraints.column.ColumnCheckConstraint;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;

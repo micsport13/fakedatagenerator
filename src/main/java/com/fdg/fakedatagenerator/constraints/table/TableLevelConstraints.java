@@ -1,4 +1,4 @@
-package com.fdg.fakedatagenerator.constraints;
+package com.fdg.fakedatagenerator.constraints.table;
 
 public enum TableLevelConstraints {
   UNIQUE,

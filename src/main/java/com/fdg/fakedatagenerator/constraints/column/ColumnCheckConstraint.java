@@ -5,12 +5,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.constraints.table.TableCheckConstraint;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.exceptions.CheckConstraintException;
-
-import java.util.*;
-
 import com.fdg.fakedatagenerator.serializers.constraints.column.ColumnCheckConstraintDeserializer;
 import com.fdg.fakedatagenerator.serializers.constraints.column.ColumnCheckConstraintSerializer;
 import lombok.Getter;
+
+import java.util.*;
 
 /** Check Constraint Column Not to be confused with {@link TableCheckConstraint} */
 @Getter
