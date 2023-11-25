@@ -25,6 +25,14 @@ public class PrimaryKeyConstraint implements TableConstraint {
     }
     this.addValue(value);
   }
+  @Override
+  public int hashCode() {
+    return 17;
+  }
+  @Override
+  public boolean equals(Object obj) {
+    return obj instanceof PrimaryKeyConstraint;
+  }
 
   @Override
   public String toString() {

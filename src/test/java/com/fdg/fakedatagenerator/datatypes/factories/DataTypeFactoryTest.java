@@ -80,7 +80,7 @@ class DataTypeFactoryTest {
 
   @Test
   public void create_VarcharDataTypeWithParameters_CreatesVarcharWithCorrectLength() {
-    this.inputParameters.put("maxLength", String.valueOf(10));
+    this.inputParameters.put("max_length", String.valueOf(10));
     VarcharDataType varcharDataType =
         (VarcharDataType) DataTypeFactory.create("varchar", inputParameters);
     assertEquals(10, varcharDataType.getMaxLength());

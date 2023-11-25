@@ -3,17 +3,18 @@ package com.fdg.fakedatagenerator.constraints.column;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 import jakarta.validation.constraints.NotNull;
-
 import java.util.Objects;
+
+import static com.fdg.fakedatagenerator.constraints.column.ColumnLevelConstraints.CHECK;
+import static com.fdg.fakedatagenerator.constraints.column.ColumnLevelConstraints.NOT_NULL;
 
 public class ColumnConstraintFactory {
 
-  public static ColumnConstraint createConstraint(String constraintType) {
-    return switch ( Objects.requireNonNull(constraintType.toLowerCase())) {
-      case "check" -> throw new IllegalArgumentException(
+  public static ColumnConstraint createConstraint(ColumnLevelConstraints constraintType) {
+    return switch ( Objects.requireNonNull(constraintType)) {
+      case CHECK -> throw new IllegalArgumentException(
           "When creating a column check constraint, you must provide parameters");
-      case "not_null", "not null" -> new NotNullConstraint();
-      default -> throw new IllegalArgumentException("Invalid constraint type");
+      case NOT_NULL -> new NotNullConstraint();
     };
   }
 

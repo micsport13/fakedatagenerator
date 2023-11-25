@@ -8,6 +8,7 @@ import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.constraints.column.ColumnCheckConstraint;
 import com.fdg.fakedatagenerator.constraints.column.ColumnConstraint;
 import com.fdg.fakedatagenerator.constraints.column.ColumnConstraintFactory;
+import com.fdg.fakedatagenerator.constraints.column.ColumnLevelConstraints;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.datatypes.factories.DataTypeFactory;
 import lombok.extern.log4j.Log4j2;
@@ -31,10 +32,16 @@ public class ColumnDeserializer extends StdDeserializer<Column<?>> {
       throws IOException { // TODO: Work on updating this to match serializer
     JsonNode rootNode = jsonParser.getCodec().readTree(jsonParser);
     String columnName = rootNode.get("name").asText();
+    if (columnName == null) {
+      throw new IllegalArgumentException("Column missing name parameter in configuration");
+    }
     DataType<?> dataType = null;
     try {
       log.info("Deserializing column: " + columnName);
       String typeName = rootNode.path("type").get("name").asText();
+      if (rootNode.path("type") == null) {
+        throw new IllegalArgumentException("Type parameter missing from column configuration");
+      }
       if (rootNode.path("type").get("parameters") != null) {
         Iterator<Map.Entry<String, JsonNode>> paramNode =
             rootNode.path("type").get("parameters").fields();
@@ -52,12 +59,13 @@ public class ColumnDeserializer extends StdDeserializer<Column<?>> {
     }
     if (rootNode.get("constraints") != null) {
       List<ColumnConstraint> constraints = new ArrayList<>();
-      for (Iterator<JsonNode> it = rootNode.get("constraints").iterator(); it.hasNext(); ) {
-        JsonNode node = it.next();
+      Iterator<JsonNode> constraintNodes = rootNode.get("constraints").elements();
+      while (constraintNodes.hasNext()) {
+        JsonNode node = constraintNodes.next();
         constraints.add(
             node.get("check_constraint") != null
                 ? deserializationContext.readTreeAsValue(node, ColumnCheckConstraint.class)
-                : ColumnConstraintFactory.createConstraint(node.textValue()));
+                : ColumnConstraintFactory.createConstraint(ColumnLevelConstraints.valueOf(node.textValue().toUpperCase())));
       }
       return new Column<>(columnName, dataType, constraints.toArray(new ColumnConstraint[0]));
     } else {

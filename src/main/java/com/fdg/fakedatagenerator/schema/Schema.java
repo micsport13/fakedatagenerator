@@ -77,4 +77,19 @@ public class Schema {
     }
     return sb.toString();
   }
+
+  @Override
+  public int hashCode() {
+    return this.tableConstraints.hashCode();
+  }
+  @Override
+  public boolean equals(Object o) {
+    if (o == this) {
+      return true;
+    }
+    if (!(o instanceof Schema schema)) {
+      return false;
+    }
+    return this.tableConstraints.equals(schema.tableConstraints);
+  }
 }

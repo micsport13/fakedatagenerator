@@ -5,7 +5,7 @@ import com.fdg.fakedatagenerator.table.Table;
 
 public class TableConstraintFactory {
 
-  public static Constraint createConstraint(TableLevelConstraints constraintType) {
+  public static TableConstraint createConstraint(TableLevelConstraints constraintType) {
     return switch (constraintType) {
       case PRIMARY_KEY -> new PrimaryKeyConstraint();
       case FOREIGN_KEY -> throw new IllegalArgumentException(

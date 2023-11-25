@@ -13,7 +13,7 @@ public class ColumnConstraintFactoryTest {
   @Test
   public void createConstraint_WithValidInput_ReturnsCorrectConstraint() {
     assertTrue(
-        ColumnConstraintFactory.createConstraint("not_null")
+        ColumnConstraintFactory.createConstraint(ColumnLevelConstraints.valueOf("not_null".toUpperCase()))
             instanceof NotNullConstraint);
   }
 
