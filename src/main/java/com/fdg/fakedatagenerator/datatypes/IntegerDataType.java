@@ -9,7 +9,7 @@ import com.fdg.fakedatagenerator.serializers.datatype.IntegerDataTypeSerializer;
 public class IntegerDataType implements DataType<Integer> {
 
   @Override
-  public String store(Object value) throws MismatchedDataTypeException {
+  public Object store(Object value) throws MismatchedDataTypeException {
     if (value == null) {
       return null;
     }

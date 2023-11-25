@@ -23,15 +23,15 @@ class VarcharDataTypeTest {
 
   @Test
   public void store_withValidInput_StoresOnlyVarcharMaxLength() {
-    String val = this.varcharDataType.store("test value");
-    assertEquals(1, val.length());
+    var val = this.varcharDataType.store("test value");
+    assertEquals(1, val.toString().length());
     assertEquals("t", val);
   }
 
   @Test
   public void store_withValidNumber_StoresAsString() {
-    String val = this.varcharDataType.store(1);
-    assertEquals(1, val.length());
+    var val = this.varcharDataType.store(1);
+    assertEquals(1, val.toString().length());
     assertEquals("1", val);
   }
 

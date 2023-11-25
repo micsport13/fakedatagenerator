@@ -22,7 +22,7 @@ public class VarcharDataType implements DataType<String> {
   }
 
   @Override
-  public String store(Object value) {
+  public Object store(Object value) {
     if (value == null) {
       return null;
     }

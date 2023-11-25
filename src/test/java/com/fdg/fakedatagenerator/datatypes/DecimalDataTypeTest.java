@@ -38,7 +38,7 @@ class DecimalDataTypeTest {
 
   @Test
   public void store_withIntegerString_StoresWithCorrectPrecision() {
-    String val = this.decimalDataType.store("1.00000001");
+    var val = this.decimalDataType.store("1.00000001");
     assertEquals("1", val);
   }
 
@@ -50,21 +50,21 @@ class DecimalDataTypeTest {
   @Test
   public void store_withScaleAndPrecision_ReturnsCorrectValue() {
     DecimalDataType testDecimal = new DecimalDataType(18,2);
-    String testVal = testDecimal.store(18.203);
+    var testVal = testDecimal.store(18.203);
     assertEquals("18.20", testVal);
   }
 
   @Test
   public void store_withLargeScale_ReturnsCorrectValue() {
     DecimalDataType testDecimal = new DecimalDataType(18,8);
-    String testVal = testDecimal.store(18.00000001);
+    var testVal = testDecimal.store(18.00000001);
     assertEquals("18.00000001", testVal);
   }
 
   @Test
   public void store_withLargeValue_ReturnsCorrectValue() {
     DecimalDataType testDecimal = new DecimalDataType(3,0);
-    String testVal = testDecimal.store(18.00000001);
+    var testVal = testDecimal.store(18.00000001);
     assertEquals("18", testVal);
   }
 }

@@ -41,7 +41,7 @@ public class DecimalDataType implements DataType<BigDecimal> {
   }
 
   @Override
-  public String store(Object value) throws MismatchedDataTypeException {
+  public Object store(Object value) throws MismatchedDataTypeException {
     if (value == null) {
       return null;
     }

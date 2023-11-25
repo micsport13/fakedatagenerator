@@ -4,7 +4,7 @@ import com.fdg.fakedatagenerator.exceptions.DeserializationException;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
 
 public interface DataType<T> {
-  String store(Object value) throws MismatchedDataTypeException;
+  Object store(Object value) throws MismatchedDataTypeException;
 
   T cast(Object value) throws DeserializationException;
 
