@@ -44,7 +44,7 @@ public class Row {
     Optional<Column<?>> column = getColumnByName(columnName);
     if (column.isPresent()) {
       if (columnValue == null || column.get().getDataType().validate(String.valueOf(columnValue))) {
-        this.columnValueMapping.put(column.get(), columnValue);
+        this.columnValueMapping.put(column.get(), column.get().getDataType().store(columnValue));
       } else {
         throw new MismatchedDataTypeException(
             "Value is not compatible with the column's data type.");
@@ -109,9 +109,7 @@ public class Row {
   public Optional<Object> getValue(String columnName) {
     Optional<Column<?>> optionalColumn = getColumnByName(columnName);
     return optionalColumn.map(
-        column -> {
-          return this.getColumnValueMapping().get(column);
-        });
+        column -> optionalColumn.get().getDataType().cast(columnValueMapping.get(column)));
   }
 
   @Override
@@ -169,7 +167,7 @@ public class Row {
       for (Column<?> column : this.columnValueMapping.keySet()) {
         if (column.getName().equals(columnName)
             && column.getDataType().validate(String.valueOf(value))) {
-          this.columnValueMapping.put(column, value);
+          this.columnValueMapping.put(column, column.getDataType().store(value));
           return this;
         }
         if (column.getName().equals(columnName)
@@ -190,6 +188,9 @@ public class Row {
      * @return the entity
      */
     public Row build() {
+      for (Map.Entry<Column<?>, Object> entry : this.columnValueMapping.entrySet()) {
+        entry.getKey().validate(entry.getValue());
+      }
       return new Row(this);
     }
   }

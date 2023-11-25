@@ -20,11 +20,10 @@ class RowTest {
   public void entityConstructor_WithCorrectValues_ResultsInCorrectEntity() {
     Column<IntegerDataType> idColumn = new Column<>("id", new IntegerDataType());
     Row row = new Row.Builder(idColumn).withColumnValue("id", 1).build();
-    int id = (int) row.getValue("id").orElseThrow(NoSuchElementException::new);
+    int id = row.getColumnValue("id");
     assertEquals(1, id);
     assertSame(row.getColumnByName("id").orElseThrow(NoSuchElementException::new), idColumn);
     assertEquals(1, row.getColumns().size());
-    assertTrue(row.getColumnValueMapping().containsValue(1));
     assertTrue(row.getColumnValueMapping().containsKey(idColumn));
   }
 
@@ -32,7 +31,7 @@ class RowTest {
   public void entityConstructor_WithNoProvidedColumnValues_ResultsInEntityWithNullInColumn() {
     Column<IntegerDataType> idColumn = new Column<>("id", new IntegerDataType());
     Row row = new Row.Builder(idColumn).build();
-    assertTrue(row.getValue("id").isEmpty());
+    assertNull(row.getColumnValue("id"));
     assertNull(row.getColumnValueMapping().get(idColumn));
   }
 }

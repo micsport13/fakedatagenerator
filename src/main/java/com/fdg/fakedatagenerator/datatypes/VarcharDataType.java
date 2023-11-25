@@ -32,7 +32,7 @@ public class VarcharDataType implements DataType<String> {
           value,
           this.maxLength);
     }
-    return value.toString().substring(0, this.maxLength);
+    return value.toString().length() > maxLength ? value.toString().substring(0, this.maxLength) : value.toString();
   }
 
   @Override

@@ -63,7 +63,7 @@ public class Table {
   public List<Object> getColumnValues(String columnName) {
     List<Object> columnValues = new ArrayList<>();
     for (Row row : entities) {
-      columnValues.add(row.getValue(columnName));
+      columnValues.add(row.getColumnValue(columnName));
     }
     return columnValues;
   }

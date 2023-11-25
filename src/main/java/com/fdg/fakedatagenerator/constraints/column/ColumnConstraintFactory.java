@@ -3,10 +3,8 @@ package com.fdg.fakedatagenerator.constraints.column;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 import jakarta.validation.constraints.NotNull;
-import java.util.Objects;
 
-import static com.fdg.fakedatagenerator.constraints.column.ColumnLevelConstraints.CHECK;
-import static com.fdg.fakedatagenerator.constraints.column.ColumnLevelConstraints.NOT_NULL;
+import java.util.Objects;
 
 public class ColumnConstraintFactory {
 
