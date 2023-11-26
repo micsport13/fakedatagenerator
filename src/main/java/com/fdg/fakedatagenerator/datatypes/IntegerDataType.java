@@ -14,8 +14,7 @@ public class IntegerDataType implements DataType<Integer> {
       return null;
     }
     try {
-      int intValue = Integer.parseInt(value.toString());
-      return Integer.toString(intValue);
+      return Integer.parseInt(value.toString());
     } catch (NumberFormatException e) {
       throw new MismatchedDataTypeException("Error casting integer value: " + value);
     }

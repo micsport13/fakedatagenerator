@@ -8,6 +8,7 @@ import com.fdg.fakedatagenerator.serializers.datatype.DecimalDataTypeSerializer;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
 
@@ -46,8 +47,7 @@ public class DecimalDataType implements DataType<BigDecimal> {
       return null;
     }
     try {
-        BigDecimal decimalValue = new BigDecimal(value.toString());
-        return decimalValue.setScale(this.scale, this.roundingMode).toString();
+        return new BigDecimal(value.toString()).setScale(this.scale, this.roundingMode);
     } catch (NumberFormatException e) {
       throw new MismatchedDataTypeException("Error deserializing decimal value: " + value);
     }
