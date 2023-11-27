@@ -6,16 +6,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fdg.fakedatagenerator.schema.Schema;
 import com.fdg.fakedatagenerator.table.Table;
-import lombok.extern.log4j.Log4j2;
-
 import java.io.IOException;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class TableDeserializer extends StdDeserializer<Table> {
   // TODO: Standardize these field names for the yml file
-  public TableDeserializer(){
+  public TableDeserializer() {
     this(null);
   }
+
   protected TableDeserializer(Class<Table> t) {
     super(t);
   }

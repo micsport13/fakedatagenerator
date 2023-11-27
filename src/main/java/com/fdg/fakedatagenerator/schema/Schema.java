@@ -7,9 +7,8 @@ import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.constraints.table.TableConstraint;
 import com.fdg.fakedatagenerator.serializers.schema.SchemaDeserializer;
 import com.fdg.fakedatagenerator.serializers.schema.SchemaSerializer;
-import lombok.Getter;
-
 import java.util.*;
+import lombok.Getter;
 
 @Getter
 @JsonSerialize(using = SchemaSerializer.class)
@@ -66,22 +65,10 @@ public class Schema {
   }
 
   @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder("Schema: \n");
-    for (Map.Entry<Column<?>, Set<TableConstraint>> entry : this.tableConstraints.entrySet()) {
-      sb.append(entry.getKey().toString()).append("\n")
-          .append("Table Constraints: ")
-          .append(entry.getValue().toString())
-          .append("\n")
-          .append("--------------------\n");
-    }
-    return sb.toString();
-  }
-
-  @Override
   public int hashCode() {
     return this.tableConstraints.hashCode();
   }
+
   @Override
   public boolean equals(Object o) {
     if (o == this) {
@@ -91,5 +78,19 @@ public class Schema {
       return false;
     }
     return this.tableConstraints.equals(schema.tableConstraints);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("Schema: \n");
+    for (Map.Entry<Column<?>, Set<TableConstraint>> entry : this.tableConstraints.entrySet()) {
+      sb.append(entry.getKey().toString())
+          .append("\n")
+          .append("Table Constraints: ")
+          .append(entry.getValue().toString())
+          .append("\n")
+          .append("--------------------\n");
+    }
+    return sb.toString();
   }
 }

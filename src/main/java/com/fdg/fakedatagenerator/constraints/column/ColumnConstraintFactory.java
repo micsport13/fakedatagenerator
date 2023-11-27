@@ -3,13 +3,12 @@ package com.fdg.fakedatagenerator.constraints.column;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 import jakarta.validation.constraints.NotNull;
-
 import java.util.Objects;
 
 public class ColumnConstraintFactory {
 
   public static ColumnConstraint createConstraint(ColumnLevelConstraints constraintType) {
-    return switch ( Objects.requireNonNull(constraintType)) {
+    return switch (Objects.requireNonNull(constraintType)) {
       case CHECK -> throw new IllegalArgumentException(
           "When creating a column check constraint, you must provide parameters");
       case NOT_NULL -> new NotNullConstraint();
@@ -17,16 +16,15 @@ public class ColumnConstraintFactory {
   }
 
   public static <T extends Number> ColumnConstraint createConstraint(
-          @NotNull DataType<T> dataType, T minValue, T maxValue) {
-      return new ColumnCheckConstraint.Builder<>(dataType).withRange(minValue, maxValue).build();
+      @NotNull DataType<T> dataType, T minValue, T maxValue) {
+    return new ColumnCheckConstraint.Builder<>(dataType).withRange(minValue, maxValue).build();
   }
 
   @SafeVarargs
   public static <U extends String> ColumnConstraint createConstraint(
       U firstAcceptedValue,
-      U...
-          acceptedValues) { // TODO: Incorrectly assigning values, potentially revisit this
-                            // constructor
+      U... acceptedValues) { // TODO: Incorrectly assigning values, potentially revisit this
+    // constructor
     if (firstAcceptedValue == null) {
       throw new IllegalArgumentException("Must provide at least one acceptable value");
     }

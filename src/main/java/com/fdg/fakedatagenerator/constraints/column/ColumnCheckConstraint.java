@@ -7,9 +7,8 @@ import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.exceptions.CheckConstraintException;
 import com.fdg.fakedatagenerator.serializers.constraints.column.ColumnCheckConstraintDeserializer;
 import com.fdg.fakedatagenerator.serializers.constraints.column.ColumnCheckConstraintSerializer;
-import lombok.Getter;
-
 import java.util.*;
+import lombok.Getter;
 
 /** Check Constraint Column Not to be confused with {@link TableCheckConstraint} */
 @Getter
@@ -139,7 +138,6 @@ public final class ColumnCheckConstraint implements ColumnConstraint {
       this.dataType = dataType;
     }
 
-
     /**
      * With range check constraint builder.
      *
@@ -151,7 +149,9 @@ public final class ColumnCheckConstraint implements ColumnConstraint {
       if (lowerBound == null && upperBound == null) {
         throw new IllegalArgumentException("One of the bounds must be set if calling this method");
       }
-      if (lowerBound != null && upperBound != null && lowerBound.doubleValue() > upperBound.doubleValue()) {
+      if (lowerBound != null
+          && upperBound != null
+          && lowerBound.doubleValue() > upperBound.doubleValue()) {
         throw new IllegalArgumentException("Lower bound can not be greater than upper bound");
       }
       this.min = lowerBound;
@@ -165,7 +165,6 @@ public final class ColumnCheckConstraint implements ColumnConstraint {
      * @param minimumValue the minimum value
      * @return the check constraint builder
      */
-
     public <U extends Number> Builder<T> withMinimumValue(U minimumValue) {
       this.withRange(Objects.requireNonNull(minimumValue), null);
       return this;
@@ -182,7 +181,6 @@ public final class ColumnCheckConstraint implements ColumnConstraint {
       return this;
     }
 
-
     @SafeVarargs
     public final <U extends String> Builder<T> withAcceptedValues(
         U firstAcceptedValue, U... acceptedValues) {
@@ -191,8 +189,7 @@ public final class ColumnCheckConstraint implements ColumnConstraint {
       return this;
     }
 
-    public final <U extends String> Builder<T> withAcceptedValues(
-            Collection<U> acceptedValues) {
+    public <U extends String> Builder<T> withAcceptedValues(Collection<U> acceptedValues) {
       if (acceptedValues.isEmpty()) {
         throw new IllegalArgumentException("Accepted values must have at least one value");
       }

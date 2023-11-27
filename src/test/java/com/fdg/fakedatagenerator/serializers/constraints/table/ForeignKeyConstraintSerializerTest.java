@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 
 class ForeignKeyConstraintSerializerTest {
 
-    @BeforeEach
-    void setUp() {
-    }
+  @BeforeEach
+  void setUp() {}
 }

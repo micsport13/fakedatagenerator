@@ -1,5 +1,7 @@
 package com.fdg.fakedatagenerator.serializers.column;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
@@ -8,26 +10,21 @@ import com.fdg.fakedatagenerator.constraints.column.NotNullConstraint;
 import com.fdg.fakedatagenerator.datatypes.DecimalDataType;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
+import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ColumnSerializerTest {
 
   private static final ObjectMapper objectMapper =
-          new YAMLMapper()
-            .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
-            .enable(YAMLGenerator.Feature.INDENT_ARRAYS)
-            .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
-            .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES); ;
+      new YAMLMapper()
+          .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
+          .enable(YAMLGenerator.Feature.INDENT_ARRAYS)
+          .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
+          .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES);
 
   @BeforeEach
-  public void setUp() {
-
-  }
+  public void setUp() {}
 
   @Test
   public void serialize_ColumnSerialization_OutputsCorrectSerialization() throws IOException {
@@ -65,13 +62,14 @@ class ColumnSerializerTest {
   }
 
   @Test
-  public void serialize_VarcharDataTypeWithNotNullConstraints_OutputsCorrectSerialization() throws IOException {
+  public void serialize_VarcharDataTypeWithNotNullConstraints_OutputsCorrectSerialization()
+      throws IOException {
     Column<VarcharDataType> varcharDataTypeColumn =
         new Column<>("varcharColumn", new VarcharDataType(40), new NotNullConstraint());
     String yaml = objectMapper.writeValueAsString(varcharDataTypeColumn);
     // Assert
     String expectedYaml =
-            """
+        """
                     name: varcharColumn
                     type:
                       name: varchar
@@ -84,13 +82,14 @@ class ColumnSerializerTest {
   }
 
   @Test
-  public void serialize_IntegerDataTypeWithNotNullConstraints_OutputsCorrectSerialization() throws IOException {
+  public void serialize_IntegerDataTypeWithNotNullConstraints_OutputsCorrectSerialization()
+      throws IOException {
     Column<IntegerDataType> varcharDataTypeColumn =
-            new Column<>("integerColumn", new IntegerDataType(), new NotNullConstraint());
+        new Column<>("integerColumn", new IntegerDataType(), new NotNullConstraint());
     String yaml = objectMapper.writeValueAsString(varcharDataTypeColumn);
     // Assert
     String expectedYaml =
-            """
+        """
                     name: integerColumn
                     type:
                       name: integer

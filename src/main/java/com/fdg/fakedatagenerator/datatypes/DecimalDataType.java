@@ -5,21 +5,16 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.exceptions.DeserializationException;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
 import com.fdg.fakedatagenerator.serializers.datatype.DecimalDataTypeSerializer;
-import lombok.Getter;
-
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
+import lombok.Getter;
 
-@JsonSerialize(using= DecimalDataTypeSerializer.class)
+@JsonSerialize(using = DecimalDataTypeSerializer.class)
 public class DecimalDataType implements DataType<BigDecimal> {
-  @Getter
-  private final Integer precision;
-  @Getter
-  private final Integer scale;
-  @JsonIgnore
-  private RoundingMode roundingMode;
+  @Getter private final Integer precision;
+  @Getter private final Integer scale;
+  @JsonIgnore private RoundingMode roundingMode;
 
   public DecimalDataType() {
     this.precision = 18;
@@ -47,7 +42,7 @@ public class DecimalDataType implements DataType<BigDecimal> {
       return null;
     }
     try {
-        return new BigDecimal(value.toString()).setScale(this.scale, this.roundingMode);
+      return new BigDecimal(value.toString()).setScale(this.scale, this.roundingMode);
     } catch (NumberFormatException e) {
       throw new MismatchedDataTypeException("Error deserializing decimal value: " + value);
     }
@@ -83,7 +78,8 @@ public class DecimalDataType implements DataType<BigDecimal> {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o instanceof DecimalDataType decimalDataType) {
-      return this.scale.equals(decimalDataType.getScale()) && this.precision.equals(((DecimalDataType) o).getPrecision());
+      return this.scale.equals(decimalDataType.getScale())
+          && this.precision.equals(((DecimalDataType) o).getPrecision());
     }
     return false;
   }

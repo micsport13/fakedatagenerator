@@ -9,9 +9,8 @@ import com.fdg.fakedatagenerator.schema.Schema;
 import com.fdg.fakedatagenerator.serializers.table.TableDeserializer;
 import com.fdg.fakedatagenerator.serializers.table.TableSerializer;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-
 import java.util.*;
+import lombok.Getter;
 
 /** The type Table. */
 @JsonSerialize(using = TableSerializer.class)

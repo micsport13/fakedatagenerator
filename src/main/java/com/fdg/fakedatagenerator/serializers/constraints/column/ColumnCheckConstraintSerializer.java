@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fdg.fakedatagenerator.constraints.column.ColumnCheckConstraint;
-
 import java.io.IOException;
 
 public class ColumnCheckConstraintSerializer extends StdSerializer<ColumnCheckConstraint> {
@@ -18,7 +17,8 @@ public class ColumnCheckConstraintSerializer extends StdSerializer<ColumnCheckCo
   }
 
   @Override
-  public void serialize(ColumnCheckConstraint columnCheckConstraint, JsonGenerator gen, SerializerProvider provider)
+  public void serialize(
+      ColumnCheckConstraint columnCheckConstraint, JsonGenerator gen, SerializerProvider provider)
       throws IOException {
     gen.writeStartObject();
     gen.writeObjectFieldStart("check_constraint");
@@ -31,7 +31,7 @@ public class ColumnCheckConstraintSerializer extends StdSerializer<ColumnCheckCo
     }
     if (!columnCheckConstraint.getAcceptedValues().isEmpty()) {
       gen.writeArrayFieldStart("accepted_values");
-      for (var acceptedValue: columnCheckConstraint.getAcceptedValues()) {
+      for (var acceptedValue : columnCheckConstraint.getAcceptedValues()) {
         gen.writeObject(acceptedValue);
       }
       gen.writeEndArray();

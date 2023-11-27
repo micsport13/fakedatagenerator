@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 
 class PrimaryKeyConstraintSerializerTest {
 
-    @BeforeEach
-    void setUp() {
-    }
+  @BeforeEach
+  void setUp() {}
 }

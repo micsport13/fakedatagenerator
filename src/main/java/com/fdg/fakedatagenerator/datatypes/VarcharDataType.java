@@ -32,14 +32,15 @@ public class VarcharDataType implements DataType<String> {
           value,
           this.maxLength);
     }
-    return value.toString().length() > maxLength ? value.toString().substring(0, this.maxLength) : value.toString();
+    return value.toString().length() > maxLength
+        ? value.toString().substring(0, this.maxLength)
+        : value.toString();
   }
 
   @Override
   public String cast(Object value) {
     return value.toString().substring(0, this.maxLength);
   }
-
 
   @Override
   public boolean validate(String value) throws MismatchedDataTypeException {

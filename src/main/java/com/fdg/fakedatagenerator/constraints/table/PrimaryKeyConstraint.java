@@ -3,7 +3,6 @@ package com.fdg.fakedatagenerator.constraints.table;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.exceptions.PrimaryKeyConstraintException;
 import com.fdg.fakedatagenerator.serializers.constraints.table.PrimaryKeyConstraintSerializer;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,10 +24,12 @@ public class PrimaryKeyConstraint implements TableConstraint {
     }
     this.addValue(value);
   }
+
   @Override
   public int hashCode() {
     return 17;
   }
+
   @Override
   public boolean equals(Object obj) {
     return obj instanceof PrimaryKeyConstraint;

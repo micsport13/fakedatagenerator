@@ -11,10 +11,9 @@ import com.fdg.fakedatagenerator.constraints.column.ColumnConstraintFactory;
 import com.fdg.fakedatagenerator.constraints.column.ColumnLevelConstraints;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.datatypes.factories.DataTypeFactory;
-import lombok.extern.log4j.Log4j2;
-
 import java.io.IOException;
 import java.util.*;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class ColumnDeserializer extends StdDeserializer<Column<?>> {
@@ -65,7 +64,8 @@ public class ColumnDeserializer extends StdDeserializer<Column<?>> {
         constraints.add(
             node.get("check_constraint") != null
                 ? deserializationContext.readTreeAsValue(node, ColumnCheckConstraint.class)
-                : ColumnConstraintFactory.createConstraint(ColumnLevelConstraints.valueOf(node.textValue().toUpperCase())));
+                : ColumnConstraintFactory.createConstraint(
+                    ColumnLevelConstraints.valueOf(node.textValue().toUpperCase())));
       }
       return new Column<>(columnName, dataType, constraints.toArray(new ColumnConstraint[0]));
     } else {

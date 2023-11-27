@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.exceptions.ForeignKeyConstraintException;
 import com.fdg.fakedatagenerator.serializers.constraints.table.ForeignKeyConstraintSerializer;
 import com.fdg.fakedatagenerator.table.Table;
-
 import java.util.HashSet;
 import java.util.Set;
 

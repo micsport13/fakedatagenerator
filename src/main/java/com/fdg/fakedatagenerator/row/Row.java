@@ -3,9 +3,8 @@ package com.fdg.fakedatagenerator.row;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
-import lombok.Getter;
-
 import java.util.*;
+import lombok.Getter;
 
 /** The type Row. */
 @Getter

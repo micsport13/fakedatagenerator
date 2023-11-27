@@ -9,13 +9,12 @@ import com.fdg.fakedatagenerator.constraints.table.TableConstraint;
 import com.fdg.fakedatagenerator.constraints.table.TableConstraintFactory;
 import com.fdg.fakedatagenerator.constraints.table.TableLevelConstraints;
 import com.fdg.fakedatagenerator.schema.Schema;
-import lombok.extern.log4j.Log4j2;
-
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class SchemaDeserializer extends StdDeserializer<Schema> {
@@ -23,6 +22,7 @@ public class SchemaDeserializer extends StdDeserializer<Schema> {
   public SchemaDeserializer() {
     this(null);
   }
+
   protected SchemaDeserializer(Class<?> vc) {
     super(vc);
   }
@@ -43,8 +43,9 @@ public class SchemaDeserializer extends StdDeserializer<Schema> {
       Set<TableConstraint> tableConstraints = new HashSet<>();
       var constraintNode = node.path("table_constraints").iterator();
       while (constraintNode.hasNext()) {
-        tableConstraints.add(TableConstraintFactory.createConstraint(TableLevelConstraints.valueOf(constraintNode.next()
-                                                                                                           .asText().toUpperCase())));
+        tableConstraints.add(
+            TableConstraintFactory.createConstraint(
+                TableLevelConstraints.valueOf(constraintNode.next().asText().toUpperCase())));
       }
       schemaMap.put(column, tableConstraints);
     }

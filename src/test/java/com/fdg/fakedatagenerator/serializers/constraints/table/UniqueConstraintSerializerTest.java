@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 
 class UniqueConstraintSerializerTest {
 
-    @BeforeEach
-    void setUp() {
-    }
+  @BeforeEach
+  void setUp() {}
 }

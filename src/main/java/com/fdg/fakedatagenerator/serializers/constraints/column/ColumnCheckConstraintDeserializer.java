@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fdg.fakedatagenerator.constraints.column.ColumnCheckConstraint;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,9 +28,11 @@ public class ColumnCheckConstraintDeserializer extends StdDeserializer<ColumnChe
       JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
     JsonNode constraintNode = jsonParser.getCodec().readTree(jsonParser);
     if (constraintNode.at("/check_constraint/parameters") == null) {
-      throw new IllegalArgumentException("Check constraints must have parameters, either min/max or accepted values");
+      throw new IllegalArgumentException(
+          "Check constraints must have parameters, either min/max or accepted values");
     }
-    Iterator<Map.Entry<String, JsonNode>> fields = constraintNode.at("/check_constraint/parameters").fields();
+    Iterator<Map.Entry<String, JsonNode>> fields =
+        constraintNode.at("/check_constraint/parameters").fields();
     Number minValue = null;
     Number maxValue = null;
     List<String> acceptedValues = new ArrayList<>();

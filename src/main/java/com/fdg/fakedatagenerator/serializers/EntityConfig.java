@@ -7,11 +7,10 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fdg.fakedatagenerator.commands.DataManager;
 import com.fdg.fakedatagenerator.table.Table;
-import lombok.extern.log4j.Log4j2;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class EntityConfig {
@@ -20,7 +19,8 @@ public class EntityConfig {
           .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
           .disable(YAMLGenerator.Feature.INDENT_ARRAYS)
           .disable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
-          .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES).enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+          .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES)
+          .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 
   public static List<Table> loadConfig(String filePath) throws IOException {
     return objectMapper.readValue(new File(filePath), new TypeReference<>() {});

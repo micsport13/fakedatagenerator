@@ -1,5 +1,7 @@
 package com.fdg.fakedatagenerator.column;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.fdg.fakedatagenerator.constraints.column.ColumnCheckConstraint;
 import com.fdg.fakedatagenerator.constraints.column.ColumnConstraint;
 import com.fdg.fakedatagenerator.constraints.column.NotNullConstraint;
@@ -9,8 +11,6 @@ import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
 import com.fdg.fakedatagenerator.exceptions.NotNullConstraintException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /** The type Column test. */
 public class ColumnTest {

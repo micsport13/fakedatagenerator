@@ -4,9 +4,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fdg.fakedatagenerator.column.Column;
-import lombok.extern.log4j.Log4j2;
-
 import java.io.IOException;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class ColumnSerializer extends JsonSerializer<Column<?>> {
@@ -25,7 +24,7 @@ public class ColumnSerializer extends JsonSerializer<Column<?>> {
     log.info("Serializing column: " + column);
     ymlGenerator.writeStartObject();
     ymlGenerator.writeStringField("name", column.getName());
-    ymlGenerator.writeObjectField("type",column.getDataType());
+    ymlGenerator.writeObjectField("type", column.getDataType());
     if (!column.getConstraints().isEmpty()) {
       ymlGenerator.writeArrayFieldStart("constraints");
       for (var columnConstraint : column.getConstraints()) {
