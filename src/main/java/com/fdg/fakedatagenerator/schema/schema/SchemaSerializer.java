@@ -1,4 +1,4 @@
-package com.fdg.fakedatagenerator.serializers.schema;
+package com.fdg.fakedatagenerator.schema.schema;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;

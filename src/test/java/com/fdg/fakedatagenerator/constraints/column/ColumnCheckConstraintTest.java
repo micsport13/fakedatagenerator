@@ -3,9 +3,6 @@ package com.fdg.fakedatagenerator.constraints.column;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.fdg.fakedatagenerator.datatypes.DecimalDataType;
-import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
-import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 import com.fdg.fakedatagenerator.exceptions.CheckConstraintException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,7 +15,7 @@ class ColumnCheckConstraintTest {
   @Test
   public void validate_valueBelowMinimumCheckConstraint_ThrowsException() {
     ColumnCheckConstraint columnCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(new IntegerDataType()).withMinimumValue(0.0).build();
+        new ColumnCheckConstraint.Builder().withMinimumValue(0.0).build();
     Assertions.assertThrows(
         CheckConstraintException.class, () -> columnCheckConstraint.validate(-1));
   }
@@ -27,21 +24,21 @@ class ColumnCheckConstraintTest {
   @Test
   public void validate_AtMinimumCheckConstraint_ThrowsNoException() {
     ColumnCheckConstraint columnCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(new IntegerDataType()).withMinimumValue(0).build();
+        new ColumnCheckConstraint.Builder().withMinimumValue(0).build();
     assertDoesNotThrow(() -> columnCheckConstraint.validate(0));
   }
 
   @Test
   public void validate_BelowMinimumCheckConstraint_ThrowsException() {
     ColumnCheckConstraint columnCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(new IntegerDataType()).withMinimumValue(0).build();
+        new ColumnCheckConstraint.Builder().withMinimumValue(0).build();
     assertThrows(CheckConstraintException.class, () -> columnCheckConstraint.validate(-1));
   }
 
   @Test
   public void validate_ExtremelySmallDoubleBelowMinimumCheckConstraint_ThrowsException() {
     ColumnCheckConstraint columnCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(new DecimalDataType()).withMinimumValue(0f).build();
+        new ColumnCheckConstraint.Builder().withMinimumValue(0f).build();
     assertThrows(
         CheckConstraintException.class, () -> columnCheckConstraint.validate(-.00000000005f));
   }
@@ -51,7 +48,7 @@ class ColumnCheckConstraintTest {
   @Test
   public void validate_valueAboveMaximumCheckConstraint_ThrowsException() {
     ColumnCheckConstraint columnCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(new IntegerDataType()).withMaximumValue(10.0).build();
+        new ColumnCheckConstraint.Builder().withMaximumValue(10.0).build();
     Assertions.assertThrows(
         CheckConstraintException.class, () -> columnCheckConstraint.validate(11));
   }
@@ -60,7 +57,7 @@ class ColumnCheckConstraintTest {
   @Test
   public void validate_AtMaximumCheckConstraint_ThrowsNoException() {
     ColumnCheckConstraint columnCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(new IntegerDataType()).withMaximumValue(10).build();
+        new ColumnCheckConstraint.Builder().withMaximumValue(10).build();
     assertDoesNotThrow(() -> columnCheckConstraint.validate(10));
   }
 
@@ -69,7 +66,7 @@ class ColumnCheckConstraintTest {
   @Test
   public void validate_BetweenMinimumAndMaximumCheckConstraint_ThrowsNoException() {
     ColumnCheckConstraint columnCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(new IntegerDataType()).withRange(0, 10).build();
+        new ColumnCheckConstraint.Builder().withRange(0, 10).build();
     assertDoesNotThrow(() -> columnCheckConstraint.validate(5));
   }
 
@@ -78,9 +75,7 @@ class ColumnCheckConstraintTest {
   @Test
   public void validate_NotInAcceptedValues_ThrowsException() {
     ColumnCheckConstraint columnCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(new VarcharDataType())
-            .withAcceptedValues("Test", "Test1")
-            .build();
+        new ColumnCheckConstraint.Builder().withAcceptedValues("Test", "Test1").build();
     Assertions.assertThrows(
         CheckConstraintException.class, () -> columnCheckConstraint.validate("Test3"));
   }
@@ -89,9 +84,7 @@ class ColumnCheckConstraintTest {
   @Test
   public void validate_ValueInAcceptedValues_ThrowsNoException() {
     ColumnCheckConstraint columnCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(new VarcharDataType())
-            .withAcceptedValues("Test", "Test1")
-            .build();
+        new ColumnCheckConstraint.Builder().withAcceptedValues("Test", "Test1").build();
     Assertions.assertDoesNotThrow(() -> columnCheckConstraint.validate("Test"));
   }
 
@@ -100,15 +93,9 @@ class ColumnCheckConstraintTest {
   @Test
   public void equals_multipleCheckConstraintsWithSameMinimum_AreEqual() {
     ColumnCheckConstraint columnCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(new IntegerDataType())
-            .withMinimumValue(0)
-            .withMaximumValue(10)
-            .build();
+        new ColumnCheckConstraint.Builder().withMinimumValue(0).withMaximumValue(10).build();
     ColumnCheckConstraint columnCheckConstraint1 =
-        new ColumnCheckConstraint.Builder<>(new IntegerDataType())
-            .withMinimumValue(0)
-            .withMaximumValue(10)
-            .build();
+        new ColumnCheckConstraint.Builder().withMinimumValue(0).withMaximumValue(10).build();
     Assertions.assertEquals(columnCheckConstraint, columnCheckConstraint1);
   }
 
@@ -116,9 +103,9 @@ class ColumnCheckConstraintTest {
   @Test
   public void equals_multipleCheckConstraintsWithSameMaximum_AreEqual() {
     ColumnCheckConstraint columnCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(new IntegerDataType()).withMaximumValue(10).build();
+        new ColumnCheckConstraint.Builder().withMaximumValue(10).build();
     ColumnCheckConstraint columnCheckConstraint1 =
-        new ColumnCheckConstraint.Builder<>(new IntegerDataType()).withMaximumValue(10).build();
+        new ColumnCheckConstraint.Builder().withMaximumValue(10).build();
     Assertions.assertEquals(columnCheckConstraint, columnCheckConstraint1);
   }
 
@@ -126,15 +113,9 @@ class ColumnCheckConstraintTest {
   @Test
   public void equals_multipleCheckConstraintsWithSameRange_AreEqual() {
     ColumnCheckConstraint columnCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(new IntegerDataType())
-            .withMinimumValue(0)
-            .withMaximumValue(10)
-            .build();
+        new ColumnCheckConstraint.Builder().withMinimumValue(0).withMaximumValue(10).build();
     ColumnCheckConstraint columnCheckConstraint1 =
-        new ColumnCheckConstraint.Builder<>(new IntegerDataType())
-            .withMinimumValue(0)
-            .withMaximumValue(10)
-            .build();
+        new ColumnCheckConstraint.Builder().withMinimumValue(0).withMaximumValue(10).build();
     Assertions.assertEquals(columnCheckConstraint, columnCheckConstraint1);
   }
 
@@ -142,15 +123,9 @@ class ColumnCheckConstraintTest {
   @Test
   public void equals_multipleCheckConstraintsWithDifferentRanges_AreNotEqual() {
     ColumnCheckConstraint columnCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(new IntegerDataType())
-            .withMinimumValue(0)
-            .withMaximumValue(10)
-            .build();
+        new ColumnCheckConstraint.Builder().withMinimumValue(0).withMaximumValue(10).build();
     ColumnCheckConstraint columnCheckConstraint1 =
-        new ColumnCheckConstraint.Builder<>(new IntegerDataType())
-            .withMinimumValue(0)
-            .withMaximumValue(8)
-            .build();
+        new ColumnCheckConstraint.Builder().withMinimumValue(0).withMaximumValue(8).build();
     Assertions.assertNotEquals(columnCheckConstraint, columnCheckConstraint1);
   }
 
@@ -158,13 +133,9 @@ class ColumnCheckConstraintTest {
   @Test
   public void equals_multipleCheckConstraintsWithSameAcceptedValues_AreEqual() {
     ColumnCheckConstraint columnCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(new VarcharDataType())
-            .withAcceptedValues("Test", "Test1")
-            .build();
+        new ColumnCheckConstraint.Builder().withAcceptedValues("Test", "Test1").build();
     ColumnCheckConstraint columnCheckConstraint1 =
-        new ColumnCheckConstraint.Builder<>(new VarcharDataType())
-            .withAcceptedValues("Test", "Test1")
-            .build();
+        new ColumnCheckConstraint.Builder().withAcceptedValues("Test", "Test1").build();
     Assertions.assertEquals(columnCheckConstraint, columnCheckConstraint1);
   }
 
@@ -172,13 +143,9 @@ class ColumnCheckConstraintTest {
   @Test
   public void equals_multipleCheckConstraintsWithDifferentAcceptedValues_AreNotEqual() {
     ColumnCheckConstraint columnCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(new VarcharDataType())
-            .withAcceptedValues("Test", "Test1")
-            .build();
+        new ColumnCheckConstraint.Builder().withAcceptedValues("Test", "Test1").build();
     ColumnCheckConstraint columnCheckConstraint1 =
-        new ColumnCheckConstraint.Builder<>(new VarcharDataType())
-            .withAcceptedValues("Test")
-            .build();
+        new ColumnCheckConstraint.Builder().withAcceptedValues("Test").build();
     Assertions.assertNotEquals(columnCheckConstraint, columnCheckConstraint1);
   }
 
@@ -186,13 +153,9 @@ class ColumnCheckConstraintTest {
   @Test
   public void equals_multipleCheckConstraintsWithDifferentOrderedAcceptedValues_AreEqual() {
     ColumnCheckConstraint columnCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(new VarcharDataType())
-            .withAcceptedValues("Test", "Test1")
-            .build();
+        new ColumnCheckConstraint.Builder().withAcceptedValues("Test", "Test1").build();
     ColumnCheckConstraint columnCheckConstraint1 =
-        new ColumnCheckConstraint.Builder<>(new VarcharDataType())
-            .withAcceptedValues("Test1", "Test")
-            .build();
+        new ColumnCheckConstraint.Builder().withAcceptedValues("Test1", "Test").build();
     Assertions.assertEquals(columnCheckConstraint, columnCheckConstraint1);
   }
 
@@ -201,9 +164,6 @@ class ColumnCheckConstraintTest {
     assertThrows(
         IllegalArgumentException.class,
         () ->
-            new ColumnCheckConstraint.Builder<>(new VarcharDataType())
-                .withRange(0, 1)
-                .withAcceptedValues("TEst")
-                .build());
+            new ColumnCheckConstraint.Builder().withRange(0, 1).withAcceptedValues("TEst").build());
   }
 }

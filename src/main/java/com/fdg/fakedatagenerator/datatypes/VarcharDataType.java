@@ -1,16 +1,19 @@
 package com.fdg.fakedatagenerator.datatypes;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
-import com.fdg.fakedatagenerator.serializers.datatype.VarcharDataTypeSerializer;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Getter
 @Log4j2
-@JsonSerialize(using = VarcharDataTypeSerializer.class)
+@JsonTypeName("varchar")
 public class VarcharDataType implements DataType<String> {
 
+  @JsonProperty("max_length")
+  @JsonAlias("maxLength")
   private final Integer maxLength;
 
   public VarcharDataType() {

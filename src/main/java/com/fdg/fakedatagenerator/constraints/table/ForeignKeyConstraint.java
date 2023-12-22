@@ -1,17 +1,19 @@
 package com.fdg.fakedatagenerator.constraints.table;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fdg.fakedatagenerator.exceptions.ForeignKeyConstraintException;
-import com.fdg.fakedatagenerator.serializers.constraints.table.ForeignKeyConstraintSerializer;
 import com.fdg.fakedatagenerator.table.Table;
 import java.util.HashSet;
 import java.util.Set;
 
 /** The type Foreign key constraint. */
-@JsonSerialize(using = ForeignKeyConstraintSerializer.class)
+
 public class ForeignKeyConstraint implements TableConstraint {
-  private final Set<Object> foreignKeyValues = new HashSet<>();
+  @JsonIgnore private final Set<Object> foreignKeyValues = new HashSet<>();
   private final Table foreignTable;
+
+  @JsonProperty("foreignColumnName")
   private final String foreignColumnName;
 
   /**

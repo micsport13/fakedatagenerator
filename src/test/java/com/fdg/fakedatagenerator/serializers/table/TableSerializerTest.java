@@ -2,8 +2,10 @@ package com.fdg.fakedatagenerator.serializers.table;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fdg.fakedatagenerator.column.Column;
@@ -23,7 +25,10 @@ class TableSerializerTest {
           .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
           .enable(YAMLGenerator.Feature.INDENT_ARRAYS)
           .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
-          .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES);
+          .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES)
+          .disable(YAMLGenerator.Feature.USE_NATIVE_TYPE_ID)
+          .enable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+          .enable(JsonGenerator.Feature.STRICT_DUPLICATE_DETECTION);
 
   @Test
   public void serialize_withValidTable_producesCorrectSerialization()
@@ -34,9 +39,7 @@ class TableSerializerTest {
         new Column<>(
             "price",
             new DecimalDataType(18, 2),
-            new ColumnCheckConstraint.Builder<>(new DecimalDataType(18, 2))
-                .withMinimumValue(0)
-                .build());
+            new ColumnCheckConstraint.Builder().withMinimumValue(0).build());
     Schema schema = new Schema(idColumn, nameColumn, priceColumn);
     schema.addConstraint(idColumn, new PrimaryKeyConstraint());
     schema.addConstraint(nameColumn, new UniqueConstraint());
@@ -51,26 +54,23 @@ class TableSerializerTest {
          type:
            name: integer
        table_constraints:
-         - primary_key
+         - type: primary_key
      - column:
          name: name
          type:
            name: varchar
-           parameters:
-             max_length: 40
+           max_length: 40
        table_constraints:
-         - unique
+         - type: unique
      - column:
          name: price
          type:
            name: decimal
-           parameters:
-             precision: 18
-             scale: 2
+           precision: 18
+           scale: 2
          constraints:
-           - check_constraint:
-               parameters:
-                 min_value: 0
+           - type: check_constraint
+             minValue: 0
  """;
     assertEquals(expectedYaml, objectMapper.writeValueAsString(table));
   }

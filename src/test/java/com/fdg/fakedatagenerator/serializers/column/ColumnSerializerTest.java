@@ -2,7 +2,9 @@ package com.fdg.fakedatagenerator.serializers.column;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fdg.fakedatagenerator.column.Column;
@@ -21,7 +23,10 @@ class ColumnSerializerTest {
           .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
           .enable(YAMLGenerator.Feature.INDENT_ARRAYS)
           .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
-          .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES);
+          .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES)
+          .disable(YAMLGenerator.Feature.USE_NATIVE_TYPE_ID)
+          .enable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+          .enable(JsonGenerator.Feature.STRICT_DUPLICATE_DETECTION);
 
   @BeforeEach
   public void setUp() {}
@@ -45,6 +50,7 @@ class ColumnSerializerTest {
       throws IOException {
     Column<DecimalDataType> decColumn =
         new Column<>("decColumn", new DecimalDataType(38, 20), new NotNullConstraint());
+
     String yaml = objectMapper.writeValueAsString(decColumn);
     // Assert
     String expectedYaml =
@@ -52,11 +58,10 @@ class ColumnSerializerTest {
                 name: decColumn
                 type:
                   name: decimal
-                  parameters:
-                    precision: 38
-                    scale: 20
+                  precision: 38
+                  scale: 20
                 constraints:
-                  - not_null
+                  - type: not_null
                 """;
     assertEquals(expectedYaml, yaml);
   }
@@ -73,10 +78,9 @@ class ColumnSerializerTest {
                     name: varcharColumn
                     type:
                       name: varchar
-                      parameters:
-                        max_length: 40
+                      max_length: 40
                     constraints:
-                      - not_null
+                      - type: not_null
                     """;
     assertEquals(expectedYaml, yaml);
   }
@@ -94,7 +98,7 @@ class ColumnSerializerTest {
                     type:
                       name: integer
                     constraints:
-                      - not_null
+                      - type: not_null
                     """;
     assertEquals(expectedYaml, yaml);
   }

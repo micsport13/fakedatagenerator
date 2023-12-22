@@ -1,33 +1,38 @@
 package com.fdg.fakedatagenerator.column;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.*;
 import com.fdg.fakedatagenerator.constraints.Constraint;
 import com.fdg.fakedatagenerator.constraints.column.ColumnConstraint;
 import com.fdg.fakedatagenerator.constraints.other.NameValidator;
 import com.fdg.fakedatagenerator.datatypes.DataType;
-import com.fdg.fakedatagenerator.serializers.column.ColumnDeserializer;
-import com.fdg.fakedatagenerator.serializers.column.ColumnSerializer;
 import jakarta.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 import lombok.Getter;
+import lombok.Setter;
 
 /** Column class Contains a name, a data type, and a set of constraints */
 @Getter
-@JsonSerialize(using = ColumnSerializer.class)
-@JsonDeserialize(using = ColumnDeserializer.class)
+@JsonPropertyOrder({"name", "type", "constraints"})
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Column<T extends DataType<?>> {
   @JsonProperty("name")
   private final @NotNull String name;
 
-  @JsonProperty("dataType")
+  @JsonProperty("type")
+  @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
   private final @NotNull T dataType;
 
   @JsonProperty("constraints")
+  @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
   private final Set<ColumnConstraint> constraints = new HashSet<>();
+
+  @JsonProperty("generator")
+  @Setter
+  @JsonIgnore
+  private Supplier<?> valueGenerator;
 
   public Column(String columnName, T dataType) {
     NameValidator.validate(columnName);
@@ -35,12 +40,23 @@ public class Column<T extends DataType<?>> {
     this.dataType = Objects.requireNonNull(dataType);
   }
 
+  @JsonCreator
   public Column(
-      String columnName, T dataType, @JsonProperty("constraints") ColumnConstraint... constraints) {
+      @JsonProperty("name") String columnName,
+      @JsonProperty("type") T dataType,
+      @JsonProperty("constraints") ColumnConstraint... constraints) {
     this(columnName, dataType);
-    for (ColumnConstraint constraint : constraints) {
-      this.addConstraint(constraint);
+    if (constraints != null) {
+      for (ColumnConstraint constraint : constraints) {
+        this.addConstraint(constraint);
+      }
     }
+  }
+
+  public Column(
+      String columnName, T dataType, Supplier<?> valueGenerator, ColumnConstraint... constraints) {
+    this(columnName, dataType, constraints);
+    this.valueGenerator = valueGenerator;
   }
 
   /**

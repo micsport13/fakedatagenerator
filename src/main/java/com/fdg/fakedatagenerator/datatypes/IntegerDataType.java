@@ -1,11 +1,10 @@
 package com.fdg.fakedatagenerator.datatypes;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fdg.fakedatagenerator.exceptions.DeserializationException;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
-import com.fdg.fakedatagenerator.serializers.datatype.IntegerDataTypeSerializer;
 
-@JsonSerialize(using = IntegerDataTypeSerializer.class)
+@JsonTypeName("integer")
 public class IntegerDataType implements DataType<Integer> {
 
   @Override

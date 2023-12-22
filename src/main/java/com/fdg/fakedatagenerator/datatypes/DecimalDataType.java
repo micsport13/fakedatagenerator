@@ -1,19 +1,22 @@
 package com.fdg.fakedatagenerator.datatypes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fdg.fakedatagenerator.exceptions.DeserializationException;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
-import com.fdg.fakedatagenerator.serializers.datatype.DecimalDataTypeSerializer;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 import lombok.Getter;
 
-@JsonSerialize(using = DecimalDataTypeSerializer.class)
+@Getter
 public class DecimalDataType implements DataType<BigDecimal> {
-  @Getter private final Integer precision;
-  @Getter private final Integer scale;
+  @JsonProperty("precision")
+  private final Integer precision;
+
+  @JsonProperty("scale")
+  final Integer scale;
+
   @JsonIgnore private RoundingMode roundingMode;
 
   public DecimalDataType() {

@@ -1,5 +1,6 @@
 package com.fdg.fakedatagenerator.row;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
@@ -10,7 +11,7 @@ import lombok.Getter;
 @Getter
 public class Row {
 
-  private final Map<Column<?>, Object> columnValueMapping;
+  @JsonIgnore private final Map<Column<?>, Object> columnValueMapping;
 
   private Row(Builder builder) {
     this.columnValueMapping = builder.columnValueMapping;

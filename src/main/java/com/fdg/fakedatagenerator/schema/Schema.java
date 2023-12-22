@@ -1,12 +1,14 @@
 package com.fdg.fakedatagenerator.schema;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.constraints.table.TableConstraint;
-import com.fdg.fakedatagenerator.serializers.schema.SchemaDeserializer;
-import com.fdg.fakedatagenerator.serializers.schema.SchemaSerializer;
+import com.fdg.fakedatagenerator.constraints.table.UniqueConstraint;
+import com.fdg.fakedatagenerator.schema.schema.SchemaDeserializer;
+import com.fdg.fakedatagenerator.schema.schema.SchemaSerializer;
 import java.util.*;
 import lombok.Getter;
 
@@ -23,6 +25,7 @@ public class Schema {
     }
   }
 
+  @JsonCreator
   public Schema(Map<Column<?>, Set<TableConstraint>> schemaMap) {
     this.tableConstraints.putAll(schemaMap);
   }
@@ -43,6 +46,15 @@ public class Schema {
         this.tableConstraints.get(schemaColumn).add(tableConstraint);
       }
     }
+  }
+
+  public void addConstraint(String columnName, UniqueConstraint tableConstraint) {
+    this.getColumn(columnName)
+        .ifPresentOrElse(
+            column -> this.addConstraint(column, tableConstraint),
+            () -> {
+              throw new IllegalArgumentException("Column does not exist in schema");
+            });
   }
 
   public Optional<Column<?>> getColumn(String columnName) {

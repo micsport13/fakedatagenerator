@@ -1,11 +1,16 @@
 package com.fdg.fakedatagenerator.constraints.table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.table.Table;
 
 /** The type Table check constraint. */
 public class TableCheckConstraint implements TableConstraint {
+  @JsonProperty("otherColumn")
   private final Column otherColumn;
+
+  @JsonProperty("currentTable")
   private final Table currentTable;
 
   public TableCheckConstraint(Table table, Column tableColumn) {

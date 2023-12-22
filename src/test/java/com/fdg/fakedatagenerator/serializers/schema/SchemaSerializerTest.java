@@ -2,7 +2,9 @@ package com.fdg.fakedatagenerator.serializers.schema;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fdg.fakedatagenerator.column.Column;
@@ -26,7 +28,10 @@ class SchemaSerializerTest {
             .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
             .enable(YAMLGenerator.Feature.INDENT_ARRAYS)
             .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
-            .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES);
+            .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES)
+            .disable(YAMLGenerator.Feature.USE_NATIVE_TYPE_ID)
+            .enable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+            .enable(JsonGenerator.Feature.STRICT_DUPLICATE_DETECTION);
   }
 
   @Test
@@ -47,15 +52,14 @@ class SchemaSerializerTest {
                           type:
                             name: integer
                         table_constraints:
-                          - primary_key
+                          - type: primary_key
                       - column:
                           name: varcharColumn
                           type:
                             name: varchar
-                            parameters:
-                              max_length: 1
+                            max_length: 1
                         table_constraints:
-                          - unique
+                          - type: unique
                     """;
     assertEquals(expectedYaml, yaml);
   }

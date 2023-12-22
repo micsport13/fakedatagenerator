@@ -57,7 +57,7 @@ public class ColumnTest {
   @Test
   public void addConstraint_WithValidCheckConstraint_AddsSuccessfullyToColumnConstraints() {
     ColumnConstraint columnConstraint =
-        new ColumnCheckConstraint.Builder<>(this.intColumn.getDataType()).withRange(0, 10).build();
+        new ColumnCheckConstraint.Builder().withRange(0, 10).build();
     intColumn.addConstraint(columnConstraint);
     assertTrue(intColumn.getConstraints().contains(columnConstraint));
   }
@@ -66,9 +66,7 @@ public class ColumnTest {
   public void addMultipleConstraints_WithValidConstraints_IncludesAllConstraints() {
     this.intColumn.addConstraint(new NotNullConstraint());
     ColumnConstraint testCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(this.intColumn.getDataType())
-            .withMinimumValue(1)
-            .build();
+        new ColumnCheckConstraint.Builder().withMinimumValue(1).build();
     this.intColumn.addConstraint(testCheckConstraint);
     assertEquals(2, this.intColumn.getConstraints().size());
   }
@@ -77,14 +75,10 @@ public class ColumnTest {
   public void addConstraint_WithConflictingConstraints_ThrowsIllegalArgumentException() {
     this.intColumn.addConstraint(new NotNullConstraint());
     ColumnConstraint testCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(this.intColumn.getDataType())
-            .withMaximumValue(1)
-            .build();
+        new ColumnCheckConstraint.Builder().withMaximumValue(1).build();
     this.intColumn.addConstraint(testCheckConstraint);
     ColumnConstraint testCheckConstraint2 =
-        new ColumnCheckConstraint.Builder<>(this.intColumn.getDataType())
-            .withMinimumValue(2)
-            .build();
+        new ColumnCheckConstraint.Builder().withMinimumValue(2).build();
     assertThrows(
         IllegalArgumentException.class,
         () -> {
@@ -121,7 +115,7 @@ public class ColumnTest {
   @Test
   public void isValid_WithViolatingCheckConstraintMax_ReturnsFalse() {
     ColumnCheckConstraint columnCheckConstraint =
-        new ColumnCheckConstraint.Builder<>(new IntegerDataType()).withMaximumValue(10).build();
+        new ColumnCheckConstraint.Builder().withMaximumValue(10).build();
     Column<IntegerDataType> column =
         new Column<>("int", new IntegerDataType(), columnCheckConstraint);
     assertThrows(CheckConstraintException.class, () -> column.validate(11));

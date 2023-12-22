@@ -2,8 +2,10 @@ package com.fdg.fakedatagenerator.serializers.column;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fdg.fakedatagenerator.column.Column;
@@ -21,7 +23,10 @@ class ColumnDeserializerTest {
           .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
           .enable(YAMLGenerator.Feature.INDENT_ARRAYS)
           .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
-          .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES);
+          .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES)
+          .disable(YAMLGenerator.Feature.USE_NATIVE_TYPE_ID)
+          .enable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+          .enable(JsonGenerator.Feature.STRICT_DUPLICATE_DETECTION);
 
   @Test
   public void deserialize_GivenInputString_DeserializesToDecimalColumn() {
@@ -30,9 +35,8 @@ class ColumnDeserializerTest {
                         name: decColumn
                         type:
                           name: decimal
-                          parameters:
-                            precision: 38
-                            scale: 20
+                          precision: 38
+                          scale: 20
                         """;
 
     try {
@@ -51,8 +55,7 @@ class ColumnDeserializerTest {
                         name: "varcharColumn"
                         type:
                           name: "varchar"
-                          parameters:
-                            max_length: 40
+                          max_length: 40
                         """;
 
     try {
@@ -71,10 +74,9 @@ class ColumnDeserializerTest {
             name: testCol
             type:
               name: varchar
-              parameters:
-                max_length: 40
+              maxLength: 40
             constraints:
-              - not_null""";
+              - type: not_null""";
     try {
       Column<?> column = objectMapper.readValue(yamlString, Column.class);
       Column<VarcharDataType> decColumn =
@@ -92,18 +94,16 @@ class ColumnDeserializerTest {
             name: testCol
             type:
               name: decimal
-              parameters:
-                precision: 38
-                scale: 20
+              precision: 38
+              scale: 20
             constraints:
-              - check_constraint:
-                  parameters:
-                    min_value: 0
-                    max_value: 10""";
+              - type: check_constraint
+                min_value: 0
+                max_value: 10""";
     try {
       Column<?> column = objectMapper.readValue(yamlString, Column.class);
       ColumnConstraint checkConstraint =
-          new ColumnCheckConstraint.Builder<>(new DecimalDataType(38, 20)).withRange(0, 10).build();
+          new ColumnCheckConstraint.Builder().withRange(0, 10).build();
       Column<DecimalDataType> decColumn =
           new Column<>("testCol", new DecimalDataType(38, 20), checkConstraint);
       assertEquals(decColumn, column);

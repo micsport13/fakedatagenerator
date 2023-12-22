@@ -1,15 +1,14 @@
 package com.fdg.fakedatagenerator.constraints.table;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fdg.fakedatagenerator.exceptions.PrimaryKeyConstraintException;
-import com.fdg.fakedatagenerator.serializers.constraints.table.PrimaryKeyConstraintSerializer;
 import java.util.HashSet;
 import java.util.Set;
 
 /** The type Primary key constraint. */
-@JsonSerialize(using = PrimaryKeyConstraintSerializer.class)
 public class PrimaryKeyConstraint implements TableConstraint {
-  private final Set<Object> primaryKeyValues = new HashSet<>();
+  @JsonIgnore private final Set<Object> primaryKeyValues = new HashSet<>();
 
   private void addValue(Object value) {
     primaryKeyValues.add(value);

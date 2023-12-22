@@ -1,28 +1,33 @@
 package com.fdg.fakedatagenerator.table;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.constraints.table.TableConstraint;
 import com.fdg.fakedatagenerator.row.Row;
 import com.fdg.fakedatagenerator.schema.Schema;
-import com.fdg.fakedatagenerator.serializers.table.TableDeserializer;
-import com.fdg.fakedatagenerator.serializers.table.TableSerializer;
 import jakarta.validation.constraints.NotNull;
 import java.util.*;
 import lombok.Getter;
 
 /** The type Table. */
-@JsonSerialize(using = TableSerializer.class)
-@JsonDeserialize(using = TableDeserializer.class)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Table {
 
-  @Getter private final @NotNull String name;
+  @Getter
+  @JsonProperty("name")
+  private final @NotNull String name;
 
-  @Getter private final Schema schema;
-  private final transient List<Row> entities = new ArrayList<>();
+  @Getter
+  @JsonProperty("schema")
+  private final Schema schema;
 
-  public Table(String name, Schema schema) {
+  @JsonIgnore private final transient List<Row> entities = new ArrayList<>();
+
+  @JsonCreator
+  public Table(@JsonProperty("name") String name, @JsonProperty("schema") Schema schema) {
     this.name = name;
     this.schema = schema;
   }

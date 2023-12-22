@@ -1,7 +1,6 @@
 package com.fdg.fakedatagenerator.constraints.column;
 
 import com.fdg.fakedatagenerator.datatypes.DataType;
-import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 import jakarta.validation.constraints.NotNull;
 import java.util.Objects;
 
@@ -17,7 +16,7 @@ public class ColumnConstraintFactory {
 
   public static <T extends Number> ColumnConstraint createConstraint(
       @NotNull DataType<T> dataType, T minValue, T maxValue) {
-    return new ColumnCheckConstraint.Builder<>(dataType).withRange(minValue, maxValue).build();
+    return new ColumnCheckConstraint.Builder().withRange(minValue, maxValue).build();
   }
 
   @SafeVarargs
@@ -28,7 +27,7 @@ public class ColumnConstraintFactory {
     if (firstAcceptedValue == null) {
       throw new IllegalArgumentException("Must provide at least one acceptable value");
     }
-    return new ColumnCheckConstraint.Builder<>(new VarcharDataType()) // TODO: Pass in varchar type?
+    return new ColumnCheckConstraint.Builder() // TODO: Pass in varchar type?
         .withAcceptedValues(firstAcceptedValue, acceptedValues)
         .build();
   }
