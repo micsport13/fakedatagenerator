@@ -6,8 +6,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.constraints.table.TableConstraint;
-import com.fdg.fakedatagenerator.constraints.table.TableConstraintFactory;
-import com.fdg.fakedatagenerator.constraints.table.TableLevelConstraints;
 import com.fdg.fakedatagenerator.schema.Schema;
 import java.io.IOException;
 import java.util.HashSet;
@@ -44,8 +42,7 @@ public class SchemaDeserializer extends StdDeserializer<Schema> {
       var constraintNode = node.path("table_constraints").iterator();
       while (constraintNode.hasNext()) {
         tableConstraints.add(
-            TableConstraintFactory.createConstraint(
-                TableLevelConstraints.valueOf(constraintNode.next().asText().toUpperCase())));
+            deserializationContext.readTreeAsValue(constraintNode.next(), TableConstraint.class));
       }
       schemaMap.put(column, tableConstraints);
     }

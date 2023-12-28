@@ -9,13 +9,12 @@ import jakarta.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Supplier;
 import lombok.Getter;
 import lombok.Setter;
 
 /** Column class Contains a name, a data type, and a set of constraints */
 @Getter
-@JsonPropertyOrder({"name", "type", "constraints"})
+@JsonPropertyOrder({"name", "type", "constraints", "generator"})
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Column<T extends DataType<?>> {
   @JsonProperty("name")
@@ -31,8 +30,7 @@ public class Column<T extends DataType<?>> {
 
   @JsonProperty("generator")
   @Setter
-  @JsonIgnore
-  private Supplier<?> valueGenerator;
+  private ValueGenerator valueGenerator;
 
   public Column(String columnName, T dataType) {
     NameValidator.validate(columnName);
@@ -40,11 +38,7 @@ public class Column<T extends DataType<?>> {
     this.dataType = Objects.requireNonNull(dataType);
   }
 
-  @JsonCreator
-  public Column(
-      @JsonProperty("name") String columnName,
-      @JsonProperty("type") T dataType,
-      @JsonProperty("constraints") ColumnConstraint... constraints) {
+  public Column(String columnName, T dataType, ColumnConstraint... constraints) {
     this(columnName, dataType);
     if (constraints != null) {
       for (ColumnConstraint constraint : constraints) {
@@ -53,17 +47,16 @@ public class Column<T extends DataType<?>> {
     }
   }
 
+  @JsonCreator
   public Column(
-      String columnName, T dataType, Supplier<?> valueGenerator, ColumnConstraint... constraints) {
+      @JsonProperty("name") String columnName,
+      @JsonProperty("type") T dataType,
+      @JsonProperty("generator") ValueGenerator valueGenerator,
+      @JsonProperty("constraints") ColumnConstraint... constraints) {
     this(columnName, dataType, constraints);
     this.valueGenerator = valueGenerator;
   }
 
-  /**
-   * Add constraint to the column.
-   *
-   * @param columnConstraint the column constraint
-   */
   public void addConstraint(ColumnConstraint columnConstraint) {
     for (ColumnConstraint constraint : this.constraints) {
       if (constraint.conflictsWith(columnConstraint)) {

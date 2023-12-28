@@ -4,16 +4,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fdg.fakedatagenerator.column.Column;
+import com.fdg.fakedatagenerator.column.ValueGenerator;
 import com.fdg.fakedatagenerator.constraints.column.ColumnCheckConstraint;
 import com.fdg.fakedatagenerator.constraints.column.ColumnConstraint;
 import com.fdg.fakedatagenerator.constraints.column.NotNullConstraint;
 import com.fdg.fakedatagenerator.datatypes.DecimalDataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
+import java.lang.reflect.InvocationTargetException;
+import net.datafaker.Faker;
 import org.junit.jupiter.api.Test;
 
 class ColumnDeserializerTest {
@@ -108,6 +112,34 @@ class ColumnDeserializerTest {
           new Column<>("testCol", new DecimalDataType(38, 20), checkConstraint);
       assertEquals(decColumn, column);
     } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Test
+  public void deserializeColumn_withGenerator_givesValidOutput() {
+    String yamlString =
+        """
+                name: testCol
+                type:
+                  name: varchar
+                  max_length: 40
+                generator:
+                  package: clashofclans
+                  method: troop""";
+    try {
+      InjectableValues.Std inject = new InjectableValues.Std();
+      inject.addValue(Faker.class, new Faker());
+      objectMapper.setInjectableValues(
+          inject); // TODO: Figure out how to auto inject this everytime
+      Column<?> column = objectMapper.readValue(yamlString, Column.class);
+      Column<VarcharDataType> decColumn =
+          new Column<>(
+              "testCol",
+              new VarcharDataType(40),
+              new ValueGenerator(new Faker(), "clashofclans", "troop"));
+      assertEquals(decColumn, column);
+    } catch (JsonProcessingException | InvocationTargetException | IllegalAccessException e) {
       throw new RuntimeException(e);
     }
   }

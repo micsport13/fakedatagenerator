@@ -37,7 +37,7 @@ public class IntegerDataType implements DataType<Integer> {
   }
 
   @Override
-  public boolean validate(String value) {
+  public boolean validate(String value) { // TODO: Add error logging for why value didn't work
     try {
       Integer.parseInt(value);
       return true;

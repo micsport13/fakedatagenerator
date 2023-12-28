@@ -50,6 +50,6 @@ public class ConfigCommand {
   @Command(command = "print", description = "Prints out the current sessions configurations")
   public void printConfig() {
     System.out.println("Current session configurations:");
-    this.dataManager.getTables().forEach(System.out::println);
+    this.dataManager.getTables().forEach((key, value) -> System.out.println(value));
   }
 }

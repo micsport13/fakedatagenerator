@@ -41,8 +41,12 @@ public class VarcharDataType implements DataType<String> {
   }
 
   @Override
-  public String cast(Object value) {
-    return value.toString().substring(0, this.maxLength);
+  public String cast(
+      Object value) { // TODO: Inspect this method to make sure it retrieves values correctly
+    if (value.toString().length() > this.maxLength) {
+      return value.toString().substring(0, this.maxLength);
+    }
+    return value.toString();
   }
 
   @Override

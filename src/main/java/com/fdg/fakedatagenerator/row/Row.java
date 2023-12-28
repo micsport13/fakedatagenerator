@@ -176,7 +176,9 @@ public class Row {
               "Value does not match the column type of "
                   + column.getDataType()
                   + " of the column: "
-                  + columnName);
+                  + columnName
+                  + ". Value: "
+                  + value);
         }
       }
       return this;

@@ -41,7 +41,7 @@ class SchemaDeserializerTest {
                         type:
                           name: int
                       table_constraints:
-                        - primary_key""";
+                        - type: primary_key""";
     Schema schema = objectMapper.readValue(expectedYaml, Schema.class);
     Map<Column<?>, Set<TableConstraint>> schemaMap = new HashMap<>();
     schemaMap.put(

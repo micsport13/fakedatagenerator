@@ -1,7 +1,9 @@
 package com.fdg.fakedatagenerator.schema;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.column.Column;
@@ -15,8 +17,10 @@ import lombok.Getter;
 @Getter
 @JsonSerialize(using = SchemaSerializer.class)
 @JsonDeserialize(using = SchemaDeserializer.class)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Schema {
   @JsonProperty("table_constraints")
+  @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY)
   private final Map<Column<?>, Set<TableConstraint>> tableConstraints = new LinkedHashMap<>();
 
   public Schema(Column<?>... columns) {
