@@ -5,7 +5,7 @@ target/
 !**/src/test/**/target/
 /*.yml
 /*.txt
-
+/*.sql
 ### STS ###
 .apt_generated
 .classpath
