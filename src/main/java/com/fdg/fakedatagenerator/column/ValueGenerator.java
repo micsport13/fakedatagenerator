@@ -49,13 +49,12 @@ public class ValueGenerator {
     throw new IllegalArgumentException("Method does not exist");
   }
 
-  public Object get()
-      throws InvocationTargetException,
-          IllegalAccessException,
-          NoSuchMethodException,
-          InstantiationException { // TODO: Catch these checked exceptions and throw a runtime in
-                                   // its place
-    return this.method.invoke(this.intermediateMethod.invoke(this.faker));
+  public Object get() {
+    try {
+      return this.method.invoke(this.intermediateMethod.invoke(this.faker));
+    } catch (InvocationTargetException | IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Override

@@ -42,7 +42,7 @@ public class VarcharDataType implements DataType<String> {
 
   @Override
   public String cast(
-      Object value) { // TODO: Inspect this method to make sure it retrieves values correctly
+      Object value) { // TODO: Test this function with more inputs to make sure it works
     if (value.toString().length() > this.maxLength) {
       return value.toString().substring(0, this.maxLength);
     }

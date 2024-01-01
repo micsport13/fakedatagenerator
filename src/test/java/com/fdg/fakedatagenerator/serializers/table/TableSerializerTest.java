@@ -18,17 +18,12 @@ import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 import com.fdg.fakedatagenerator.schema.Schema;
 import com.fdg.fakedatagenerator.table.Table;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.json.JsonTest;
 
+@JsonTest
 class TableSerializerTest {
-  private static final ObjectMapper objectMapper =
-      new YAMLMapper()
-          .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
-          .enable(YAMLGenerator.Feature.INDENT_ARRAYS)
-          .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
-          .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES)
-          .disable(YAMLGenerator.Feature.USE_NATIVE_TYPE_ID)
-          .enable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-          .enable(JsonGenerator.Feature.STRICT_DUPLICATE_DETECTION);
+  @Autowired private ObjectMapper objectMapper;
 
   @Test
   public void serialize_withValidTable_producesCorrectSerialization()

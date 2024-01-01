@@ -2,13 +2,9 @@ package com.fdg.fakedatagenerator.serializers.column;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.column.ValueGenerator;
 import com.fdg.fakedatagenerator.constraints.column.ColumnCheckConstraint;
@@ -19,18 +15,14 @@ import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 import java.lang.reflect.InvocationTargetException;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.json.JsonTest;
 
+@JsonTest
 class ColumnDeserializerTest {
 
-  private static final ObjectMapper objectMapper =
-      new YAMLMapper()
-          .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
-          .enable(YAMLGenerator.Feature.INDENT_ARRAYS)
-          .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
-          .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES)
-          .disable(YAMLGenerator.Feature.USE_NATIVE_TYPE_ID)
-          .enable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-          .enable(JsonGenerator.Feature.STRICT_DUPLICATE_DETECTION);
+  @Autowired
+  private ObjectMapper objectMapper;
 
   @Test
   public void deserialize_GivenInputString_DeserializesToDecimalColumn() {

@@ -66,15 +66,12 @@ public class DecimalDataType implements DataType<BigDecimal> {
 
   @Override
   public boolean validate(String value) {
-    return false;
-    /*
     try {
+      this.store(value);
+    } catch (MismatchedDataTypeException e) {
       return false;
-      // TODO: Fix this function
-    } catch (NumberFormatException | ParseException e) {
-      // Handle parsing errors
-      return false;
-    }*/
+    }
+    return true;
   }
 
   @Override

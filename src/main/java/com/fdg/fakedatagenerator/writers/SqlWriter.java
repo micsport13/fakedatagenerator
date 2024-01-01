@@ -21,9 +21,7 @@ public class SqlWriter implements Writer {
     sb.append(" ").append(this.table.getName()).append(" ");
     sb.append("(")
         .append(
-            this.table.getSchema().getColumns().stream()
-                .map(Column::getName)
-                .collect(Collectors.joining(", ")))
+            this.table.getColumns().stream().map(Column::getName).collect(Collectors.joining(", ")))
         .append(") ");
     sb.append(VALUES);
     for (Row row : this.table.getEntities()) {

@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.constraints.table.PrimaryKeyConstraint;
 import com.fdg.fakedatagenerator.constraints.table.TableConstraint;
@@ -14,22 +12,14 @@ import com.fdg.fakedatagenerator.schema.Schema;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.json.JsonTest;
 
+@JsonTest
 class SchemaDeserializerTest {
 
-  ObjectMapper objectMapper;
-
-  @BeforeEach
-  public void setUp() {
-    this.objectMapper =
-        new YAMLMapper()
-            .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
-            .enable(YAMLGenerator.Feature.INDENT_ARRAYS)
-            .enable(YAMLGenerator.Feature.INDENT_ARRAYS_WITH_INDICATOR)
-            .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES);
-  }
+  @Autowired private ObjectMapper objectMapper;
 
   @Test
   public void deserialize_withValidYaml_ThrowsNoException() throws JsonProcessingException {

@@ -3,8 +3,10 @@ package com.fdg.fakedatagenerator.datatypes;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fdg.fakedatagenerator.exceptions.DeserializationException;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
+import lombok.extern.log4j.Log4j2;
 
 @JsonTypeName("integer")
+@Log4j2
 public class IntegerDataType implements DataType<Integer> {
 
   @Override
@@ -37,11 +39,12 @@ public class IntegerDataType implements DataType<Integer> {
   }
 
   @Override
-  public boolean validate(String value) { // TODO: Add error logging for why value didn't work
+  public boolean validate(String value) {
     try {
-      Integer.parseInt(value);
+      this.store(value);
       return true;
-    } catch (NumberFormatException e) {
+    } catch (MismatchedDataTypeException e) {
+      log.error(e);
       return false;
     }
   }

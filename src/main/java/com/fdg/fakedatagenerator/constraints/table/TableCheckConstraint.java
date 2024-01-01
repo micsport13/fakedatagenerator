@@ -1,7 +1,6 @@
 package com.fdg.fakedatagenerator.constraints.table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.table.Table;
 

@@ -7,7 +7,6 @@ import com.fdg.fakedatagenerator.table.Table;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,25 +15,20 @@ import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import net.datafaker.Faker;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Component
 @Service
 @Log4j2
 public class DataManager {
 
-  private final Faker faker = new Faker();
+  @Autowired private Faker faker;
 
   @Getter private final Map<String, Table> tables = new HashMap<>();
   @Getter private final Map<String, Column<?>> columns = new HashMap<>();
   @Getter private final List<Schema> schemas = new ArrayList<>();
 
-  public void generateData(Integer numEntities, String tableName, String filePath)
-      throws InvocationTargetException,
-          IllegalAccessException,
-          NoSuchMethodException,
-          InstantiationException { // TODO: Make this generic for any table
+  public void generateData(Integer numEntities, String tableName, String filePath) {
     if (filePath != null) {
       try {
         EntityConfig entityConfig = new EntityConfig();
@@ -51,9 +45,8 @@ public class DataManager {
     } else {
       Table currentTable = this.tables.get(tableName);
       for (int i = 0; i < numEntities; i++) {
-        Row.Builder rowBuilder =
-            new Row.Builder(currentTable.getSchema().getColumns().toArray(new Column[0]));
-        for (Column<?> column : currentTable.getSchema().getColumns()) {
+        Row.Builder rowBuilder = new Row.Builder(currentTable.getColumns().toArray(new Column[0]));
+        for (Column<?> column : currentTable.getColumns()) {
           rowBuilder.withColumnValue(column.getName(), column.getValueGenerator().get());
         }
         currentTable.add(rowBuilder.build());

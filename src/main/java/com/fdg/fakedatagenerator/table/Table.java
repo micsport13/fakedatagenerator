@@ -72,6 +72,11 @@ public class Table {
     return columnValues;
   }
 
+  @JsonIgnore
+  public Set<Column<?>> getColumns() {
+    return this.getSchema().getColumns();
+  }
+
   /**
    * Add.
    *
@@ -117,7 +122,7 @@ public class Table {
                         row.getColumnValueMapping().get(tableConstraints.getKey())));
       }
     }
-    return this.getSchema().getColumns().containsAll(row.getColumnValueMapping().keySet());
+    return this.getColumns().containsAll(row.getColumnValueMapping().keySet());
   }
 
   @Override

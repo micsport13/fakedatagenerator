@@ -23,7 +23,10 @@ public class ConfigCommand {
   @Command(command = "load", description = "Load configuration from file")
   public void loadConfig(
       @Option(longNames = "path", shortNames = 'p', required = true) String path) {
-    Path filePath = Path.of(System.getProperty("user.dir"), path);
+    Path filePath =
+        Path.of(
+            System.getProperty("user.dir"),
+            path); // TODO: Figure out how to set path better than this
     try {
       List<Table> tables =
           entityConfig.loadConfig(
