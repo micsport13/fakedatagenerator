@@ -61,7 +61,8 @@ public class Schema {
             });
   }
 
-  public Optional<Column<?>> getColumn(String columnName) {
+  public Optional<Column<?>> getColumn(
+      String columnName) { // TODO: Should this be an optional or should it throw an error instead?
     for (Column<?> column : this.getColumns()) {
       if (column.getName().equals(columnName)) return Optional.of(column);
     }

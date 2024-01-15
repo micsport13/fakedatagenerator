@@ -77,6 +77,10 @@ public class Table {
     return this.getSchema().getColumns();
   }
 
+  public Column<?> getColumn(String columnName) { // TODO: Figure out if optional is the right type
+    return this.getSchema().getColumn(columnName).get();
+  }
+
   /**
    * Add.
    *
@@ -87,20 +91,6 @@ public class Table {
       entities.add(row);
     } else {
       throw new IllegalArgumentException("Row is not valid for table " + this.name);
-    }
-  }
-
-  public void addColumn(Column<?> column, TableConstraint... tableConstraints) {
-    this.schema.addColumn(column, tableConstraints);
-  }
-
-  public void dropColumn(String columnName) {
-    Optional<Column<?>> column = this.schema.getColumn(columnName);
-    if (column.isPresent()) {
-      this.schema.getTableConstraints().remove(column.get());
-      this.entities.forEach(row -> row.getColumnValueMapping().remove(column.get()));
-    } else {
-      throw new IllegalArgumentException("Column with name " + columnName + " not found.");
     }
   }
 
@@ -128,20 +118,5 @@ public class Table {
   @Override
   public String toString() {
     return "Table: " + name + "\n" + schema.toString();
-  }
-
-  public String printTable() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("Table: ").append(name).append("\n");
-    sb.append("Schema: \n").append(this.schema.toString());
-    sb.append("Values: \n");
-    for (Column<?> column : this.schema.getColumns()) {
-      sb.append(column.getName()).append(",");
-    }
-    sb.append("\n");
-    for (Row row : entities) {
-      sb.append(row.toRecord()).append("\n");
-    }
-    return sb.toString();
   }
 }

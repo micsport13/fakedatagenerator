@@ -28,6 +28,7 @@ public class SchemaDeserializer extends StdDeserializer<Schema> {
   @Override
   public Schema deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
       throws IOException { // TODO: Work on updating this to match serializer
+    // TODO: Is there a way to make this follow OCP?
     log.info("Deserializing schema");
     JsonNode rootNode = jsonParser.getCodec().readTree(jsonParser);
     Map<Column<?>, Set<TableConstraint>> schemaMap = new LinkedHashMap<>();

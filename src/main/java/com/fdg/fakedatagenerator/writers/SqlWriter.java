@@ -5,7 +5,7 @@ import com.fdg.fakedatagenerator.row.Row;
 import com.fdg.fakedatagenerator.table.Table;
 import java.util.stream.Collectors;
 
-public class SqlWriter implements Writer {
+public class SqlWriter implements Writer { // TODO: Should I make classes for different databases?
   private static final String INSERT_INTO = "INSERT INTO ";
   private static final String VALUES = " VALUES ";
   private final Table table;
@@ -26,7 +26,7 @@ public class SqlWriter implements Writer {
     sb.append(VALUES);
     for (Row row : this.table.getEntities()) {
       sb.append("(");
-      sb.append(
+      sb.append( // TODO: Get rid of this ugly hack
           row.getColumns().stream()
               .map(
                   column ->

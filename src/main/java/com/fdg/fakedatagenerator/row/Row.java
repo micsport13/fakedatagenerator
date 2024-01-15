@@ -26,14 +26,6 @@ public class Row {
     return new LinkedHashSet<>(this.columnValueMapping.keySet());
   }
 
-  public <T> void setColumnValue(Column<?> column, T columnValue) {
-    if (columnValue == null || column.getDataType().validate(String.valueOf(columnValue))) {
-      this.columnValueMapping.put(column, columnValue);
-    } else {
-      throw new MismatchedDataTypeException("Value is not compatible with the column's data type.");
-    }
-  }
-
   /**
    * Sets column value.
    *
@@ -61,7 +53,7 @@ public class Row {
       DataType<?> dataType = column.getDataType();
       return (T) dataType.cast(value);
     }
-    return null; // Handle the case where the value is null
+    return null;
   }
 
   @SuppressWarnings("unchecked")
@@ -73,22 +65,7 @@ public class Row {
       DataType<?> dataType = column.getDataType();
       return (T) dataType.cast(value);
     }
-    return null; // Handle the case where the value is null
-  }
-
-  /**
-   * To record string.
-   *
-   * @return the string
-   */
-  public String toRecord() {
-    StringBuilder string = new StringBuilder();
-    for (Column<?> column : this.columnValueMapping.keySet()) {
-      Object value = this.columnValueMapping.get(column);
-      string.append(value).append(",");
-    }
-    string.deleteCharAt(string.length() - 1);
-    return string.toString();
+    return null;
   }
 
   /**

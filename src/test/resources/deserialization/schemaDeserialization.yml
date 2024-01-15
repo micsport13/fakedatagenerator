@@ -1,0 +1,7 @@
+columns:
+  - column:
+      name: id
+      type:
+        name: int
+    table_constraints:
+      - type: primary_key

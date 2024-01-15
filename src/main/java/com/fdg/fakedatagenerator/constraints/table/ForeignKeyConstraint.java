@@ -2,19 +2,23 @@ package com.fdg.fakedatagenerator.constraints.table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.exceptions.ForeignKeyConstraintException;
 import com.fdg.fakedatagenerator.table.Table;
 import java.util.HashSet;
 import java.util.Set;
 
 /** The type Foreign key constraint. */
-
 public class ForeignKeyConstraint implements TableConstraint {
+  // TODO: Implement this class
   @JsonIgnore private final Set<Object> foreignKeyValues = new HashSet<>();
-  private final Table foreignTable;
 
   @JsonProperty("foreignColumnName")
   private final String foreignColumnName;
+
+  @JsonIgnore private final Table foreignTable;
+
+  @JsonIgnore private final Column<?> foreignColumn;
 
   /**
    * Instantiates a new Foreign key constraint.
@@ -23,8 +27,9 @@ public class ForeignKeyConstraint implements TableConstraint {
    * @param foreignColumnName the foreign column
    */
   public ForeignKeyConstraint(Table foreignTable, String foreignColumnName) {
+    this.foreignColumn = foreignTable.getColumn(foreignColumnName);
     this.foreignTable = foreignTable;
-    this.foreignColumnName = foreignColumnName;
+    this.foreignColumnName = foreignColumn.getName();
   }
 
   private void addValue(Object value) {

@@ -4,7 +4,8 @@ import java.util.regex.Pattern;
 
 public class NameValidator {
   public static final Pattern NAME_VALIDATION = Pattern.compile("[A-z]\\w+");
-  // TODO: Verify if this is the valid naming for tables/columns
+
+  // TODO: Add reserved words
   private static final int MAX_NAME_LENGTH = 31;
 
   public static void validate(String value) {

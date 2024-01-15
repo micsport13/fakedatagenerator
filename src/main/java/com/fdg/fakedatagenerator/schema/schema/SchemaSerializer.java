@@ -18,7 +18,7 @@ public class SchemaSerializer extends StdSerializer<Schema> {
   }
 
   @Override
-  public void serialize(
+  public void serialize( // TODO: Is there a way to make this follow OCP?
       Schema schema, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
       throws IOException {
     log.info("Serializing schema: " + schema.toString());

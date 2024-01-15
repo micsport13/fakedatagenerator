@@ -2,7 +2,6 @@ package com.fdg.fakedatagenerator.commands;
 
 import com.fdg.fakedatagenerator.writers.SqlWriter;
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +18,11 @@ public class GenerateCommand {
     this.dataManager = dataManager;
   }
 
-  @Command(command = "generate")
+  @Command(command = "data")
   public void generateData(
       @Option(shortNames = {'n'}) Integer numEntities,
       @Option(shortNames = {'t'}) String tableName,
-      @Option(required = false) String filePath)
-      throws InvocationTargetException,
-          IllegalAccessException,
-          NoSuchMethodException,
-          InstantiationException {
+      @Option(required = false) String filePath) {
     this.dataManager.generateData(numEntities, tableName, filePath);
   }
 
