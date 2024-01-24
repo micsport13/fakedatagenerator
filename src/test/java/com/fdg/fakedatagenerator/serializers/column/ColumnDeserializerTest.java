@@ -7,9 +7,7 @@ import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.column.ValueGenerator;
-import com.fdg.fakedatagenerator.constraints.column.ColumnCheckConstraint;
-import com.fdg.fakedatagenerator.constraints.column.ColumnConstraint;
-import com.fdg.fakedatagenerator.constraints.column.NotNullConstraint;
+import com.fdg.fakedatagenerator.constraints.single.NumericCheckConstraint;
 import com.fdg.fakedatagenerator.datatypes.DecimalDataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 import java.lang.reflect.InvocationTargetException;
@@ -21,8 +19,7 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest;
 @JsonTest
 class ColumnDeserializerTest {
 
-  @Autowired
-  private ObjectMapper objectMapper;
+  @Autowired private ObjectMapper objectMapper;
 
   @Test
   public void deserialize_GivenInputString_DeserializesToDecimalColumn() {
@@ -70,13 +67,10 @@ class ColumnDeserializerTest {
             name: testCol
             type:
               name: varchar
-              maxLength: 40
-            constraints:
-              - type: not_null""";
+              maxLength: 40""";
     try {
       Column<?> column = objectMapper.readValue(yamlString, Column.class);
-      Column<VarcharDataType> decColumn =
-          new Column<>("testCol", new VarcharDataType(40), new NotNullConstraint());
+      Column<VarcharDataType> decColumn = new Column<>("testCol", new VarcharDataType(40));
       assertEquals(decColumn, column);
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
@@ -91,17 +85,12 @@ class ColumnDeserializerTest {
             type:
               name: decimal
               precision: 38
-              scale: 20
-            constraints:
-              - type: check_constraint
-                min_value: 0
-                max_value: 10""";
+              scale: 20""";
     try {
       Column<?> column = objectMapper.readValue(yamlString, Column.class);
-      ColumnConstraint checkConstraint =
-          new ColumnCheckConstraint.Builder().withRange(0, 10).build();
-      Column<DecimalDataType> decColumn =
-          new Column<>("testCol", new DecimalDataType(38, 20), checkConstraint);
+      NumericCheckConstraint<Integer> checkConstraint =
+          new NumericCheckConstraint.Builder<Integer>().withRange(0, 10).build();
+      Column<DecimalDataType> decColumn = new Column<>("testCol", new DecimalDataType(38, 20));
       assertEquals(decColumn, column);
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
@@ -135,5 +124,4 @@ class ColumnDeserializerTest {
       throw new RuntimeException(e);
     }
   }
-  
 }

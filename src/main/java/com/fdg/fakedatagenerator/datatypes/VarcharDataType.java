@@ -55,9 +55,16 @@ public class VarcharDataType implements DataType<String> {
   }
 
   @Override
+  public int hashCode() {
+    return this.maxLength.hashCode();
+  }
+
+  @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    return o != null && getClass() == o.getClass();
+    return o != null
+        && this.getClass() == o.getClass()
+        && this.maxLength.equals(((VarcharDataType) o).getMaxLength());
   }
 
   @Override

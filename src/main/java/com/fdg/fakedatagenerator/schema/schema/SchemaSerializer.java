@@ -25,16 +25,7 @@ public class SchemaSerializer extends StdSerializer<Schema> {
     jsonGenerator.writeStartObject();
     jsonGenerator.writeArrayFieldStart("columns");
     for (var column : schema.getColumns()) {
-      jsonGenerator.writeStartObject();
-      jsonGenerator.writeObjectField("column", column);
-      if (!schema.getTableConstraints().get(column).isEmpty()) {
-        jsonGenerator.writeArrayFieldStart("table_constraints");
-        for (var tableConstraint : schema.getTableConstraints().get(column)) {
-          jsonGenerator.writeObject(tableConstraint);
-        }
-        jsonGenerator.writeEndArray();
-      }
-      jsonGenerator.writeEndObject();
+      jsonGenerator.writeObject(column);
     }
     jsonGenerator.writeEndArray();
     jsonGenerator.writeEndObject();

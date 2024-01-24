@@ -75,6 +75,11 @@ public class DecimalDataType implements DataType<BigDecimal> {
   }
 
   @Override
+  public int hashCode() {
+    return this.precision.hashCode() * this.scale.hashCode();
+  }
+
+  @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o instanceof DecimalDataType decimalDataType) {

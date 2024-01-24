@@ -1,17 +1,18 @@
 package com.fdg.fakedatagenerator.schema;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fdg.fakedatagenerator.column.Column;
-import com.fdg.fakedatagenerator.constraints.table.TableConstraint;
-import com.fdg.fakedatagenerator.constraints.table.UniqueConstraint;
+import com.fdg.fakedatagenerator.constraints.Constraint;
+import com.fdg.fakedatagenerator.exceptions.ColumnNotFoundException;
+import com.fdg.fakedatagenerator.row.Row;
 import com.fdg.fakedatagenerator.schema.schema.SchemaDeserializer;
 import com.fdg.fakedatagenerator.schema.schema.SchemaSerializer;
 import java.util.*;
+import java.util.stream.Collectors;
 import lombok.Getter;
 
 @Getter
@@ -21,69 +22,45 @@ import lombok.Getter;
 public class Schema {
   @JsonProperty("table_constraints")
   @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY)
-  private final Map<Column<?>, Set<TableConstraint>> tableConstraints = new LinkedHashMap<>();
+  private final Map<Constraint, Set<Column<?>>> constraints;
+
+  @Getter private final Set<Column<?>> columns;
 
   public Schema(Column<?>... columns) {
-    for (Column<?> column : columns) {
-      this.tableConstraints.put(column, new HashSet<>());
-    }
+    this.columns = new LinkedHashSet<>(Arrays.asList(columns));
+    this.constraints = new HashMap<>();
   }
 
-  @JsonCreator
-  public Schema(Map<Column<?>, Set<TableConstraint>> schemaMap) {
-    this.tableConstraints.putAll(schemaMap);
+  public void addColumn(Column<?> column) {
+    this.columns.add(column);
   }
 
-  public void addColumn(
-      Column<?> column,
-      TableConstraint... tableConstraints) { // TODO: Validate constraints if existing
-    if (this.tableConstraints.get(column) != null) {
-      this.tableConstraints.get(column).addAll(Set.of(tableConstraints));
-    } else {
-      this.tableConstraints.put(column, new HashSet<>(Set.of(tableConstraints)));
-    }
+  public void addConstraint(Constraint constraint, Column<?>... columns) {
+    this.constraints.put(constraint, new HashSet<>(Arrays.asList(columns)));
   }
 
-  public void addConstraint(Column<?> column, TableConstraint tableConstraint) {
-    for (var schemaColumn : this.tableConstraints.keySet()) {
-      if (schemaColumn.equals(column)) {
-        this.tableConstraints.get(schemaColumn).add(tableConstraint);
-      }
-    }
-  }
-
-  public void addConstraint(String columnName, UniqueConstraint tableConstraint) {
-    this.getColumn(columnName)
-        .ifPresentOrElse(
-            column -> this.addConstraint(column, tableConstraint),
-            () -> {
-              throw new IllegalArgumentException("Column does not exist in schema");
-            });
-  }
-
-  public Optional<Column<?>> getColumn(
+  public Column<?> getColumn(
       String columnName) { // TODO: Should this be an optional or should it throw an error instead?
     for (Column<?> column : this.getColumns()) {
-      if (column.getName().equals(columnName)) return Optional.of(column);
+      if (column.getName().equals(columnName)) return column;
     }
-    return Optional.empty();
+    throw new ColumnNotFoundException("Column with name of " + columnName + " does not exist.");
   }
 
-  public Set<Column<?>> getColumns() {
-    return this.tableConstraints.keySet();
-  }
-
-  public void validate(Object value) {
-    for (Map.Entry<Column<?>, Set<TableConstraint>> entry : this.tableConstraints.entrySet()) {
-      for (TableConstraint tableConstraint : entry.getValue()) {
-        tableConstraint.validate(value);
-      }
+  public void validate(Row value) {
+    for (Map.Entry<Constraint, Set<Column<?>>> entry : this.constraints.entrySet()) {
+      Object validation =
+          entry.getValue().stream()
+              .map(value::getColumnValue)
+              .map(Object::toString)
+              .collect(Collectors.joining());
+      entry.getKey().validate(validation);
     }
   }
 
   @Override
   public int hashCode() {
-    return this.tableConstraints.hashCode();
+    return this.columns.hashCode();
   }
 
   @Override
@@ -94,19 +71,22 @@ public class Schema {
     if (!(o instanceof Schema schema)) {
       return false;
     }
-    return this.tableConstraints.equals(schema.tableConstraints);
+    return this.columns.equals(schema.getColumns())
+        && this.constraints.equals(schema.getConstraints());
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("Schema: \n");
-    for (Map.Entry<Column<?>, Set<TableConstraint>> entry : this.tableConstraints.entrySet()) {
+    for (Column<?> column : this.columns) {
+      sb.append(column.toString()).append("\n");
+    }
+    sb.append("Constraints: \n");
+    for (Map.Entry<Constraint, Set<Column<?>>> entry : this.constraints.entrySet()) {
       sb.append(entry.getKey().toString())
-          .append("\n")
-          .append("Table Constraints: ")
+          .append(": ")
           .append(entry.getValue().toString())
-          .append("\n")
-          .append("--------------------\n");
+          .append("\n");
     }
     return sb.toString();
   }

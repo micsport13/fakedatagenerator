@@ -3,6 +3,7 @@ package com.fdg.fakedatagenerator.row;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.datatypes.DataType;
+import com.fdg.fakedatagenerator.exceptions.ColumnNotFoundException;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
 import java.util.*;
 import lombok.Getter;
@@ -27,28 +28,23 @@ public class Row {
   }
 
   /**
-   * Sets column value.
+   * Sets single value.
    *
-   * @param columnName the column name
-   * @param columnValue the column value
+   * @param columnName the single name
+   * @param columnValue the single value
    */
   public <T> void setColumnValue(String columnName, T columnValue) {
-    Optional<Column<?>> column = getColumnByName(columnName);
-    if (column.isPresent()) {
-      if (columnValue == null || column.get().getDataType().validate(String.valueOf(columnValue))) {
-        this.columnValueMapping.put(column.get(), column.get().getDataType().store(columnValue));
-      } else {
-        throw new MismatchedDataTypeException(
-            "Value is not compatible with the column's data type.");
-      }
+    Column<?> column = getColumnByName(columnName);
+    if (columnValue == null || column.getDataType().validate(String.valueOf(columnValue))) {
+      this.columnValueMapping.put(column, column.getDataType().store(columnValue));
     } else {
-      throw new IllegalArgumentException("Column does not exist.");
+      throw new MismatchedDataTypeException("Value is not compatible with the single's data type.");
     }
   }
 
   @SuppressWarnings("unchecked")
   public <T> T getColumnValue(Column<?> column) {
-    Object value = columnValueMapping.get(column);
+    Object value = this.columnValueMapping.get(column);
     if (value != null) {
       DataType<?> dataType = column.getDataType();
       return (T) dataType.cast(value);
@@ -58,35 +54,30 @@ public class Row {
 
   @SuppressWarnings("unchecked")
   public <T> T getColumnValue(String columnName) {
-    Optional<Column<?>> columnOptional = getColumnByName(columnName);
-    if (columnOptional.isPresent()) {
-      Column<?> column = columnOptional.get();
-      Object value = columnValueMapping.get(column);
-      DataType<?> dataType = column.getDataType();
-      return (T) dataType.cast(value);
-    }
-    return null;
+    Column<?> column = getColumnByName(columnName);
+    Object value = columnValueMapping.get(column);
+    DataType<?> dataType = column.getDataType();
+    return (T) dataType.cast(value);
   }
 
   /**
-   * Gets column by name.
+   * Gets single by name.
    *
-   * @param columnName the column name
-   * @return the column by name
+   * @param columnName the single name
+   * @return the single by name
    */
-  public Optional<Column<?>> getColumnByName(String columnName) {
+  public Column<?> getColumnByName(String columnName) {
     for (Column<?> column : this.columnValueMapping.keySet()) {
       if (Objects.equals(columnName, column.getName())) {
-        return Optional.of(column);
+        return column;
       }
     }
-    return Optional.empty();
+    throw new ColumnNotFoundException("Column not found: " + columnName);
   }
 
-  public Optional<Object> getValue(String columnName) {
-    Optional<Column<?>> optionalColumn = getColumnByName(columnName);
-    return optionalColumn.map(
-        column -> optionalColumn.get().getDataType().cast(columnValueMapping.get(column)));
+  public Object getValue(String columnName) {
+    Column<?> column = getColumnByName(columnName);
+    return column.getDataType().cast(columnValueMapping.get(column));
   }
 
   @Override
@@ -111,7 +102,7 @@ public class Row {
     /**
      * Instantiates a new SchemaBuilder.
      *
-     * @param columnList the column list
+     * @param columnList the single list
      */
     public Builder(Column<?>... columnList) {
       for (Column<?> column : columnList) {
@@ -120,9 +111,9 @@ public class Row {
     }
 
     /**
-     * Add column builder.
+     * Add single builder.
      *
-     * @param column the column
+     * @param column the single
      * @return the builder
      */
     public Builder addColumn(Column<?> column) {
@@ -131,9 +122,9 @@ public class Row {
     }
 
     /**
-     * With column value builder.
+     * With single value builder.
      *
-     * @param columnName the column name
+     * @param columnName the single name
      * @param value the value
      * @return the builder
      */
@@ -150,9 +141,9 @@ public class Row {
         if (column.getName().equals(columnName)
             && !column.getDataType().validate(String.valueOf(value))) {
           throw new IllegalArgumentException(
-              "Value does not match the column type of "
+              "Value does not match the single type of "
                   + column.getDataType()
-                  + " of the column: "
+                  + " of the single: "
                   + columnName
                   + ". Value: "
                   + value);

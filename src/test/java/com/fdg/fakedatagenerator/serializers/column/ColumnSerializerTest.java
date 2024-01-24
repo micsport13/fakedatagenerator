@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fdg.fakedatagenerator.column.Column;
-import com.fdg.fakedatagenerator.constraints.column.NotNullConstraint;
 import com.fdg.fakedatagenerator.datatypes.DecimalDataType;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
@@ -39,8 +38,7 @@ class ColumnSerializerTest {
   @Test
   public void serialize_DecimalDataTypeColumnWithNotNullConstraint_OutputsCorrectSerialization()
       throws IOException {
-    Column<DecimalDataType> decColumn =
-        new Column<>("decColumn", new DecimalDataType(38, 20), new NotNullConstraint());
+    Column<DecimalDataType> decColumn = new Column<>("decColumn", new DecimalDataType(38, 20));
 
     String yaml = objectMapper.writeValueAsString(decColumn);
     // Assert
@@ -51,8 +49,6 @@ class ColumnSerializerTest {
                   name: decimal
                   precision: 38
                   scale: 20
-                constraints:
-                  - type: not_null
                 """;
     assertEquals(expectedYaml, yaml);
   }
@@ -61,7 +57,7 @@ class ColumnSerializerTest {
   public void serialize_VarcharDataTypeWithNotNullConstraints_OutputsCorrectSerialization()
       throws IOException {
     Column<VarcharDataType> varcharDataTypeColumn =
-        new Column<>("varcharColumn", new VarcharDataType(40), new NotNullConstraint());
+        new Column<>("varcharColumn", new VarcharDataType(40));
     String yaml = objectMapper.writeValueAsString(varcharDataTypeColumn);
     // Assert
     String expectedYaml =
@@ -70,8 +66,6 @@ class ColumnSerializerTest {
                     type:
                       name: varchar
                       max_length: 40
-                    constraints:
-                      - type: not_null
                     """;
     assertEquals(expectedYaml, yaml);
   }
@@ -80,7 +74,7 @@ class ColumnSerializerTest {
   public void serialize_IntegerDataTypeWithNotNullConstraints_OutputsCorrectSerialization()
       throws IOException {
     Column<IntegerDataType> varcharDataTypeColumn =
-        new Column<>("integerColumn", new IntegerDataType(), new NotNullConstraint());
+        new Column<>("integerColumn", new IntegerDataType());
     String yaml = objectMapper.writeValueAsString(varcharDataTypeColumn);
     // Assert
     String expectedYaml =
@@ -88,8 +82,6 @@ class ColumnSerializerTest {
                     name: integerColumn
                     type:
                       name: integer
-                    constraints:
-                      - type: not_null
                     """;
     assertEquals(expectedYaml, yaml);
   }

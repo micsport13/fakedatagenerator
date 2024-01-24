@@ -50,9 +50,14 @@ public class IntegerDataType implements DataType<Integer> {
   }
 
   @Override
+  public int hashCode() {
+    return this.getClass().hashCode();
+  }
+
+  @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    return o != null && getClass() == o.getClass();
+    return o instanceof IntegerDataType;
   }
 
   @Override

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fdg.fakedatagenerator.column.Column;
-import com.fdg.fakedatagenerator.constraints.table.TableConstraint;
+import com.fdg.fakedatagenerator.constraints.Constraint;
 import com.fdg.fakedatagenerator.row.Row;
 import com.fdg.fakedatagenerator.schema.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -24,35 +24,17 @@ public class Table {
   @JsonProperty("schema")
   private final Schema schema;
 
-  @JsonIgnore private final transient List<Row> entities = new ArrayList<>();
+  @JsonIgnore private final transient List<Row> entities;
 
   @JsonCreator
   public Table(@JsonProperty("name") String name, @JsonProperty("schema") Schema schema) {
     this.name = name;
     this.schema = schema;
+    this.entities = new ArrayList<>();
   }
 
-  /**
-   * Add table constraint.
-   *
-   * @param column the column
-   * @param tableConstraints the table constraints
-   */
-  public void addTableConstraint(Column<?> column, TableConstraint... tableConstraints) {
-    var schemaColumns = this.schema.getTableConstraints();
-    if (schemaColumns.containsKey(column)) {
-      Set<TableConstraint> columnConstraints = schemaColumns.get(column);
-      if (columnConstraints.containsAll(Arrays.asList(tableConstraints))) {
-        System.out.println("Constraint already exists for column " + column.getName());
-      } else {
-        this.schema
-            .getTableConstraints()
-            .get(column)
-            .addAll(
-                Set.of(
-                    Objects.requireNonNull(tableConstraints, "Must provide a table constraint")));
-      }
-    }
+  public void addConstraint(Constraint constraint, Column<?>... columns) {
+    this.schema.addConstraint(constraint, columns);
   }
 
   /**
@@ -61,7 +43,7 @@ public class Table {
    * @return the row
    */
   public List<Row> getEntities() {
-    return new ArrayList<>(entities);
+    return new ArrayList<>(this.entities);
   }
 
   public List<Object> getColumnValues(String columnName) {
@@ -78,7 +60,7 @@ public class Table {
   }
 
   public Column<?> getColumn(String columnName) { // TODO: Figure out if optional is the right type
-    return this.getSchema().getColumn(columnName).get();
+    return this.getSchema().getColumn(columnName);
   }
 
   /**
@@ -87,32 +69,8 @@ public class Table {
    * @param row the row
    */
   public void add(Row row) {
-    if (isValidEntity(row)) { // TODO: Fix if schema doesn't match row
-      entities.add(row);
-    } else {
-      throw new IllegalArgumentException("Row is not valid for table " + this.name);
-    }
-  }
-
-  /**
-   * Is valid row boolean.
-   *
-   * @param row the row
-   * @return the boolean
-   */
-  public boolean isValidEntity(Row row) {
-    for (Map.Entry<Column<?>, Set<TableConstraint>> tableConstraints :
-        this.schema.getTableConstraints().entrySet()) {
-      if (tableConstraints.getValue() != null) {
-        tableConstraints
-            .getValue()
-            .forEach(
-                constraint ->
-                    constraint.validate(
-                        row.getColumnValueMapping().get(tableConstraints.getKey())));
-      }
-    }
-    return this.getColumns().containsAll(row.getColumnValueMapping().keySet());
+    this.schema.validate(row);
+    this.entities.add(row);
   }
 
   @Override

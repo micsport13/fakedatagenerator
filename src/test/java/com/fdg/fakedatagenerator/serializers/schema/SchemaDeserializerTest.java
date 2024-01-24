@@ -5,13 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fdg.fakedatagenerator.column.Column;
-import com.fdg.fakedatagenerator.constraints.table.PrimaryKeyConstraint;
-import com.fdg.fakedatagenerator.constraints.table.TableConstraint;
+import com.fdg.fakedatagenerator.constraints.multi.PrimaryKeyConstraint;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.schema.Schema;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
@@ -26,18 +22,17 @@ class SchemaDeserializerTest {
     String expectedYaml =
         """
                   columns:
-                    - column:
-                        name: id
-                        type:
-                          name: int
-                      table_constraints:
-                        - type: primary_key"""; // TODO: Put this in file instead of hardcoded test case
+                    - name: id
+                      type:
+                        name: int
+                  constraints:
+                    - type: primary_key
+                      column: id
+                          """; // TODO: Put this in file instead of hardcoded test case
     Schema schema = objectMapper.readValue(expectedYaml, Schema.class);
-    Map<Column<?>, Set<TableConstraint>> schemaMap = new HashMap<>();
-    schemaMap.put(
-        new Column<IntegerDataType>("id", new IntegerDataType()),
-        Set.of(new PrimaryKeyConstraint()));
-    Schema expectedSchema = new Schema(schemaMap);
+    Column<IntegerDataType> column = new Column<>("id", new IntegerDataType());
+    Schema expectedSchema = new Schema(column);
+    expectedSchema.addConstraint(new PrimaryKeyConstraint(), column);
     assertEquals(expectedSchema, schema);
   }
 }
