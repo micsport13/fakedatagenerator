@@ -16,61 +16,61 @@ class DecimalDataTypeTest {
   }
 
   @Test
-  public void store_withValidInput_ThrowsNoException() {
+  public void cast_withValidInput_ThrowsNoException() {
     assertDoesNotThrow(
         () -> {
-          this.decimalDataType.store(1.1);
+          this.decimalDataType.cast(1.1);
         });
   }
 
   @Test
-  public void store_withString_ThrowsNoException() {
+  public void cast_withString_ThrowsNoException() {
     assertDoesNotThrow(
         () -> {
-          this.decimalDataType.store("1.1");
+          this.decimalDataType.cast("1.1");
         });
   }
 
   @Test
-  public void store_withUncastableString_ThrowsMismatchedDataTypeException() {
-    assertThrows(MismatchedDataTypeException.class, () -> this.decimalDataType.store("test value"));
+  public void cast_withUncastableString_ThrowsMismatchedDataTypeException() {
+    assertThrows(MismatchedDataTypeException.class, () -> this.decimalDataType.cast("test value"));
   }
 
   @Test
-  public void store_withIntegerString_StoresWithCorrectPrecision() {
-    var val = this.decimalDataType.store("1.00000001");
+  public void cast_withIntegerString_StoresWithCorrectPrecision() {
+    var val = this.decimalDataType.cast("1.00000001");
     assertEquals("1", val.toString());
   }
 
   @Test
-  public void store_withNullValue_ReturnsNull() {
-    assertNull(this.decimalDataType.store(null));
+  public void cast_withNullValue_ReturnsNull() {
+    assertNull(this.decimalDataType.cast(null));
   }
 
   @Test
-  public void store_withScaleAndPrecision_ReturnsCorrectValue() {
+  public void cast_withScaleAndPrecision_ReturnsCorrectValue() {
     DecimalDataType testDecimal = new DecimalDataType(18, 2);
-    var testVal = testDecimal.store(18.203);
+    var testVal = testDecimal.cast(18.203);
     assertEquals("18.20", testVal.toString());
   }
 
   @Test
-  public void store_withLargeScale_ReturnsCorrectValue() {
+  public void cast_withLargeScale_ReturnsCorrectValue() {
     DecimalDataType testDecimal = new DecimalDataType(18, 8);
-    var testVal = testDecimal.store(18.00000001);
+    var testVal = testDecimal.cast(18.00000001);
     assertEquals("18.00000001", testVal.toString());
   }
 
   @Test
-  public void store_withLargeValue_ReturnsCorrectValue() {
+  public void cast_withLargeValue_ReturnsCorrectValue() {
     DecimalDataType testDecimal = new DecimalDataType(3, 0);
-    var testVal = testDecimal.store(18.00000001);
+    var testVal = testDecimal.cast(18.00000001);
     assertEquals("18", testVal.toString());
   }
 
   @Test
-  public void storeAndCast_withValidInput_ReturnsIdenticalValueAsStored() {
-    var testVal = this.decimalDataType.store(1.123580128935792835); // Stores as one
+  public void castAndCast_withValidInput_ReturnsIdenticalValueAsStored() {
+    var testVal = this.decimalDataType.cast(1.123580128935792835); // Stores as one
     assertEquals(testVal, this.decimalDataType.cast(testVal)); // Returns as one
   }
 }

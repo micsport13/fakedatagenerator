@@ -40,7 +40,7 @@ public class Column<T extends DataType<?>> {
   }
 
   public void validate(Object value) {
-    this.getDataType().store(value);
+    this.getDataType().cast(value);
   }
 
   @Override

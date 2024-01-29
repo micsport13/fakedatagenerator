@@ -2,7 +2,6 @@ package com.fdg.fakedatagenerator.datatypes;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fdg.fakedatagenerator.exceptions.DeserializationException;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.DEDUCTION, property = "name")
@@ -33,9 +32,6 @@ import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
   @JsonSubTypes.Type(value = VarcharDataType.class, name = "varchar"),
 })
 public interface DataType<T> {
-  Object store(Object value) throws MismatchedDataTypeException;
 
-  T cast(Object value) throws DeserializationException;
-
-  boolean validate(String value);
+  T cast(Object value) throws MismatchedDataTypeException;
 }

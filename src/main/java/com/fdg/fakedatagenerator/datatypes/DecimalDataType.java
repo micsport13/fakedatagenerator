@@ -2,7 +2,6 @@ package com.fdg.fakedatagenerator.datatypes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fdg.fakedatagenerator.exceptions.DeserializationException;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -40,38 +39,16 @@ public class DecimalDataType implements DataType<BigDecimal> {
   }
 
   @Override
-  public Object store(Object value) throws MismatchedDataTypeException {
-    if (value == null) {
-      return null;
-    }
-    try {
-      return new BigDecimal(value.toString()).setScale(this.scale, this.roundingMode);
-    } catch (NumberFormatException e) {
-      throw new MismatchedDataTypeException("Error deserializing decimal value: " + value);
-    }
-  }
-
-  @Override
-  public BigDecimal cast(Object value) throws DeserializationException {
+  public BigDecimal cast(Object value) throws MismatchedDataTypeException {
     if (value == null) {
       return null;
     } else {
       try {
         return new BigDecimal(value.toString()).setScale(this.scale, RoundingMode.HALF_UP);
       } catch (NumberFormatException e) {
-        throw new DeserializationException("Error deserializing decimal value: " + value);
+        throw new MismatchedDataTypeException("Error deserializing decimal value: " + value);
       }
     }
-  }
-
-  @Override
-  public boolean validate(String value) {
-    try {
-      this.store(value);
-    } catch (MismatchedDataTypeException e) {
-      return false;
-    }
-    return true;
   }
 
   @Override

@@ -15,18 +15,18 @@ class IntegerDataTypeTest {
   }
 
   @Test
-  public void store_withValidInput_ThrowsNoException() {
+  public void cast_withValidInput_ThrowsNoException() {
     assertDoesNotThrow(
         () -> {
-          this.integerDataType.store(1);
+          this.integerDataType.cast(1);
         });
   }
 
   @Test
-  public void store_parseableString_ThrowsNoException() {
+  public void cast_parseableString_ThrowsNoException() {
     assertDoesNotThrow(
         () -> {
-          this.integerDataType.store("1");
+          this.integerDataType.cast("1");
         });
   }
 
@@ -59,7 +59,7 @@ class IntegerDataTypeTest {
   }
 
   @Test
-  public void store_withNullValue_ReturnsNull() {
-    assertNull(this.integerDataType.store(null));
+  public void cast_withNullValue_ReturnsNull() {
+    assertNull(this.integerDataType.cast(null));
   }
 }

@@ -7,9 +7,11 @@ import com.fdg.fakedatagenerator.exceptions.ColumnNotFoundException;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
 import java.util.*;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 
 /** The type Row. */
 @Getter
+@Log4j2
 public class Row {
 
   @JsonIgnore private final Map<Column<?>, Object> columnValueMapping;
@@ -35,9 +37,10 @@ public class Row {
    */
   public <T> void setColumnValue(String columnName, T columnValue) {
     Column<?> column = getColumnByName(columnName);
-    if (columnValue == null || column.getDataType().validate(String.valueOf(columnValue))) {
+    try {
       this.columnValueMapping.put(column, column.getDataType().cast(columnValue));
-    } else {
+    } catch (MismatchedDataTypeException e) {
+      log.error(e);
       throw new MismatchedDataTypeException("Value is not compatible with the single's data type.");
     }
   }
@@ -133,20 +136,9 @@ public class Row {
         throw new IllegalArgumentException("Value cannot be null if calling this method");
       }
       for (Column<?> column : this.columnValueMapping.keySet()) {
-        if (column.getName().equals(columnName)
-            && column.getDataType().validate(String.valueOf(value))) {
-          this.columnValueMapping.put(column, column.getDataType().store(value));
+        if (column.getName().equals(columnName)) {
+          this.columnValueMapping.put(column, column.getDataType().cast(value));
           return this;
-        }
-        if (column.getName().equals(columnName)
-            && !column.getDataType().validate(String.valueOf(value))) {
-          throw new IllegalArgumentException(
-              "Value does not match the single type of "
-                  + column.getDataType()
-                  + " of the single: "
-                  + columnName
-                  + ". Value: "
-                  + value);
         }
       }
       return this;

@@ -3,7 +3,6 @@ package com.fdg.fakedatagenerator.datatypes;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
@@ -25,7 +24,8 @@ public class VarcharDataType implements DataType<String> {
   }
 
   @Override
-  public Object store(Object value) {
+  public String cast( // TODO: Test this function with more inputs to make sure it works
+      Object value) {
     if (value == null) {
       return null;
     }
@@ -34,24 +34,11 @@ public class VarcharDataType implements DataType<String> {
           "Value \"{}\" is longer than max length of {}.  Value will be truncated to stay within maximum string length",
           value,
           this.maxLength);
+      return value.toString().substring(0, this.maxLength);
     }
     return value.toString().length() > maxLength
         ? value.toString().substring(0, this.maxLength)
         : value.toString();
-  }
-
-  @Override
-  public String cast(
-      Object value) { // TODO: Test this function with more inputs to make sure it works
-    if (value.toString().length() > this.maxLength) {
-      return value.toString().substring(0, this.maxLength);
-    }
-    return value.toString();
-  }
-
-  @Override
-  public boolean validate(String value) throws MismatchedDataTypeException {
-    return true;
   }
 
   @Override
