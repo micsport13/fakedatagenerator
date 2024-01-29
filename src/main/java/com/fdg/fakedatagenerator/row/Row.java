@@ -36,7 +36,7 @@ public class Row {
   public <T> void setColumnValue(String columnName, T columnValue) {
     Column<?> column = getColumnByName(columnName);
     if (columnValue == null || column.getDataType().validate(String.valueOf(columnValue))) {
-      this.columnValueMapping.put(column, column.getDataType().store(columnValue));
+      this.columnValueMapping.put(column, column.getDataType().cast(columnValue));
     } else {
       throw new MismatchedDataTypeException("Value is not compatible with the single's data type.");
     }

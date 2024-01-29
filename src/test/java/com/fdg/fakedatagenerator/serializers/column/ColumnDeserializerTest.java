@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.column.ValueGenerator;
-import com.fdg.fakedatagenerator.constraints.single.NumericCheckConstraint;
+import com.fdg.fakedatagenerator.constraints.NumericCheckConstraint;
 import com.fdg.fakedatagenerator.datatypes.DecimalDataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 import java.lang.reflect.InvocationTargetException;

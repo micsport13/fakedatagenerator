@@ -3,7 +3,7 @@ package com.fdg.fakedatagenerator.table;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fdg.fakedatagenerator.column.Column;
-import com.fdg.fakedatagenerator.constraints.multi.UniqueLevelConstraint;
+import com.fdg.fakedatagenerator.constraints.UniqueConstraint;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 import com.fdg.fakedatagenerator.exceptions.UniqueConstraintException;
@@ -61,7 +61,7 @@ class TableTest {
   @Test
   public void addTableConstraint_WithUniqueColumn_ThrowsNoException() {
     Column<?> column = this.testRow.getColumnByName("name");
-    this.table.addConstraint(new UniqueLevelConstraint(), column);
+    this.table.addConstraint(new UniqueConstraint(), column);
     this.table.add(this.testRow);
     assertEquals(1, this.table.getEntities().size());
   }
@@ -77,7 +77,7 @@ class TableTest {
             .withColumnValue("name", "John")
             .build();
     Column<?> column = this.testRow.getColumnByName("name");
-    this.table.addConstraint(new UniqueLevelConstraint(), column);
+    this.table.addConstraint(new UniqueConstraint(), column);
     this.table.add(testRow);
     Assertions.assertDoesNotThrow(() -> this.table.add(testRow2));
   }
@@ -86,7 +86,7 @@ class TableTest {
   @Test
   public void add_MultipleMembersWithNonUniqueIntoUniqueColumn_ValuesThrowsException() {
     Column<?> column = this.testRow.getColumnByName("name");
-    this.table.addConstraint(new UniqueLevelConstraint(), column);
+    this.table.addConstraint(new UniqueConstraint(), column);
     this.table.add(this.testRow);
     Assertions.assertThrows(UniqueConstraintException.class, () -> this.table.add(testRow));
   }

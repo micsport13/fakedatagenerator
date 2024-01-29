@@ -1,7 +1,7 @@
 package com.fdg.fakedatagenerator.column;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fdg.fakedatagenerator.constraints.other.NameValidator;
+import com.fdg.fakedatagenerator.constraints.NameValidator;
 import com.fdg.fakedatagenerator.datatypes.DataType;
 import jakarta.validation.constraints.NotNull;
 import java.util.Objects;

@@ -3,6 +3,7 @@ package com.fdg.fakedatagenerator.schema.schema;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.schema.Schema;
 import java.io.IOException;
 import lombok.extern.log4j.Log4j2;
@@ -26,6 +27,18 @@ public class SchemaSerializer extends StdSerializer<Schema> {
     jsonGenerator.writeArrayFieldStart("columns");
     for (var column : schema.getColumns()) {
       jsonGenerator.writeObject(column);
+    }
+    jsonGenerator.writeEndArray();
+    jsonGenerator.writeArrayFieldStart("constraints");
+    for (var constraint : schema.getConstraints().entrySet()) {
+      jsonGenerator.writeStartObject();
+      jsonGenerator.writeObjectField("constraint", constraint.getKey());
+      jsonGenerator.writeArrayFieldStart("columns");
+      for (Column<?> column : constraint.getValue()) {
+        jsonGenerator.writeString(column.getName());
+      }
+      jsonGenerator.writeEndArray();
+      jsonGenerator.writeEndObject();
     }
     jsonGenerator.writeEndArray();
     jsonGenerator.writeEndObject();

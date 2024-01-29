@@ -29,7 +29,7 @@ public class FakedatageneratorApplication {
         .enable(YAMLGenerator.Feature.MINIMIZE_QUOTES)
         .disable(YAMLGenerator.Feature.USE_NATIVE_TYPE_ID)
         .enable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-        .enable(JsonGenerator.Feature.STRICT_DUPLICATE_DETECTION);
+        .disable(JsonGenerator.Feature.STRICT_DUPLICATE_DETECTION);
   }
 
   @Bean

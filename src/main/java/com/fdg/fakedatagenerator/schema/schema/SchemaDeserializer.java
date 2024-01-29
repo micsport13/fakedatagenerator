@@ -24,8 +24,7 @@ public class SchemaDeserializer extends StdDeserializer<Schema> {
 
   @Override
   public Schema deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-      throws IOException { // TODO: Work on updating this to match serializer
-    // TODO: Is there a way to make this follow OCP?
+      throws IOException {
     log.info("Deserializing schema");
     JsonNode rootNode = jsonParser.getCodec().readTree(jsonParser);
     Set<Column<?>> columns = new LinkedHashSet<>();
@@ -43,8 +42,15 @@ public class SchemaDeserializer extends StdDeserializer<Schema> {
     var constraintsNode = rootNode.withArray("constraints").elements();
     while (constraintsNode.hasNext()) {
       JsonNode node = constraintsNode.next();
-      Constraint constraint = deserializationContext.readTreeAsValue(node, Constraint.class);
-      constraintMap.put(constraint, Set.of(schema.getColumn(node.get("column").asText())));
+      Constraint constraint =
+          deserializationContext.readTreeAsValue(node.get("constraint"), Constraint.class);
+      Set<Column<?>> constraintColumns = new HashSet<>();
+      var columnNode = node.withArray("columns").elements();
+      while (columnNode.hasNext()) {
+        JsonNode columnElement = columnNode.next();
+        constraintColumns.add(schema.getColumn(columnElement.asText()));
+      }
+      constraintMap.put(constraint, constraintColumns);
     }
     if (constraintMap.isEmpty()) {
       return schema;

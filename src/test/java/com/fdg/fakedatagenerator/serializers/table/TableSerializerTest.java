@@ -5,9 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fdg.fakedatagenerator.column.Column;
-import com.fdg.fakedatagenerator.constraints.multi.PrimaryKeyConstraint;
-import com.fdg.fakedatagenerator.constraints.multi.UniqueLevelConstraint;
-import com.fdg.fakedatagenerator.constraints.single.NumericCheckConstraint;
+import com.fdg.fakedatagenerator.constraints.NumericCheckConstraint;
 import com.fdg.fakedatagenerator.datatypes.DecimalDataType;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
@@ -28,8 +26,6 @@ class TableSerializerTest {
     Column<VarcharDataType> nameColumn = new Column<>("name", new VarcharDataType(40));
     Column<DecimalDataType> priceColumn = new Column<>("price", new DecimalDataType(18, 2));
     Schema schema = new Schema(idColumn, nameColumn, priceColumn);
-    schema.addConstraint(new PrimaryKeyConstraint(), idColumn);
-    schema.addConstraint(new UniqueLevelConstraint(), nameColumn);
     schema.addConstraint(
         new NumericCheckConstraint.Builder<Double>().withMinimumValue(0.0).build(), priceColumn);
     Table table = new Table("test", schema);
@@ -50,10 +46,12 @@ class TableSerializerTest {
          name: decimal
          precision: 18
          scale: 2
-     constraints:
-       - type: numeric_check
+   constraints:
+     - constraint:
+         type: numeric_check
          minValue: 0.0
-         column: price
+       columns:
+         - price
  """;
     assertEquals(expectedYaml, objectMapper.writeValueAsString(table));
   }

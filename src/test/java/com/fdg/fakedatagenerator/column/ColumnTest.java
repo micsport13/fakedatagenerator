@@ -2,8 +2,6 @@ package com.fdg.fakedatagenerator.column;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.fdg.fakedatagenerator.constraints.single.ColumnLevelConstraint;
-import com.fdg.fakedatagenerator.constraints.single.NotNullLevelConstraint;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +34,6 @@ public class ColumnTest {
 
   @Test
   public void constructor_WithValidNameDataTypeAndConstraints_SetsNameDataTypeAndConstraints() {
-    ColumnLevelConstraint columnConstraint = new NotNullLevelConstraint();
     Column<?> column = new Column<>("int", new IntegerDataType());
     assertEquals("int", column.getName());
     assertEquals(IntegerDataType.class, column.getDataType().getClass());

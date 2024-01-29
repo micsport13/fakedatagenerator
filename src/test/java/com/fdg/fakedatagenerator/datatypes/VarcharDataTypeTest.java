@@ -30,6 +30,7 @@ class VarcharDataTypeTest {
 
   @Test
   public void store_withValidNumber_StoresAsString() {
+
     var val = this.varcharDataType.store(1);
     assertEquals(1, val.toString().length());
     assertEquals("1", val);

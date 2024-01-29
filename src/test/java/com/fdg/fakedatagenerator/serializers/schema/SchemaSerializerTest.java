@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fdg.fakedatagenerator.column.Column;
-import com.fdg.fakedatagenerator.constraints.multi.PrimaryKeyConstraint;
-import com.fdg.fakedatagenerator.constraints.multi.UniqueLevelConstraint;
+import com.fdg.fakedatagenerator.constraints.PrimaryKeyConstraint;
+import com.fdg.fakedatagenerator.constraints.UniqueConstraint;
 import com.fdg.fakedatagenerator.datatypes.IntegerDataType;
 import com.fdg.fakedatagenerator.datatypes.VarcharDataType;
 import com.fdg.fakedatagenerator.schema.Schema;
@@ -26,7 +26,7 @@ class SchemaSerializerTest {
         new Column<VarcharDataType>("varcharColumn", new VarcharDataType());
     Schema schema = new Schema(intColumn, varcharColumn);
     schema.addConstraint(new PrimaryKeyConstraint(), intColumn);
-    schema.addConstraint(new UniqueLevelConstraint(), varcharColumn);
+    schema.addConstraint(new UniqueConstraint(), varcharColumn);
     String yaml = objectMapper.writeValueAsString(schema);
     // Assert
     String expectedYaml =
@@ -39,6 +39,15 @@ class SchemaSerializerTest {
                         type:
                           name: varchar
                           max_length: 1
+                    constraints:
+                      - constraint:
+                          type: primary_key
+                        columns:
+                          - intColumn
+                      - constraint:
+                          type: unique
+                        columns:
+                          - varcharColumn
                     """;
     assertEquals(expectedYaml, yaml);
   }
