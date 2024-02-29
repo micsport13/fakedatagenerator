@@ -18,8 +18,6 @@ public class ForeignKeyConstraint implements Constraint {
 
   @JsonIgnore private final Table foreignTable;
 
-  @JsonIgnore private final Column<?> foreignColumn;
-
   /**
    * Instantiates a new Foreign key constraint.
    *
@@ -27,7 +25,7 @@ public class ForeignKeyConstraint implements Constraint {
    * @param foreignColumnName the foreign single
    */
   public ForeignKeyConstraint(Table foreignTable, String foreignColumnName) {
-    this.foreignColumn = foreignTable.getColumn(foreignColumnName);
+    Column<?> foreignColumn = foreignTable.getColumn(foreignColumnName);
     this.foreignTable = foreignTable;
     this.foreignColumnName = foreignColumn.getName();
   }

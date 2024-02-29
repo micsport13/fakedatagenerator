@@ -3,7 +3,8 @@ package com.fdg.fakedatagenerator.constraints;
 import com.fdg.fakedatagenerator.exceptions.NotNullConstraintException;
 
 /** The type Not null constraint. */
-public class NotNullLevelConstraint implements Constraint {
+public class NotNullConstraint implements Constraint {
+
   @Override
   public void validate(Object value) {
     if (value == null) {
@@ -14,13 +15,13 @@ public class NotNullLevelConstraint implements Constraint {
 
   @Override
   public int hashCode() {
-    return 79 * 31;
+    return 17 * 73;
   }
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    return o instanceof NotNullLevelConstraint;
+    return o instanceof NotNullConstraint;
   }
 
   @Override

@@ -2,6 +2,7 @@ package com.fdg.fakedatagenerator.datatypes;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.fdg.fakedatagenerator.exceptions.MismatchedDataTypeException;
 import java.math.BigInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,5 +23,11 @@ class BigIntDataTypeTest {
     assertEquals(123456789L, bigIntDataType.cast("123456789"));
     assertEquals(-123456789L, bigIntDataType.cast("-123456789"));
     assertEquals(1L, bigIntDataType.cast(new BigInteger("1")));
+    assertEquals(1L, bigIntDataType.cast("1.0"));
+  }
+
+  @Test
+  public void cast_withInvalidObjects_ThrowsException() {
+    assertThrows(MismatchedDataTypeException.class, () -> bigIntDataType.cast("test"));
   }
 }

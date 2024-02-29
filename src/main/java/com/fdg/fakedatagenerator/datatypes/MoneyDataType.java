@@ -1,3 +1,3 @@
 package com.fdg.fakedatagenerator.datatypes;
 
-public class MoneyDataType {}
+public class MoneyDataType {} // TODO: Implement this class

@@ -1,20 +1,13 @@
 package com.fdg.fakedatagenerator.constraints;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.exceptions.PrimaryKeyConstraintException;
 import java.util.HashSet;
 import java.util.Set;
 
 /** The type Primary key constraint. */
 public class PrimaryKeyConstraint implements Constraint {
-  @JsonIgnore private final Set<Column<?>> primaryKeyColumns;
   @JsonIgnore private final Set<Object> primaryKeyValues = new HashSet<>();
-
-  
-  public PrimaryKeyConstraint(Column<?>... primaryKeyColumns) {
-    this.primaryKeyColumns = new HashSet<>(Set.of(primaryKeyColumns));
-  }
 
   private void addValue(Object value) {
     primaryKeyValues.add(value);
@@ -32,7 +25,7 @@ public class PrimaryKeyConstraint implements Constraint {
 
   @Override
   public int hashCode() {
-    return 17;
+    return 17 * 31;
   }
 
   @Override

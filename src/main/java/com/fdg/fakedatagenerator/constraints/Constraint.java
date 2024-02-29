@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
   @JsonSubTypes.Type(value = ForeignKeyConstraint.class, name = "foreign_key"),
   @JsonSubTypes.Type(value = PrimaryKeyConstraint.class, name = "primary_key"),
   @JsonSubTypes.Type(value = AcceptedValuesCheckConstraint.class, name = "accepted_values"),
-  @JsonSubTypes.Type(value = NotNullLevelConstraint.class, name = "not_null"),
+  @JsonSubTypes.Type(value = NotNullConstraint.class, name = "not_null"),
   @JsonSubTypes.Type(value = NumericCheckConstraint.class, name = "numeric_check")
 })
 public interface Constraint {

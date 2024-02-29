@@ -62,4 +62,12 @@ public class AcceptedValuesConstraintTest {
     Assertions.assertThrows(
         CheckConstraintException.class, () -> columnCheckConstraint.validate("test"));
   }
+
+  @Test
+  public void validate_withNonStringArgument_ThrowsException() {
+    AcceptedValuesCheckConstraint columnCheckConstraint =
+        new AcceptedValuesCheckConstraint("Test", "Test1");
+    Assertions.assertThrows(
+        CheckConstraintException.class, () -> columnCheckConstraint.validate(1));
+  }
 }

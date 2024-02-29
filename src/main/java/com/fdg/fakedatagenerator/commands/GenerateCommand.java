@@ -1,7 +1,10 @@
 package com.fdg.fakedatagenerator.commands;
 
+import com.fdg.fakedatagenerator.table.Table;
 import com.fdg.fakedatagenerator.writers.SqlWriter;
 import java.io.File;
+import java.io.IOException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +24,21 @@ public class GenerateCommand {
   @Command(command = "data")
   public void generateData(
       @Option(shortNames = {'n'}) Integer numEntities,
-      @Option(shortNames = {'t'}) String tableName,
-      @Option(required = false) String filePath) {
-    this.dataManager.generateData(numEntities, tableName, filePath);
+      @Option(shortNames = 'p', required = true) String filePath)
+      throws IOException {
+    this.dataManager.generateData(numEntities, filePath);
   }
 
   @Command(command = "script")
   public void generateScript(
-      @Option(required = true) String filePath, @Option(required = true) String tableName) {
-    SqlWriter sqlWriter = new SqlWriter(this.dataManager.getTables().get(tableName));
+      @Option(shortNames = 'p', required = true) String filePath,
+      @Option(shortNames = 't') String tableName) {
+    SqlWriter sqlWriter = null;
+    if (tableName == null) {
+      sqlWriter = new SqlWriter(this.dataManager.getTables().values().toArray(new Table[0]));
+    } else {
+      sqlWriter = new SqlWriter(this.dataManager.getTables().get(tableName));
+    }
     File file = new File(filePath);
     try (var fileWriter = new java.io.FileWriter(file)) {
       fileWriter.write(sqlWriter.write());

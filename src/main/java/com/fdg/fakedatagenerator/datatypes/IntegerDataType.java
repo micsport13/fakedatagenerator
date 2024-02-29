@@ -6,7 +6,7 @@ import lombok.extern.log4j.Log4j2;
 
 @JsonTypeName("integer")
 @Log4j2
-public class IntegerDataType implements DataType<Integer> {
+public class IntegerDataType implements DataType<Integer> { // TODO: Implement this class
 
   @Override
   public Integer cast(Object value) {

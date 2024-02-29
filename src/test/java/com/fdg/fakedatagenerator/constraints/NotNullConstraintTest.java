@@ -1,11 +1,12 @@
 package com.fdg.fakedatagenerator.constraints;
 
+
 import com.fdg.fakedatagenerator.exceptions.NotNullConstraintException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class NotNullConstraintTest {
-  private final NotNullLevelConstraint notNullConstraint = new NotNullLevelConstraint();
+  private final NotNullConstraint notNullConstraint = new NotNullConstraint();
 
   /** Null input throws not null constraint exception. */
   @Test
@@ -16,7 +17,8 @@ class NotNullConstraintTest {
 
   /** Not null input throws no exception. */
   @Test
-  public void notNullInputThrowsNoException() {
+  public void validate_notNullInput_ThrowsNoException() {
     Assertions.assertDoesNotThrow(() -> notNullConstraint.validate(1));
   }
+  
 }

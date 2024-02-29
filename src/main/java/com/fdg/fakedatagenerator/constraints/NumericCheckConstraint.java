@@ -3,10 +3,13 @@ package com.fdg.fakedatagenerator.constraints;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.fdg.fakedatagenerator.exceptions.CheckConstraintException;
 import java.util.*;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonDeserialize(builder = NumericCheckConstraint.Builder.class)
 public class NumericCheckConstraint<T extends Number> implements Constraint {
   @JsonProperty("minValue")
   @JsonAlias("min_value")
@@ -50,6 +53,7 @@ public class NumericCheckConstraint<T extends Number> implements Constraint {
     return Objects.equals(this.min, that.min) && Objects.equals(this.max, that.max);
   }
 
+  @JsonPOJOBuilder()
   public static final class Builder<T extends Number> {
     @JsonProperty("minValue")
     @JsonAlias("min_value")

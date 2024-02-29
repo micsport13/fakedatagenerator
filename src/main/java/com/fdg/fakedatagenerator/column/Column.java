@@ -18,6 +18,7 @@ public class Column<T extends DataType<?>> {
 
   @JsonProperty("type")
   @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
+  @Getter
   private final @NotNull T dataType;
 
   @JsonProperty("generator")
@@ -40,7 +41,7 @@ public class Column<T extends DataType<?>> {
   }
 
   public void validate(Object value) {
-    this.getDataType().cast(value);
+    this.dataType.cast(value);
   }
 
   @Override

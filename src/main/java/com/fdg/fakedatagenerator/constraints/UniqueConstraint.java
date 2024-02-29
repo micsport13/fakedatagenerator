@@ -18,7 +18,8 @@ public class UniqueConstraint implements Constraint {
     if (this.uniqueValues.contains(value)) {
       throw new UniqueConstraintException(
           UniqueConstraint.class.getSimpleName()
-              + ": Value already exists in the unique constraint");
+              + String.format(
+                  ": Value %s already exists in the unique constraint", value.toString()));
     }
     this.addValue(value);
   }
