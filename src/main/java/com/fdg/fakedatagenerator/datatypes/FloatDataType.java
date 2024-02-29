@@ -12,4 +12,9 @@ public class FloatDataType implements DataType<Float> {
       throw new MismatchedDataTypeException("Invalid float format for value: " + value);
     }
   }
+
+  @Override
+  public String toString() {
+    return "Float";
+  }
 }

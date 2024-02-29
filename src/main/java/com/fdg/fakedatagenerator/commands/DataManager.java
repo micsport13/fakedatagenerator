@@ -3,9 +3,7 @@ package com.fdg.fakedatagenerator.commands;
 import com.fdg.fakedatagenerator.column.Column;
 import com.fdg.fakedatagenerator.row.Row;
 import com.fdg.fakedatagenerator.table.Table;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
@@ -40,21 +38,6 @@ public class DataManager {
         rowBuilder.withColumnValue(column.getName(), column.getValueGenerator().get());
       }
       table.add(rowBuilder.build());
-    }
-  }
-
-  private void writeToOutput(String message, String filePath) {
-    if (filePath != null && !filePath.isEmpty()) {
-      try {
-        log.info("Writing to file: " + filePath);
-        PrintWriter writer = new PrintWriter(new FileWriter(filePath, true));
-        writer.println(message);
-        writer.close();
-      } catch (IOException e) {
-        log.error(e);
-      }
-    } else {
-      System.out.println(message);
     }
   }
 

@@ -25,4 +25,9 @@ public class BitDataType implements DataType<Boolean> {
       }
     }
   }
+
+  @Override
+  public String toString() {
+    return "Bit";
+  }
 }

@@ -47,4 +47,9 @@ public class DateDataType implements DataType<LocalDate> {
     }
     throw new MismatchedDataTypeException("Invalid date format for value: " + value);
   }
+
+  @Override
+  public String toString() {
+    return "Date";
+  }
 }

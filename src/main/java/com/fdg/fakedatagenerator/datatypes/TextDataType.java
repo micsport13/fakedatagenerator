@@ -9,4 +9,9 @@ public class TextDataType implements DataType<String> {
       throws MismatchedDataTypeException { // TODO: Implement this class
     return null;
   }
+
+  @Override
+  public String toString() {
+    return "Text";
+  }
 }

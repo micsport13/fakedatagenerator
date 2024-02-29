@@ -13,4 +13,9 @@ public class UniqueIdentifierDataType implements DataType<UUID> {
       throw new MismatchedDataTypeException("Invalid UUID format for value: " + value);
     }
   }
+
+  @Override
+  public String toString() {
+    return "UniqueIdentifier";
+  }
 }

@@ -30,4 +30,9 @@ public class CharDataType implements DataType<String> {
       throw new MismatchedDataTypeException("CharDataType: Cannot cast " + value + " to char[]");
     }
   }
+
+  @Override
+  public String toString() {
+    return String.format("Char(%d)", maxLength);
+  }
 }

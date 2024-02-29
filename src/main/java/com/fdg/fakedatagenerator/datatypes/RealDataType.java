@@ -8,4 +8,9 @@ public class RealDataType implements DataType<Float> {
   public Float cast(Object value) throws MismatchedDataTypeException { // TODO: Implement this class
     return null;
   }
+
+  @Override
+  public String toString() {
+    return "Real";
+  }
 }

@@ -10,4 +10,9 @@ public class DateTimeOffsetDataType implements DataType<ZonedDateTime> {
       throws MismatchedDataTypeException { // TODO: Implement this class
     return null;
   }
+
+  @Override
+  public String toString() {
+    return "DateTimeOffset";
+  }
 }

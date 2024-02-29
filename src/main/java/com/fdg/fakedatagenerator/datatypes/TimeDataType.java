@@ -9,4 +9,9 @@ public class TimeDataType implements DataType<Time> {
   public Time cast(Object value) throws MismatchedDataTypeException { // TODO: Implement this class
     return null;
   }
+
+  @Override
+  public String toString() {
+    return "Time";
+  }
 }

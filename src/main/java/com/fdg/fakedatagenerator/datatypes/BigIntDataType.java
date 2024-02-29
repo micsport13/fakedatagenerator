@@ -14,4 +14,9 @@ public class BigIntDataType implements DataType<Long> {
       throw new MismatchedDataTypeException("BigIntDataType: Cannot cast " + value + " to Long");
     }
   }
+
+  @Override
+  public String toString() {
+    return "BigInt";
+  }
 }

@@ -32,4 +32,9 @@ public class DateTime2DataType implements DataType<LocalDateTime> {
           "DateTime2DataType: Cannot cast " + value + " to LocalDateTime");
     }
   }
+
+  @Override
+  public String toString() {
+    return "DateTime2";
+  }
 }

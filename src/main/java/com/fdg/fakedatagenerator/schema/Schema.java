@@ -82,8 +82,8 @@ public class Schema {
     sb.append("Constraints: \n");
     for (Map.Entry<Constraint, Set<Column<?>>> entry : this.constraints.entrySet()) {
       sb.append(entry.getKey().toString())
-          .append(": ")
-          .append(entry.getValue().toString())
+          .append(": \n")
+          .append(entry.getValue().toString().replace("\n", ", "))
           .append("\n");
     }
     return sb.toString();

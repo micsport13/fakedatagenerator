@@ -9,4 +9,9 @@ public class BinaryDataType implements DataType<byte[]> {
   public byte[] cast(Object value) throws MismatchedDataTypeException {
     return value.toString().getBytes(StandardCharsets.UTF_8);
   }
+
+  @Override
+  public String toString() {
+    return "Binary";
+  }
 }
