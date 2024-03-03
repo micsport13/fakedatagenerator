@@ -27,7 +27,7 @@ public class ValueGeneratorDeserializer extends StdDeserializer<ValueGenerator> 
     String method = node.get("method").asText();
     Faker faker = (Faker) deserializationContext.findInjectableValue((Object) "faker", null, null);
     if (node.get("arguments") == null) {
-      return new ValueGenerator(faker, provider, method);
+      return new FakerMethodGenerator(faker, provider, method);
     } else {
       Object[] methodArguments = new Object[node.get("arguments").size()];
       for (int i = 0; i < node.get("arguments").size(); i++) {
@@ -37,7 +37,7 @@ public class ValueGeneratorDeserializer extends StdDeserializer<ValueGenerator> 
           methodArguments[i] = node.get("arguments").get(i).asText();
         }
       }
-      return new ValueGenerator(faker, provider, method, methodArguments);
+      return new FakerMethodGenerator(faker, provider, method, methodArguments);
     }
   }
 }

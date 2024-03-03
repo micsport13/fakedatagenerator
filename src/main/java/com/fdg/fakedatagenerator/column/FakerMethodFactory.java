@@ -9,7 +9,7 @@ public class FakerMethodFactory {
   private static final Map<String, Method> PROVIDER_MAP =
       new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-  private static Method getMethodByName(Faker faker, String methodName) {
+  private static Method getProviderByName(Faker faker, String methodName) {
     if (PROVIDER_MAP.isEmpty()) {
       for (Method method : faker.getClass().getMethods()) {
         PROVIDER_MAP.put(method.getName(), method);
@@ -23,7 +23,7 @@ public class FakerMethodFactory {
 
   private static Object invokeProvider(Faker faker, String providerName) {
     try {
-      return getMethodByName(faker, providerName).invoke(faker);
+      return getProviderByName(faker, providerName).invoke(faker);
     } catch (IllegalAccessException | InvocationTargetException e) {
       throw new RuntimeException("Unable to locate provider: " + providerName, e);
     }
@@ -68,5 +68,25 @@ public class FakerMethodFactory {
       }
     }
     return true;
+  }
+
+  public static Object getProvider(Faker faker, String providerName) {
+    try {
+      return getProviderByName(faker, providerName);
+    } catch (RuntimeException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static Method getMethod(
+      Faker faker, String providerName, String methodName, Object... args) {
+    try {
+      Object provider = getProviderByName(faker, providerName);
+      return provider.getClass().getMethod(methodName, args.getClass());
+    } catch (RuntimeException e) {
+      throw new RuntimeException(e);
+    } catch (NoSuchMethodException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

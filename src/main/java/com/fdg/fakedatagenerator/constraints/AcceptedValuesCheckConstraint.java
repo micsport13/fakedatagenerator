@@ -35,7 +35,7 @@ public class AcceptedValuesCheckConstraint implements Constraint {
   @Override
   public int hashCode() {
     return this.acceptedValues.hashCode();
-  }
+  } // TODO: Remove this?
 
   @Override
   public boolean equals(Object o) {

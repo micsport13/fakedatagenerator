@@ -20,20 +20,20 @@ class ValueGeneratorTest {
 
   @Test
   public void get_withValidInput_GivesValue() {
-    ValueGenerator valueGenerator = new ValueGenerator(faker, "clashofclans", "troop");
-    assertNotNull(valueGenerator.get());
+    ValueGenerator valueGenerator = new FakerMethodGenerator(faker, "clashofclans", "troop");
+    assertNotNull(valueGenerator.nextValue());
   }
 
   @Test
   public void get_withNonValidExpression_ThrowsRuntimeException() {
-    ValueGenerator valueGenerator = new ValueGenerator(faker, "clashofclans", "random");
-    assertThrows(RuntimeException.class, valueGenerator::get);
+    ValueGenerator valueGenerator = new FakerMethodGenerator(faker, "clashofclans", "random");
+    assertThrows(RuntimeException.class, valueGenerator::nextValue);
   }
 
   @Test
   public void get_withMethodArguments_GivesValueWithArguments() {
     ValueGenerator valueGenerator =
-        new ValueGenerator(faker, "date", "birthday", "yy DDD hh:mm:ss");
-    assertTrue(valueGenerator.get().toString().matches("\\d{2} \\d{3} \\d{2}:\\d{2}:\\d{2}"));
+        new FakerMethodGenerator(faker, "date", "birthday", "yy DDD hh:mm:ss");
+    assertTrue(valueGenerator.nextValue().toString().matches("\\d{2} \\d{3} \\d{2}:\\d{2}:\\d{2}"));
   }
 }

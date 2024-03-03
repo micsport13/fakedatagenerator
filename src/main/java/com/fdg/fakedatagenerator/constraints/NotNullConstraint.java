@@ -14,17 +14,6 @@ public class NotNullConstraint implements Constraint {
   }
 
   @Override
-  public int hashCode() {
-    return 17 * 73;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    return o instanceof NotNullConstraint;
-  }
-
-  @Override
   public String toString() {
     return "Not Null";
   }

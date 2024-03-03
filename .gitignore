@@ -4,7 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 /*.yml
-/*.txt
+tables/
+sql/
 /*.sql
 ### STS ###
 .apt_generated

@@ -13,8 +13,7 @@ public class AcceptedValuesConstraintTest {
 
   @Test
   public void constructor_nullAcceptedValues_ThrowsIllegalArgumentException() {
-    Assertions.assertThrows(
-        IllegalArgumentException.class, () -> new AcceptedValuesCheckConstraint(null));
+    Assertions.assertThrows(IllegalArgumentException.class, AcceptedValuesCheckConstraint::new);
   }
 
   /** Multiple check constraints with same accepted values are equal. */

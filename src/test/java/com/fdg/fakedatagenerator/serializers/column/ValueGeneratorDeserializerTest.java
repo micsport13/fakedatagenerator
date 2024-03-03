@@ -24,8 +24,8 @@ public class ValueGeneratorDeserializerTest {
             """;
     try {
       ValueGenerator valueGenerator = objectMapper.readValue(yamlString, ValueGenerator.class);
-      System.out.println(valueGenerator.get());
-      Assertions.assertNotNull(valueGenerator.get());
+      System.out.println(valueGenerator.nextValue());
+      Assertions.assertNotNull(valueGenerator.nextValue());
       Assertions.assertNotNull(valueGenerator);
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
@@ -43,9 +43,9 @@ public class ValueGeneratorDeserializerTest {
             """;
     try {
       ValueGenerator valueGenerator = objectMapper.readValue(yamlString, ValueGenerator.class);
-      Assertions.assertNotNull(valueGenerator.get());
+      Assertions.assertNotNull(valueGenerator.nextValue());
       Assertions.assertTrue(
-          valueGenerator.get().toString().matches("\\d{2} \\d{3} \\d{2}:\\d{2}:\\d{2}"));
+          valueGenerator.nextValue().toString().matches("\\d{2} \\d{3} \\d{2}:\\d{2}:\\d{2}"));
       Assertions.assertNotNull(valueGenerator);
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
@@ -65,7 +65,7 @@ public class ValueGeneratorDeserializerTest {
     try {
       ValueGenerator valueGenerator = objectMapper.readValue(yamlString, ValueGenerator.class);
       DateDataType dateDataType = new DateDataType();
-      LocalDate ld = dateDataType.cast(valueGenerator.get());
+      LocalDate ld = dateDataType.cast(valueGenerator.nextValue());
       Assertions.assertTrue(
           LocalDate.now().isAfter(ld) && LocalDate.now().minusYears(18).isBefore(ld));
       Assertions.assertNotNull(valueGenerator);
@@ -85,7 +85,7 @@ public class ValueGeneratorDeserializerTest {
                 """;
     try {
       ValueGenerator valueGenerator = objectMapper.readValue(yamlString, ValueGenerator.class);
-      String number = (String) valueGenerator.get();
+      String number = (String) valueGenerator.nextValue();
       Assertions.assertEquals(10, Long.valueOf(number).toString().length());
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);

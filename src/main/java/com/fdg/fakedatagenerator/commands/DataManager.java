@@ -35,7 +35,7 @@ public class DataManager {
     for (int i = 0; i < numEntities; i++) {
       Row.Builder rowBuilder = new Row.Builder(table.getColumns().toArray(new Column[0]));
       for (Column<?> column : table.getColumns()) {
-        rowBuilder.withColumnValue(column.getName(), column.getValueGenerator().get());
+        rowBuilder.withColumnValue(column.getName(), column.getValueGenerator().nextValue());
       }
       table.add(rowBuilder.build());
     }
