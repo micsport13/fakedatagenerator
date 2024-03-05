@@ -1,0 +1,4 @@
+constraint:
+  type: foreign_key
+  table_name: test_table
+  column_name: test_column

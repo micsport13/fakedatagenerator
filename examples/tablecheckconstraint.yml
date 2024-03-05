@@ -1,0 +1,42 @@
+# Check constraint where columns are nullable but both cannot be null simultaneously
+constraint:
+  type: "table_check"
+  main_condition: "not_null"
+  other_columns:
+    - name: "test_other_column"
+      condition: "not_null"
+
+---
+# Check constraint where main column must be less than or equal to test_other_column
+constraint:
+  type: "table_check"
+  other_columns:
+    - name: "test_other_column"
+      condition: ">="
+
+---
+# Check constraint where main column must be greater than or equal to test_other_column
+constraint:
+  type: "table_check"
+  other_columns:
+    - name: "test_other_column"
+      condition: "<="
+---
+#Check constraint where main column is greater than a value and other column is less than a value
+constraint:
+  type: "table_check"
+  main_condition: ">50"
+  other_columns:
+    - name: "test_other_column"
+      condition: "<100"
+
+---
+#Check constraint with multiple column criteria
+constraint:
+  type: "table_check"
+  main_condition: ">10"
+  other_columns:
+    - name: "test_other_column_1"
+      condition: "<100"
+    - name: "test_other_column_2"
+      condition: "<1000"

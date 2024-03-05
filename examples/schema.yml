@@ -1,0 +1,32 @@
+schema:
+  columns:
+    - name: id
+      type:
+        name: integer
+      generator:
+        provider: "number"
+        method: "positive"
+    - name: first_name
+      type:
+        name: varchar
+        max_length: 50
+      generator:
+        provider: "name"
+        method: "firstName"
+    - name: last_name
+      type:
+        name: varchar
+        max_length: 50
+      generator:
+        provider: "name"
+        method: "lastName"
+  constraints:
+    - constraint:
+        type: primary_key
+      columns:
+        - id
+    - constraint:
+        type: unique
+      columns:
+        - first_name
+        - last_name

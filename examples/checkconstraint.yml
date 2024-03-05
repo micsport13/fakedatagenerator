@@ -1,0 +1,19 @@
+---
+# Constraint for checking that a column is between two values
+constraint:
+  type: numeric_check
+  min_value: 0
+  max_value: 10
+---
+# Constraint for checking that a column is one of a set number of values, like an Enum
+constraint:
+  type: accepted_values
+  values:
+    - "test"
+    - "test1"
+    - "test2"
+---
+# Check that a column obeys a specific pattern.  Instead of using like in SQL, we use regular expressions
+constraint:
+  type: pattern_check
+  pattern: "[0-9]{5}"

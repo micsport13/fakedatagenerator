@@ -1,0 +1,12 @@
+---
+type:
+  name: varchar
+  max_length: 50
+---
+type:
+  name: int
+---
+type:
+  name: decimal
+  precision: 18
+  scale: 2

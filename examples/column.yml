@@ -1,0 +1,14 @@
+column:
+  name: id
+  type:
+    name: integer
+  generator:
+    provider: "number"
+    method: "positive"
+---
+column:
+  name: test
+  type:
+    name: varchar
+    maxLength: 30
+
