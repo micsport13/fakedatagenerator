@@ -3,11 +3,13 @@ package com.fakedatagenerator.generators;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import net.datafaker.Faker;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FakerRegexifyGenerator implements ValueGenerator {
   private final Faker faker;
   private final String regexString;
 
+  @Autowired
   public FakerRegexifyGenerator(Faker faker, String regexString) {
     this.faker = faker;
     this.regexString = checkRegexString(regexString);

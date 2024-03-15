@@ -1,12 +1,16 @@
 ---
-# Creating a generator based on a netfaker method.  For other methods like collection and regexify, please use the other examples below
+# Creating a generators based on a netfaker method.  For other methods like collection and regexify, please use the other examples below
 generator:
+  type:
+    name: "provider"
   provider: "date"
   method: "birthday"
 ---
 # Create a collection of values that can be selected from.  Similar to options method
 generator:
   collection:
+    type:
+      -
     suppliers:
       - provider: "name"
         method: "firstName"
@@ -20,26 +24,26 @@ generator:
 generator:
   expression: "Lorem#paragraph"
 ---
-# Create a generator that will return a value that matches the regular expression
+# Create a generators that will return a value that matches the regular expression
 generator:
   regexify: "^\d{3}-\d{2}-\d{4}$"
 ---
-# Create a generator that will replace ? with characters and # with numbers
+# Create a generators that will replace ? with characters and # with numbers
 generator:
   bothify: "???-##-test"
 
 ---
-# Create a generator that will replace # with numbers
+# Create a generators that will replace # with numbers
 generator:
   numerify: "###-##-####"
 
 ---
-# Create a generator that will replace ? with characters.
+# Create a generators that will replace ? with characters.
 # Use the normal character if you don't want to swap characters (i.e. test? would return test followed by some character)
 generator:
   letterify: "???-??-????"
 ---
-# Create a generator that will replace the character with one of the replacement strings
+# Create a generators that will replace the character with one of the replacement strings
 generator:
   templatify:
     string: "testvalue"
@@ -47,7 +51,7 @@ generator:
     replacement_strings:
       - "test"
 ---
-# Create a generator that will replace characters by example
+# Create a generators that will replace characters by example
 # (i.e. ABC will return [A-Z]{3} and aBc will return [a-z][A-Z][a-z])
 # Digits will be replaced will give a random digit
 generator:

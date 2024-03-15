@@ -12,22 +12,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.command.annotation.Command;
 import org.springframework.shell.command.annotation.Option;
 
-/** The type Data generator. */
+/** The type Data generators. */
 @Command(command = "generate", group = "generate")
 public class GenerateCommand {
   private static final Logger logger = LogManager.getLogger(GenerateCommand.class);
-  @Autowired private final DataManager dataManager;
+  @Autowired private final EntityConfig entityConfig;
 
-  public GenerateCommand(DataManager dataManager) {
-    this.dataManager = dataManager;
+  public GenerateCommand(EntityConfig entityConfig) {
+    this.entityConfig = entityConfig;
   }
 
   @Command(command = "data")
   public void generateData(
       @Option(shortNames = {'n'}) Integer numEntities,
-      @Option(shortNames = 'p', required = true) String filePath)
+      @Option(shortNames = 't', required = true) String tableName,
+      @Option(shortNames = 'p') String filePath)
       throws IOException {
-    this.dataManager.generateData(numEntities, filePath);
+    if (filePath == null) {
+      this.entityConfig.getDataManager().generateData(numEntities, tableName);
+    } else {
+      this.entityConfig.loadConfig(filePath);
+      this.entityConfig.getDataManager().generateData(numEntities, tableName);
+    }
   }
 
   @Command(command = "script")
@@ -45,9 +51,12 @@ public class GenerateCommand {
     if (tableName == null) {
       writer =
           WriterFactory.getWriter(
-              fileFormat, this.dataManager.getTables().values().toArray(new Table[0]));
+              fileFormat,
+              this.entityConfig.getDataManager().getTables().values().toArray(new Table[0]));
     } else {
-      writer = WriterFactory.getWriter(fileFormat, this.dataManager.getTables().get(tableName));
+      writer =
+          WriterFactory.getWriter(
+              fileFormat, this.entityConfig.getDataManager().getTables().get(tableName));
     }
     File file = new File(filePath);
     try (var fileWriter = new java.io.FileWriter(file)) {

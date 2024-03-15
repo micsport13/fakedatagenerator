@@ -1,4 +1,4 @@
-package com.fakedatagenerator.serializers.schema;
+package com.fakedatagenerator.schema;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -7,7 +7,6 @@ import com.fakedatagenerator.constraints.PrimaryKeyConstraint;
 import com.fakedatagenerator.constraints.UniqueConstraint;
 import com.fakedatagenerator.datatypes.IntegerDataType;
 import com.fakedatagenerator.datatypes.VarcharDataType;
-import com.fakedatagenerator.schema.Schema;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
@@ -21,9 +20,8 @@ class SchemaSerializerTest {
 
   @Test
   public void serialize_Schema_OutputsCorrectSerialization() throws IOException {
-    Column<IntegerDataType> intColumn = new Column<>("intColumn", new IntegerDataType());
-    Column<VarcharDataType> varcharColumn =
-        new Column<VarcharDataType>("varcharColumn", new VarcharDataType());
+    Column intColumn = new Column("intColumn", new IntegerDataType());
+    Column varcharColumn = new Column("varcharColumn", new VarcharDataType());
     Schema schema = new Schema(intColumn, varcharColumn);
     schema.addConstraint(new PrimaryKeyConstraint(), intColumn);
     schema.addConstraint(new UniqueConstraint(), varcharColumn);
@@ -33,11 +31,11 @@ class SchemaSerializerTest {
         """
                     columns:
                       - name: intColumn
-                        type:
-                          name: integer
+                        data_type:
+                          type: integer
                       - name: varcharColumn
-                        type:
-                          name: varchar
+                        data_type:
+                          type: varchar
                           max_length: 1
                     constraints:
                       - constraint:

@@ -4,7 +4,7 @@ import com.fakedatagenerator.exceptions.MismatchedDataTypeException;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.DEDUCTION, property = "name")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
   @JsonSubTypes.Type(value = BigIntDataType.class, name = "bigint"),
   @JsonSubTypes.Type(value = BinaryDataType.class, name = "binary"),

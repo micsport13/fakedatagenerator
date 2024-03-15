@@ -10,10 +10,11 @@ import org.springframework.shell.command.annotation.Option;
 @Log4j2
 @Command(command = "config", group = "Config")
 public class ConfigCommand {
-  @Autowired private final DataManager dataManager;
+  private final EntityConfig entityConfig;
 
-  public ConfigCommand(DataManager dataManager) {
-    this.dataManager = dataManager;
+  @Autowired
+  public ConfigCommand(EntityConfig entityConfig) {
+    this.entityConfig = entityConfig;
   }
 
   @Command(command = "load", description = "Load configuration from file")
@@ -24,7 +25,7 @@ public class ConfigCommand {
             System.getProperty("user.dir"),
             path); // TODO: Figure out how to set path better than this
     try {
-      dataManager.addTable(dataManager.getEntityConfig().loadConfig(filePath.toString()));
+      entityConfig.loadConfig(filePath.toString());
     } catch (IOException e) {
       log.error(e);
     }
@@ -35,7 +36,7 @@ public class ConfigCommand {
       @Option(longNames = "path", shortNames = 'p', required = true) String path) {
     Path filePath = Path.of(System.getProperty("user.dir"), path);
     try {
-      dataManager.getEntityConfig().writeConfig(path, dataManager);
+      entityConfig.writeConfig(path);
     } catch (IOException e) {
       log.error(e);
     }
@@ -44,6 +45,9 @@ public class ConfigCommand {
   @Command(command = "print", description = "Prints out the current sessions configurations")
   public void printConfig() {
     System.out.println("Current session configurations:");
-    this.dataManager.getTables().forEach((key, value) -> System.out.println(value));
+    this.entityConfig
+        .getDataManager()
+        .getTables()
+        .forEach((key, value) -> System.out.println(value));
   }
 }

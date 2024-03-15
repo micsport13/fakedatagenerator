@@ -16,7 +16,7 @@ class RowTest {
   */
   @Test
   public void entityConstructor_WithCorrectValues_ResultsInCorrectEntity() {
-    Column<IntegerDataType> idColumn = new Column<>("id", new IntegerDataType());
+    Column idColumn = new Column("id", new IntegerDataType());
     Row row = new Row.Builder(idColumn).withColumnValue("id", 1).build();
     int id = row.getColumnValue("id");
     assertEquals(1, id);
@@ -27,7 +27,7 @@ class RowTest {
 
   @Test
   public void entityConstructor_WithNoProvidedColumnValues_ResultsInEntityWithNullInColumn() {
-    Column<IntegerDataType> idColumn = new Column<>("id", new IntegerDataType());
+    Column idColumn = new Column("id", new IntegerDataType());
     Row row = new Row.Builder(idColumn).build();
     assertNull(row.getColumnValue("id"));
     assertNull(row.getColumnValueMapping().get(idColumn));
@@ -35,8 +35,8 @@ class RowTest {
 
   @Test
   public void getColumnValue_WithMatchingColumn_ReturnsCorrectValue() {
-    Column<IntegerDataType> idColumn = new Column<>("id", new IntegerDataType());
-    Column<IntegerDataType> idColumn2 = new Column<>("id", new IntegerDataType());
+    Column idColumn = new Column("id", new IntegerDataType());
+    Column idColumn2 = new Column("id", new IntegerDataType());
     Row row = new Row.Builder(idColumn).withColumnValue("id", 1).build();
     int id = row.getColumnValue(idColumn2);
     assertEquals(1, id);

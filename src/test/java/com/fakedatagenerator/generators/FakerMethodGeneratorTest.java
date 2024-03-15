@@ -1,22 +1,19 @@
-package com.fakedatagenerator.column;
+package com.fakedatagenerator.generators;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.fakedatagenerator.FakeDataGeneratorConfiguration;
-import com.fakedatagenerator.generators.FakerMethodGenerator;
-import com.fakedatagenerator.generators.ValueGenerator;
 import net.datafaker.Faker;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.autoconfigure.json.JsonTest;
 
-@SpringBootTest(classes = FakeDataGeneratorConfiguration.class)
-@ExtendWith(SpringExtension.class)
-class ValueGeneratorTest {
-
+@JsonTest
+class FakerMethodGeneratorTest {
   @Autowired private Faker faker;
+
+  @BeforeEach
+  void setUp() {}
 
   @Test
   public void get_withValidInput_GivesValue() {

@@ -1,10 +1,8 @@
 package com.fakedatagenerator.datatypes;
 
 import com.fakedatagenerator.exceptions.MismatchedDataTypeException;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.extern.log4j.Log4j2;
 
-@JsonTypeName("integer")
 @Log4j2
 public class IntegerDataType implements DataType<Integer> { // TODO: Implement this class
 

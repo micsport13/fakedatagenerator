@@ -1,4 +1,4 @@
 constraint:
   type: foreign_key
-  table_name: test_table
-  column_name: test_column
+  foreign_table: test_table
+  foreign_column: test_column

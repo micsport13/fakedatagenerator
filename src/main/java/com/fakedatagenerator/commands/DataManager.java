@@ -3,38 +3,31 @@ package com.fakedatagenerator.commands;
 import com.fakedatagenerator.column.Column;
 import com.fakedatagenerator.row.Row;
 import com.fakedatagenerator.table.Table;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Getter
+@Component
 @Log4j2
 public class DataManager {
 
-  @Autowired @Getter private final EntityConfig entityConfig;
+  private final Map<String, Table> tables = new HashMap<>();
 
-  @Getter private final Map<String, Table> tables = new HashMap<>();
-
-  public DataManager(EntityConfig entityConfig) {
-    this.entityConfig = entityConfig;
-  }
-
-  public void generateData(Integer numEntities, String filePath) throws IOException {
-    if (filePath == null) {
-      throw new IllegalArgumentException("File path cannot be null");
-    }
+  public void generateData(Integer numEntities, String tableName) {
     if (numEntities == null || numEntities <= 0) {
       throw new IllegalArgumentException("Number of entities must be greater than 0");
     }
-    Table table = entityConfig.loadConfig(filePath);
-    this.tables.put(table.getName(), table);
+    Table table = this.tables.get(tableName);
+    if (table == null) {
+      throw new IllegalArgumentException(
+          String.format("Table with name %s was not found.  Was the table loaded?", tableName));
+    }
     for (int i = 0; i < numEntities; i++) {
       Row.Builder rowBuilder = new Row.Builder(table.getColumns().toArray(new Column[0]));
-      for (Column<?> column : table.getColumns()) {
+      for (Column column : table.getColumns()) {
         rowBuilder.withColumnValue(column.getName(), column.getValueGenerator().nextValue());
       }
       table.add(rowBuilder.build());
@@ -43,5 +36,9 @@ public class DataManager {
 
   public void addTable(Table table) {
     this.tables.put(table.getName(), table);
+  }
+
+  public Table getTable(String tableName) {
+    return this.tables.get(tableName);
   }
 }

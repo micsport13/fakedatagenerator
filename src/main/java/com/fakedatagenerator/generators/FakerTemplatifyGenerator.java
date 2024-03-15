@@ -1,6 +1,7 @@
 package com.fakedatagenerator.generators;
 
 import net.datafaker.Faker;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FakerTemplatifyGenerator implements ValueGenerator {
   private final String stringToTemplate;
@@ -8,6 +9,7 @@ public class FakerTemplatifyGenerator implements ValueGenerator {
   private final String[] replacementStrings;
   private final Faker faker;
 
+  @Autowired
   public FakerTemplatifyGenerator(
       Faker faker, String stringToTemplate, char charToReplace, String... replacementStrings) {
     this.faker = faker;

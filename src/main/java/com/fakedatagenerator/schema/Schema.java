@@ -4,8 +4,6 @@ import com.fakedatagenerator.column.Column;
 import com.fakedatagenerator.constraints.Constraint;
 import com.fakedatagenerator.exceptions.ColumnNotFoundException;
 import com.fakedatagenerator.row.Row;
-import com.fakedatagenerator.serializers.SchemaDeserializer;
-import com.fakedatagenerator.serializers.SchemaSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -20,33 +18,33 @@ import lombok.Getter;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Schema {
   @JsonProperty("table_constraints")
-  private final Map<Constraint, Set<Column<?>>> constraints;
+  private final Map<Constraint, Set<Column>> constraints;
 
-  @Getter private final Set<Column<?>> columns;
+  @Getter private final Set<Column> columns;
 
-  public Schema(Column<?>... columns) {
+  public Schema(Column... columns) {
     this.columns = new LinkedHashSet<>(Arrays.asList(columns));
     this.constraints = new LinkedHashMap<>();
   }
 
-  public void addColumn(Column<?> column) {
+  public void addColumn(Column column) {
     this.columns.add(column);
   }
 
-  public void addConstraint(Constraint constraint, Column<?>... columns) {
+  public void addConstraint(Constraint constraint, Column... columns) {
     this.constraints.put(constraint, new HashSet<>(Arrays.asList(columns)));
   }
 
-  public Column<?> getColumn(
+  public Column getColumn(
       String columnName) { // TODO: Should this be an optional or should it throw an error instead?
-    for (Column<?> column : this.getColumns()) {
+    for (Column column : this.getColumns()) {
       if (column.getName().equals(columnName)) return column;
     }
     throw new ColumnNotFoundException("Column with name of " + columnName + " does not exist.");
   }
 
   public void validate(Row value) {
-    for (Map.Entry<Constraint, Set<Column<?>>> entry : this.constraints.entrySet()) {
+    for (Map.Entry<Constraint, Set<Column>> entry : this.constraints.entrySet()) {
       Object validation =
           entry.getValue().stream()
               .map(value::getColumnValue)
@@ -76,11 +74,12 @@ public class Schema {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("Schema: \n");
-    for (Column<?> column : this.columns) {
+    for (Column column : this.columns) {
       sb.append(column.toString()).append("\n");
     }
+    sb.append("==================\n");
     sb.append("Constraints: \n");
-    for (Map.Entry<Constraint, Set<Column<?>>> entry : this.constraints.entrySet()) {
+    for (Map.Entry<Constraint, Set<Column>> entry : this.constraints.entrySet()) {
       sb.append(entry.getKey().toString())
           .append(": \n")
           .append(entry.getValue().toString().replace("\n", ", "))

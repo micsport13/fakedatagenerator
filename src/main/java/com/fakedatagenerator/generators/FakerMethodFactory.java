@@ -3,8 +3,10 @@ package com.fakedatagenerator.generators;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import lombok.extern.log4j.Log4j2;
 import net.datafaker.Faker;
 
+@Log4j2
 public class FakerMethodFactory {
   private static final Map<String, Method> PROVIDER_MAP =
       new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
@@ -16,6 +18,7 @@ public class FakerMethodFactory {
       }
     }
     if (!PROVIDER_MAP.containsKey(methodName)) {
+      log.error("Unable to locate provider: {}", methodName);
       throw new RuntimeException("Unable to locate provider: " + methodName);
     }
     return PROVIDER_MAP.get(methodName);
@@ -45,6 +48,9 @@ public class FakerMethodFactory {
         }
       }
       for (Method method : eligibleMethods) {
+        if (method.getParameterCount() == 0 && args.length == 0) {
+          return method.invoke(provider);
+        }
         if (method.getParameterCount() == args.length
             && checkMethodCompatibility(method, argTypes)) {
           return method.invoke(provider, args);
@@ -70,22 +76,13 @@ public class FakerMethodFactory {
     return true;
   }
 
-  public static Object getProvider(Faker faker, String providerName) {
-    try {
-      return getProviderByName(faker, providerName);
-    } catch (RuntimeException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
   public static Method getMethod(
       Faker faker, String providerName, String methodName, Object... args) {
     try {
       Object provider = getProviderByName(faker, providerName);
       return provider.getClass().getMethod(methodName, args.getClass());
-    } catch (RuntimeException e) {
-      throw new RuntimeException(e);
     } catch (NoSuchMethodException e) {
+      log.error("Unable to find method {} with arguments {}", methodName, args);
       throw new RuntimeException(e);
     }
   }

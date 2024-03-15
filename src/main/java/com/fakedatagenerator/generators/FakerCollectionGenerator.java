@@ -1,11 +1,13 @@
 package com.fakedatagenerator.generators;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.util.List;
 import java.util.function.Supplier;
 import net.datafaker.Faker;
 
 public class FakerCollectionGenerator implements ValueGenerator {
-  private final Faker faker;
+  @JsonIgnore private final Faker faker;
   private final List<?> collection;
 
   private FakerCollectionGenerator(Builder builder) {
@@ -13,6 +15,7 @@ public class FakerCollectionGenerator implements ValueGenerator {
     this.faker = builder.faker;
   }
 
+  @JsonPOJOBuilder
   public static class Builder {
     private Faker faker;
     private int minElements;

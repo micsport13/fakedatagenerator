@@ -1,5 +1,6 @@
 package com.fakedatagenerator;
 
+import com.fakedatagenerator.commands.DataManager;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,19 +8,23 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import net.datafaker.Faker;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 @Configuration
-@Component
+@ComponentScan("com.fakedatagenerator.commands")
 public class FakeDataGeneratorConfiguration {
+  @Autowired private DataManager dataManager;
+
   @Bean
   @Scope("singleton")
   public ObjectMapper objectMapper() {
     InjectableValues.Std inject = new InjectableValues.Std();
     inject.addValue("faker", faker());
+    inject.addValue("datamanager", dataManager);
     return new YAMLMapper()
         .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
         .enable(YAMLGenerator.Feature.INDENT_ARRAYS)

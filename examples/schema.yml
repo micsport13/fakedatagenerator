@@ -1,21 +1,21 @@
 schema:
   columns:
     - name: id
-      type:
-        name: integer
+      data_type:
+        type: integer
       generator:
         provider: "number"
         method: "positive"
     - name: first_name
-      type:
-        name: varchar
+      data_type:
+        type: varchar
         max_length: 50
       generator:
         provider: "name"
         method: "firstName"
     - name: last_name
-      type:
-        name: varchar
+      data_type:
+        type: varchar
         max_length: 50
       generator:
         provider: "name"

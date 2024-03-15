@@ -33,7 +33,7 @@ public class Table {
     this.entities = new ArrayList<>();
   }
 
-  public void addConstraint(Constraint constraint, Column<?>... columns) {
+  public void addConstraint(Constraint constraint, Column... columns) {
     this.schema.addConstraint(constraint, columns);
   }
 
@@ -55,11 +55,11 @@ public class Table {
   }
 
   @JsonIgnore
-  public Set<Column<?>> getColumns() {
+  public Set<Column> getColumns() {
     return this.getSchema().getColumns();
   }
 
-  public Column<?> getColumn(String columnName) { // TODO: Figure out if optional is the right type
+  public Column getColumn(String columnName) { // TODO: Figure out if optional is the right type
     return this.getSchema().getColumn(columnName);
   }
 

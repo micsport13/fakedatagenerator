@@ -1,11 +1,13 @@
 package com.fakedatagenerator.generators;
 
 import net.datafaker.Faker;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FakerExpressionGenerator implements ValueGenerator {
   private final Faker faker;
   private final String expressionString;
 
+  @Autowired
   public FakerExpressionGenerator(
       Faker faker, String expressionString, String... expressionExtras) {
     this.faker = faker;

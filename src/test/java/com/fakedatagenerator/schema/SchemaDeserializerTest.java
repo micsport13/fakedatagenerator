@@ -1,11 +1,10 @@
-package com.fakedatagenerator.serializers.schema;
+package com.fakedatagenerator.schema;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fakedatagenerator.column.Column;
 import com.fakedatagenerator.constraints.UniqueConstraint;
 import com.fakedatagenerator.datatypes.IntegerDataType;
-import com.fakedatagenerator.schema.Schema;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -23,8 +22,8 @@ class SchemaDeserializerTest {
         """
                   columns:
                     - name: id
-                      type:
-                        name: int
+                      data_type:
+                        type: int
                   constraints:
                     - constraint:
                         type: unique
@@ -32,7 +31,7 @@ class SchemaDeserializerTest {
                         - id
                           """; // TODO: Put this in file instead of hardcoded test case
     Schema schema = objectMapper.readValue(expectedYaml, Schema.class);
-    Column<IntegerDataType> column = new Column<>("id", new IntegerDataType());
+    Column column = new Column("id", new IntegerDataType());
     Schema expectedSchema = new Schema(column);
     expectedSchema.addConstraint(new UniqueConstraint(), column);
     assertEquals(expectedSchema, schema);

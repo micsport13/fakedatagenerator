@@ -11,22 +11,22 @@ import lombok.Setter;
 
 /** Column class Contains a name, a data type, and a set of constraints */
 @Getter
-@JsonPropertyOrder({"name", "type", "generator"})
+@JsonPropertyOrder({"name", "data_type", "generators"})
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Column<T extends DataType<?>> {
-  @JsonProperty("name")
+public class Column {
+
   private final @NotNull String name;
 
-  @JsonProperty("type")
-  @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
+  @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+  @JsonProperty("data_type")
   @Getter
-  private final @NotNull T dataType;
+  private final @NotNull DataType<?> dataType;
 
   @JsonProperty("generator")
   @Setter
   private ValueGenerator valueGenerator;
 
-  public Column(String columnName, T dataType) {
+  public Column(String columnName, DataType<?> dataType) {
     NameValidator.validate(columnName);
     this.name = Objects.requireNonNull(columnName);
     this.dataType = Objects.requireNonNull(dataType);
@@ -35,7 +35,7 @@ public class Column<T extends DataType<?>> {
   @JsonCreator
   public Column(
       @JsonProperty("name") String columnName,
-      @JsonProperty("type") T dataType,
+      @JsonProperty("data_type") DataType<?> dataType,
       @JsonProperty("generator") ValueGenerator valueGenerator) {
     this(columnName, dataType);
     this.valueGenerator = valueGenerator;
@@ -54,7 +54,7 @@ public class Column<T extends DataType<?>> {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    Column<?> column = (Column<?>) o;
+    Column column = (Column) o;
     return this.name.equals(column.name) && this.dataType.equals(column.dataType);
   }
 

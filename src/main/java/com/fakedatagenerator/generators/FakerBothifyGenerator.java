@@ -1,11 +1,14 @@
 package com.fakedatagenerator.generators;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.datafaker.Faker;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FakerBothifyGenerator implements ValueGenerator {
-  private final Faker faker;
+  @JsonIgnore private final Faker faker;
   private final String bothifyString;
 
+  @Autowired
   public FakerBothifyGenerator(Faker faker, String bothifyString) {
     this.faker = faker;
     this.bothifyString = checkBothifyString(bothifyString);

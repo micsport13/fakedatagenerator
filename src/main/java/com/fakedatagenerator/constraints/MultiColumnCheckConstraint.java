@@ -6,12 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /** The type Table check constraint. */
 public class MultiColumnCheckConstraint implements Constraint {
   @JsonProperty("first_column")
-  private final Column<?> firstColumn; // TODO: Allow comparison between columns
+  private final Column firstColumn; // TODO: Allow comparison between columns
 
   @JsonProperty("second_column")
-  private final Column<?> secondColumn;
+  private final Column secondColumn;
 
-  public MultiColumnCheckConstraint(Column<?> firstColumn, Column<?> secondColumn) {
+  public MultiColumnCheckConstraint(Column firstColumn, Column secondColumn) {
     this.firstColumn = firstColumn;
     this.secondColumn = secondColumn;
   }

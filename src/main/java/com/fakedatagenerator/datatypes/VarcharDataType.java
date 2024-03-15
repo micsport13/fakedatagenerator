@@ -2,13 +2,11 @@ package com.fakedatagenerator.datatypes;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Getter
 @Log4j2
-@JsonTypeName("varchar")
 public class VarcharDataType implements DataType<String> {
 
   @JsonProperty("max_length")

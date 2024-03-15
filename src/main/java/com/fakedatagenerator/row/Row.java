@@ -14,7 +14,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Row {
 
-  @JsonIgnore private final Map<Column<?>, Object> columnValueMapping;
+  @JsonIgnore private final Map<Column, Object> columnValueMapping;
 
   private Row(Builder builder) {
     this.columnValueMapping = builder.columnValueMapping;
@@ -25,7 +25,7 @@ public class Row {
    *
    * @return the columns
    */
-  public Set<Column<?>> getColumns() {
+  public Set<Column> getColumns() {
     return new LinkedHashSet<>(this.columnValueMapping.keySet());
   }
 
@@ -36,7 +36,7 @@ public class Row {
    * @param columnValue the single value
    */
   public <T> void setColumnValue(String columnName, T columnValue) {
-    Column<?> column = getColumnByName(columnName);
+    Column column = getColumnByName(columnName);
     try {
       this.columnValueMapping.put(column, column.getDataType().cast(columnValue));
     } catch (MismatchedDataTypeException e) {
@@ -46,7 +46,7 @@ public class Row {
   }
 
   @SuppressWarnings("unchecked")
-  public <T> T getColumnValue(Column<?> column) {
+  public <T> T getColumnValue(Column column) {
     Object value = this.columnValueMapping.get(column);
     if (value != null) {
       DataType<?> dataType = column.getDataType();
@@ -57,7 +57,7 @@ public class Row {
 
   @SuppressWarnings("unchecked")
   public <T> T getColumnValue(String columnName) {
-    Column<?> column = getColumnByName(columnName);
+    Column column = getColumnByName(columnName);
     Object value = columnValueMapping.get(column);
     DataType<?> dataType = column.getDataType();
     return (T) dataType.cast(value);
@@ -69,8 +69,8 @@ public class Row {
    * @param columnName the single name
    * @return the single by name
    */
-  public Column<?> getColumnByName(String columnName) {
-    for (Column<?> column : this.columnValueMapping.keySet()) {
+  public Column getColumnByName(String columnName) {
+    for (Column column : this.columnValueMapping.keySet()) {
       if (Objects.equals(columnName, column.getName())) {
         return column;
       }
@@ -79,15 +79,15 @@ public class Row {
   }
 
   public Object getValue(String columnName) {
-    Column<?> column = getColumnByName(columnName);
+    Column column = getColumnByName(columnName);
     return column.getDataType().cast(columnValueMapping.get(column));
   }
 
   @Override
   public String toString() {
     StringBuilder string = new StringBuilder();
-    for (Map.Entry<Column<?>, ?> entry : columnValueMapping.entrySet()) {
-      Column<?> column = entry.getKey();
+    for (Map.Entry<Column, Object> entry : columnValueMapping.entrySet()) {
+      Column column = entry.getKey();
       Object value = entry.getValue();
       string
           .append(column.toString())
@@ -100,15 +100,15 @@ public class Row {
 
   /** The type SchemaBuilder. */
   public static class Builder {
-    private final Map<Column<?>, Object> columnValueMapping = new LinkedHashMap<>();
+    private final Map<Column, Object> columnValueMapping = new LinkedHashMap<>();
 
     /**
      * Instantiates a new SchemaBuilder.
      *
      * @param columnList the single list
      */
-    public Builder(Column<?>... columnList) {
-      for (Column<?> column : columnList) {
+    public Builder(Column... columnList) {
+      for (Column column : columnList) {
         this.columnValueMapping.put(Objects.requireNonNull(column), null);
       }
     }
@@ -119,7 +119,7 @@ public class Row {
      * @param column the single
      * @return the builder
      */
-    public Builder addColumn(Column<?> column) {
+    public Builder addColumn(Column column) {
       this.columnValueMapping.put(column, null);
       return this;
     }
@@ -135,7 +135,7 @@ public class Row {
       if (value == null) {
         throw new IllegalArgumentException("Value cannot be null if calling this method");
       }
-      for (Column<?> column : this.columnValueMapping.keySet()) {
+      for (Column column : this.columnValueMapping.keySet()) {
         if (column.getName().equals(columnName)) {
           this.columnValueMapping.put(column, column.getDataType().cast(value));
           return this;
@@ -150,7 +150,7 @@ public class Row {
      * @return the entity
      */
     public Row build() {
-      for (Map.Entry<Column<?>, Object> entry : this.columnValueMapping.entrySet()) {
+      for (Map.Entry<Column, Object> entry : this.columnValueMapping.entrySet()) {
         entry.getKey().validate(entry.getValue());
       }
       return new Row(this);

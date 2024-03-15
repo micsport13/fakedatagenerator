@@ -5,18 +5,23 @@ import com.fakedatagenerator.exceptions.ForeignKeyConstraintException;
 import com.fakedatagenerator.table.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.Getter;
 
 /** The type Foreign key constraint. */
+@JsonSerialize(using = ForeignKeyConstraintSerializer.class)
+@JsonDeserialize(using = ForeignKeyConstraintDeserializer.class)
 public class ForeignKeyConstraint implements Constraint {
-  // TODO: Implement this class
   @JsonIgnore private final Set<Object> foreignKeyValues = new HashSet<>();
 
-  @JsonProperty("foreignColumnName")
+  @JsonProperty("foreign_column")
+  @Getter
   private final String foreignColumnName;
 
-  @JsonIgnore private final Table foreignTable;
+  @JsonIgnore @Getter private final Table foreignTable;
 
   /**
    * Instantiates a new Foreign key constraint.
@@ -25,22 +30,18 @@ public class ForeignKeyConstraint implements Constraint {
    * @param foreignColumnName the foreign single
    */
   public ForeignKeyConstraint(Table foreignTable, String foreignColumnName) {
-    Column<?> foreignColumn = foreignTable.getColumn(foreignColumnName);
+    Column foreignColumn = foreignTable.getColumn(foreignColumnName);
     this.foreignTable = foreignTable;
     this.foreignColumnName = foreignColumn.getName();
-  }
-
-  private void addValue(Object value) {
-    foreignKeyValues.add(value);
   }
 
   @Override
   public void validate(Object value) {
     this.foreignKeyValues.addAll(this.foreignTable.getColumnValues(foreignColumnName));
-    if (this.foreignKeyValues.contains(value)) {
-      return;
-    }
-    throw new ForeignKeyConstraintException("Value does not exist in the foreign key values");
+      if (this.foreignKeyValues.contains(value)) {
+        return;
+      }
+      throw new ForeignKeyConstraintException("Value does not exist in the foreign key values");
   }
 
   @Override
