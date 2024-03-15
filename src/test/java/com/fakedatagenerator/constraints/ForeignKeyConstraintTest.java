@@ -78,8 +78,8 @@ class ForeignKeyConstraintTest {
   }
 
   @Test
-  public void validate_withWrongForeignKeyValueType_throwsException() {
+  public void validate_withWrongForeignKeyValueTypeButCorrectValue_doesNotThrowException() {
     ForeignKeyConstraint foreignKeyConstraint = new ForeignKeyConstraint(table, "test_column");
-    assertThrows(ForeignKeyConstraintException.class, () -> foreignKeyConstraint.validate("1"));
+    assertDoesNotThrow(() -> foreignKeyConstraint.validate("1"));
   }
 }

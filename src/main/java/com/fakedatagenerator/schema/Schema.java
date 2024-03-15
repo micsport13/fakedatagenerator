@@ -48,7 +48,7 @@ public class Schema {
       Object validation =
           entry.getValue().stream()
               .map(value::getColumnValue)
-              .map(Object::toString)
+              .map(Object::toString) // Causes a validation exception, figure out how to check
               .collect(Collectors.joining());
       entry.getKey().validate(validation);
     }

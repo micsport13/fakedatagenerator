@@ -27,6 +27,10 @@ public class ForeignValueGenerator implements ValueGenerator {
   @Override
   public Object nextValue() {
     List<Object> foreignValues = table.getColumnValues(columnName);
-    return faker.random().nextInt(foreignValues.size());
+    if (foreignValues.isEmpty()) {
+      throw new IllegalStateException(
+          "Foreign column has no values.  Have you generated data for it?");
+    }
+    return foreignValues.get(faker.random().nextInt(foreignValues.size()));
   }
 }

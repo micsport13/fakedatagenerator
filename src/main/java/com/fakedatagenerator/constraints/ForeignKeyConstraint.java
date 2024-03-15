@@ -10,10 +10,12 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 
 /** The type Foreign key constraint. */
 @JsonSerialize(using = ForeignKeyConstraintSerializer.class)
 @JsonDeserialize(using = ForeignKeyConstraintDeserializer.class)
+@Log4j2
 public class ForeignKeyConstraint implements Constraint {
   @JsonIgnore private final Set<Object> foreignKeyValues = new HashSet<>();
 
@@ -38,10 +40,14 @@ public class ForeignKeyConstraint implements Constraint {
   @Override
   public void validate(Object value) {
     this.foreignKeyValues.addAll(this.foreignTable.getColumnValues(foreignColumnName));
-      if (this.foreignKeyValues.contains(value)) {
-        return;
-      }
-      throw new ForeignKeyConstraintException("Value does not exist in the foreign key values");
+    // Casts just for comparison only.  When stored in the data type, it will store the original
+    // value
+    var castedValue = this.foreignTable.getColumn(this.foreignColumnName).getDataType().cast(value);
+    if (this.foreignKeyValues.contains(castedValue)) {
+      return;
+    }
+    log.debug("Value: {}, foreignValues: {}", castedValue, this.foreignKeyValues);
+    throw new ForeignKeyConstraintException("Value does not exist in the foreign key values");
   }
 
   @Override
