@@ -25,6 +25,7 @@ public class DataManager {
       throw new IllegalArgumentException(
           String.format("Table with name %s was not found.  Was the table loaded?", tableName));
     }
+    table.truncate(); // Resets the table before reloading data
     for (int i = 0; i < numEntities; i++) {
       Row.Builder rowBuilder = new Row.Builder(table.getColumns().toArray(new Column[0]));
       for (Column column : table.getColumns()) {

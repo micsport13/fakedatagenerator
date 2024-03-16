@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.*;
 import jakarta.validation.constraints.NotNull;
 import java.util.Objects;
 import lombok.Getter;
-import lombok.Setter;
 
 /** Column class Contains a name, a data type, and a set of constraints */
 @Getter
@@ -23,7 +22,6 @@ public class Column {
   private final @NotNull DataType<?> dataType;
 
   @JsonProperty("generator")
-  @Setter
   private ValueGenerator valueGenerator;
 
   public Column(String columnName, DataType<?> dataType) {

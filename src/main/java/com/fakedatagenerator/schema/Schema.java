@@ -2,7 +2,9 @@ package com.fakedatagenerator.schema;
 
 import com.fakedatagenerator.column.Column;
 import com.fakedatagenerator.constraints.Constraint;
+import com.fakedatagenerator.constraints.StateConstraint;
 import com.fakedatagenerator.exceptions.ColumnNotFoundException;
+import com.fakedatagenerator.generators.SequentialValueGenerator;
 import com.fakedatagenerator.row.Row;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -51,6 +53,19 @@ public class Schema {
               .map(Object::toString) // Causes a validation exception, figure out how to check
               .collect(Collectors.joining());
       entry.getKey().validate(validation);
+    }
+  }
+
+  public void resetSequences() {
+    for (var constraint : this.constraints.keySet()) {
+      if (StateConstraint.class.isAssignableFrom(constraint.getClass())) {
+        ((StateConstraint) constraint).reset();
+      }
+    }
+    for (var column : this.columns) {
+      if (column.getValueGenerator() instanceof SequentialValueGenerator) {
+        ((SequentialValueGenerator) column.getValueGenerator()).reset();
+      }
     }
   }
 

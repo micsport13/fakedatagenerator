@@ -15,7 +15,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
   @JsonSubTypes.Type(value = FakerTemplatifyGenerator.class, name = "templatify"),
   @JsonSubTypes.Type(
       value = ForeignValueGenerator.class,
-      names = {"foreign_values", "foreign_value"})
+      names = {"foreign_values", "foreign_value"}),
+  @JsonSubTypes.Type(value = SequentialValueGenerator.class, name = "sequence")
 })
 public interface ValueGenerator {
   Object nextValue();

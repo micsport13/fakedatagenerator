@@ -73,6 +73,11 @@ public class Table {
     this.entities.add(row);
   }
 
+  public void truncate() {
+    this.entities.clear();
+    this.schema.resetSequences();
+  }
+
   @Override
   public String toString() {
     return "Table: " + name + "\n" + schema.toString();

@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /** The type Unique constraint. */
-public class UniqueConstraint implements Constraint {
+public class UniqueConstraint implements Constraint, StateConstraint {
   @JsonIgnore private final Set<Object> uniqueValues = new HashSet<>(); //
 
   private void addValue(Object value) {
@@ -38,5 +38,10 @@ public class UniqueConstraint implements Constraint {
   @Override
   public String toString() {
     return "Unique";
+  }
+
+  @Override
+  public void reset() {
+    this.uniqueValues.clear();
   }
 }
