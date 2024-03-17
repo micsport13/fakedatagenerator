@@ -71,15 +71,12 @@ public class GenerateCommand {
   @Command(command = "seed")
   public void seedData(
       @Option(shortNames = 'p', required = true) String seedPath,
-      @Option(shortNames = 't') String tableName,
-      @Option(shortNames = 'f', required = false) String format) {
+      @Option(shortNames = 't') String tableName) {
     FileFormats fileFormat;
-    if (format == null) {
+    if (seedPath.endsWith("csv")) {
       fileFormat = FileFormats.CSV; // Default until adding other writers
-    } else if (format.equalsIgnoreCase("csv")) {
-      fileFormat = FileFormats.CSV;
     } else {
-      fileFormat = FileFormats.valueOf(format);
+      throw new UnsupportedOperationException("File format not supported");
     }
     Seeder seeder = SeederFactory.getSeeder(fileFormat);
     seeder.seed(this.entityConfig.getDataManager().getTables().get(tableName), seedPath);
