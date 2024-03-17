@@ -1,5 +1,7 @@
 package com.fakedatagenerator.commands;
 
+import com.fakedatagenerator.seeders.Seeder;
+import com.fakedatagenerator.seeders.SeederFactory;
 import com.fakedatagenerator.table.Table;
 import com.fakedatagenerator.writers.FileFormats;
 import com.fakedatagenerator.writers.Writer;
@@ -64,5 +66,21 @@ public class GenerateCommand {
     } catch (java.io.IOException e) {
       logger.error(e.getMessage());
     }
+  }
+
+  @Command(command = "seed")
+  public void seedData(
+      @Option(shortNames = 'p', required = true) String seedPath,
+      @Option(shortNames = 't') String tableName,
+      @Option(shortNames = 'f') String format) {
+    Writer writer = null;
+    FileFormats fileFormat = null;
+    if (format.equalsIgnoreCase("csv")) {
+      fileFormat = FileFormats.CSV;
+    } else {
+      fileFormat = FileFormats.valueOf(format);
+    }
+    Seeder seeder = SeederFactory.getSeeder(fileFormat);
+    seeder.seed(this.entityConfig.getDataManager().getTables().get(tableName), seedPath);
   }
 }
