@@ -9,7 +9,6 @@ public class NotNullConstraint implements Constraint {
   public void validate(Object value) {
     if (value == null) {
       throw new NotNullConstraintException(": Value cannot be null");
-      // to include at interface level
     }
   }
 

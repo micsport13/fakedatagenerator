@@ -16,7 +16,7 @@ import lombok.extern.log4j.Log4j2;
 @JsonSerialize(using = ForeignKeyConstraintSerializer.class)
 @JsonDeserialize(using = ForeignKeyConstraintDeserializer.class)
 @Log4j2
-public class ForeignKeyConstraint implements Constraint, StateConstraint {
+public class ForeignKeyConstraint implements Constraint {
   @JsonIgnore private final Set<Object> foreignKeyValues = new HashSet<>();
 
   @JsonProperty("foreign_column")
@@ -54,7 +54,4 @@ public class ForeignKeyConstraint implements Constraint, StateConstraint {
   public String toString() {
     return "Foreign Key: " + this.foreignTable.getName() + "." + this.foreignColumnName;
   }
-
-  @Override
-  public void reset() {}
 }

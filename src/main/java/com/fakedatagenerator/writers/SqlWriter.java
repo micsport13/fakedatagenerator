@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SqlWriter implements Writer { // TODO: Should I make classes for different databases?
-  private static final String INSERT_INTO = "INSERT INTO ";
-  private static final String VALUES = " VALUES ";
+  private static final String INSERT_INTO = "INSERT INTO";
+  private static final String VALUES = "VALUES";
   private final List<Table> tables = new ArrayList<>();
 
   public SqlWriter(Table... tables) {
@@ -28,26 +28,16 @@ public class SqlWriter implements Writer { // TODO: Should I make classes for di
           .append(") ");
       sb.append(VALUES);
       for (Row row : table.getEntities()) {
-        sb.append("(");
+        sb.append(" (");
         sb.append( // TODO: Get rid of this ugly hack
             row.getColumns().stream()
                 .map(
                     column -> {
-                      try {
-                        return column
-                                    .getDataType()
-                                    .getClass()
-                                    .getMethod("cast", Object.class)
-                                    .getReturnType()
-                                    .getSuperclass()
-                                != Number.class // TODO: Determine if class is a number
-                            ? wrapInQuotes(row.getColumnValue(column).toString())
-                            : row.getColumnValue(column).toString();
-                      } catch (
-                          NoSuchMethodException
-                              e) { // TODO: Get rid of this exception and find a better way than
-                        // reflection
-                        throw new RuntimeException(e);
+                      Object value = row.getColumnValue(column);
+                      if (value instanceof String) {
+                        return wrapInQuotes(value.toString());
+                      } else {
+                        return value.toString();
                       }
                     })
                 .collect(Collectors.joining(", ")));
@@ -61,6 +51,7 @@ public class SqlWriter implements Writer { // TODO: Should I make classes for di
   }
 
   private String wrapInQuotes(String value) {
-    return "'" + value.replace("'", "''") + "'"; // TODO: Scrub string before quoting
+    String finalValue = value.replace("'", "''").replace("\"", "\"\"");
+    return "'" + finalValue + "'";
   }
 }

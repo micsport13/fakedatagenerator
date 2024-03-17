@@ -78,11 +78,6 @@ public class Row {
     throw new ColumnNotFoundException("Column not found: " + columnName);
   }
 
-  public Object getValue(String columnName) {
-    Column column = getColumnByName(columnName);
-    return column.getDataType().cast(columnValueMapping.get(column));
-  }
-
   @Override
   public String toString() {
     StringBuilder string = new StringBuilder();
@@ -135,12 +130,8 @@ public class Row {
       if (value == null) {
         throw new IllegalArgumentException("Value cannot be null if calling this method");
       }
-      for (Column column : this.columnValueMapping.keySet()) {
-        if (column.getName().equals(columnName)) {
-          this.columnValueMapping.put(column, column.getDataType().cast(value));
-          return this;
-        }
-      }
+      Column column = getColumnByName(columnName);
+      this.columnValueMapping.put(column, column.getDataType().cast(value));
       return this;
     }
 
@@ -154,6 +145,15 @@ public class Row {
         entry.getKey().validate(entry.getValue());
       }
       return new Row(this);
+    }
+
+    private Column getColumnByName(String columnName) {
+      for (Column column : this.columnValueMapping.keySet()) {
+        if (Objects.equals(columnName, column.getName())) {
+          return column;
+        }
+      }
+      throw new ColumnNotFoundException("Column not found: " + columnName);
     }
   }
 }

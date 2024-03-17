@@ -18,7 +18,7 @@ public class ForeignKeyConstraintDeserializer extends JsonDeserializer<ForeignKe
     String foreignColumnName = rootNode.get("foreign_column").asText();
     if (foreignTableName == null) {
       throw new IllegalArgumentException(
-          "Field foreign_table is missing from the foreign constraint object");
+          "Field foreign_table is missing from the foreign constraint object.");
     }
     if (foreignColumnName == null) {
       throw new IllegalArgumentException(

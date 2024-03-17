@@ -31,16 +31,4 @@ public class AcceptedValuesCheckConstraint implements Constraint {
       throw new CheckConstraintException("Value is not in the accepted list of values");
     }
   }
-
-  @Override
-  public int hashCode() {
-    return this.acceptedValues.hashCode();
-  } // TODO: Remove this?
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof AcceptedValuesCheckConstraint that)) return false;
-    return this.acceptedValues.equals(that.acceptedValues);
-  }
 }
