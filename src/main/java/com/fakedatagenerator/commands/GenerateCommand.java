@@ -72,10 +72,11 @@ public class GenerateCommand {
   public void seedData(
       @Option(shortNames = 'p', required = true) String seedPath,
       @Option(shortNames = 't') String tableName,
-      @Option(shortNames = 'f') String format) {
-    Writer writer = null;
-    FileFormats fileFormat = null;
-    if (format.equalsIgnoreCase("csv")) {
+      @Option(shortNames = 'f', required = false) String format) {
+    FileFormats fileFormat;
+    if (format == null) {
+      fileFormat = FileFormats.CSV; // Default until adding other writers
+    } else if (format.equalsIgnoreCase("csv")) {
       fileFormat = FileFormats.CSV;
     } else {
       fileFormat = FileFormats.valueOf(format);
