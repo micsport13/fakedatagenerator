@@ -15,7 +15,7 @@ import org.springframework.shell.command.annotation.Command;
 import org.springframework.shell.command.annotation.Option;
 
 /** The type Data generators. */
-@Command(command = "generate", group = "generate")
+@Command(command = "generate", group = "Generate")
 public class GenerateCommand {
   private static final Logger logger = LogManager.getLogger(GenerateCommand.class);
   @Autowired private final EntityConfig entityConfig;
@@ -24,9 +24,12 @@ public class GenerateCommand {
     this.entityConfig = entityConfig;
   }
 
-  @Command(command = "data")
+  @Command(command = "data", description = "Generates data for a specified table")
   public void generateData(
-      @Option(shortNames = {'n'}) Integer numEntities,
+      @Option(
+              shortNames = {'n'},
+              required = true)
+          Integer numEntities,
       @Option(shortNames = 't', required = true) String tableName,
       @Option(shortNames = 'p') String filePath)
       throws IOException {
@@ -38,18 +41,19 @@ public class GenerateCommand {
     }
   }
 
-  @Command(command = "script")
+  @Command(
+      command = "script",
+      description = "Creates a SQL script for loading the fake data into a database.")
   public void generateScript(
       @Option(shortNames = 'p', required = true) String filePath,
-      @Option(shortNames = 't') String tableName,
-      @Option(shortNames = 'f') String format) {
-    Writer writer = null;
-    FileFormats fileFormat = null;
-    if (format == null) {
-      fileFormat = FileFormats.SQL;
+      @Option(shortNames = 't') String tableName) {
+    FileFormats fileFormat;
+    if (filePath.endsWith("sql")) {
+      fileFormat = FileFormats.SQL; // Default until adding other writers
     } else {
-      fileFormat = FileFormats.valueOf(format);
+      throw new UnsupportedOperationException("File format not supported");
     }
+    Writer writer;
     if (tableName == null) {
       writer =
           WriterFactory.getWriter(
@@ -68,10 +72,12 @@ public class GenerateCommand {
     }
   }
 
-  @Command(command = "seed")
+  @Command(
+      command = "seed",
+      description = "Loads a csv into a table for already predefined values.")
   public void seedData(
       @Option(shortNames = 'p', required = true) String seedPath,
-      @Option(shortNames = 't') String tableName) {
+      @Option(shortNames = 't', required = true) String tableName) {
     FileFormats fileFormat;
     if (seedPath.endsWith("csv")) {
       fileFormat = FileFormats.CSV; // Default until adding other writers

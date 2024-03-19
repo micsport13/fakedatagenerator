@@ -2,6 +2,10 @@ package com.fakedatagenerator.commands;
 
 import java.io.IOException;
 import java.nio.file.Path;
+
+import com.fakedatagenerator.column.Column;
+import com.fakedatagenerator.schema.Schema;
+import com.fakedatagenerator.table.Table;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.command.annotation.Command;
@@ -49,5 +53,14 @@ public class ConfigCommand {
         .getDataManager()
         .getTables()
         .forEach((key, value) -> System.out.println(value));
+  }
+
+  @Command(command = "build", description = "Build a configuration file")
+  public void buildConfig() {
+    String options;
+  }
+
+  private void createColumn(Schema schema, String columnName, String dataType) {
+    Column column = new Column(columnName, )
   }
 }

@@ -43,7 +43,7 @@ public class FakerMethodFactory {
       Method[] methods = provider.getClass().getDeclaredMethods();
       List<Method> eligibleMethods = new ArrayList<>();
       for (Method method : methods) {
-        if (method.getName().equals(methodName)) {
+        if (method.getName().equalsIgnoreCase(methodName)) {
           eligibleMethods.add(method);
         }
       }

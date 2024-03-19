@@ -1,6 +1,7 @@
 package com.fakedatagenerator.commands;
 
 import com.fakedatagenerator.column.Column;
+import com.fakedatagenerator.exceptions.TableNotFoundException;
 import com.fakedatagenerator.row.Row;
 import com.fakedatagenerator.table.Table;
 import java.util.HashMap;
@@ -40,6 +41,11 @@ public class DataManager {
   }
 
   public Table getTable(String tableName) {
+    if (this.tables.get(tableName) == null) {
+      throw new TableNotFoundException(
+          String.format(
+              "Table with name %s was not found.  Have you loaded the table?", tableName));
+    }
     return this.tables.get(tableName);
   }
 }

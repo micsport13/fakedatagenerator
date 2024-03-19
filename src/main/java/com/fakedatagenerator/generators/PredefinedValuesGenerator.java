@@ -1,2 +1,3 @@
-package com.fakedatagenerator.generators;public class PredefinedValuesGenerator {
-}
+package com.fakedatagenerator.generators;
+
+public class PredefinedValuesGenerator {}

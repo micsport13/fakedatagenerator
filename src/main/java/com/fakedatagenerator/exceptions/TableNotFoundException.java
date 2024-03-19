@@ -1,2 +1,7 @@
-package com.fakedatagenerator.exceptions;public class TableNotFoundException extends Throwable {
-public TableNotFoundException(String format) {}}
+package com.fakedatagenerator.exceptions;
+
+public class TableNotFoundException extends ValidationException {
+  public TableNotFoundException(String message) {
+    super(message);
+  }
+}
