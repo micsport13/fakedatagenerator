@@ -33,4 +33,11 @@ public class ForeignValueGenerator implements ValueGenerator {
     }
     return foreignValues.get(faker.random().nextInt(foreignValues.size()));
   }
+
+  @Override
+  public String toString() {
+    return String.format(
+        "Foreign Values, Foreign Table: %s, Foreign Column: %s",
+        this.table.getName(), this.columnName);
+  }
 }

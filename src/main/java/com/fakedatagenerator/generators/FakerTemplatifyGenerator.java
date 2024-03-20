@@ -22,4 +22,19 @@ public class FakerTemplatifyGenerator implements ValueGenerator {
   public Object nextValue() {
     return faker.templatify(this.stringToTemplate, this.charToReplace, this.replacementStrings);
   }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Templatify: ");
+    sb.append("Template String: ");
+    sb.append(this.stringToTemplate);
+    sb.append(" Replacement Character: ");
+    sb.append(this.charToReplace);
+    sb.append(" Replacement Strings: ");
+    for (String replacement : replacementStrings) {
+      sb.append(replacement);
+    }
+    return sb.toString();
+  }
 }

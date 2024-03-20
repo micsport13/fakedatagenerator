@@ -50,7 +50,7 @@ public class Schema {
       Object validation =
           entry.getValue().stream()
               .map(value::getColumnValue)
-              .map(Object::toString) // Causes a validation exception, figure out how to check
+              .map(Object::toString) // TODO: If this is null, it will throw a NPE
               .collect(Collectors.joining());
       entry.getKey().validate(validation);
     }
@@ -97,7 +97,7 @@ public class Schema {
     for (Map.Entry<Constraint, Set<Column>> entry : this.constraints.entrySet()) {
       sb.append(entry.getKey().toString())
           .append(": \n")
-          .append(entry.getValue().toString().replace("\n", ", "))
+          .append(entry.getValue().stream().map(Column::getName).collect(Collectors.joining(",")))
           .append("\n");
     }
     return sb.toString();

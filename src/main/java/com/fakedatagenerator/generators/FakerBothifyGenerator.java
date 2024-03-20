@@ -26,4 +26,9 @@ public class FakerBothifyGenerator implements ValueGenerator {
     }
     return bothifyString;
   }
+
+  @Override
+  public String toString() {
+    return String.format("Bothify: %s", bothifyString);
+  }
 }

@@ -20,7 +20,7 @@ public class NVarcharDataType implements DataType<String> {
   @Override
   public String cast(Object value)
       throws MismatchedDataTypeException { // TODO: Implement this class
-    return null;
+    throw new UnsupportedOperationException("This class is not yet implemented");
   }
 
   @Override

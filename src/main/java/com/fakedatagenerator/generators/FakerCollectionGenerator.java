@@ -74,4 +74,9 @@ public class FakerCollectionGenerator implements ValueGenerator {
   public Object nextValue() {
     return this.collection.get(faker.random().nextInt(this.collection.size()));
   }
+
+  @Override
+  public String toString() {
+    return "Collection";
+  }
 }

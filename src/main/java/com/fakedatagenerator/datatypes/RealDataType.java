@@ -6,7 +6,7 @@ public class RealDataType implements DataType<Float> {
 
   @Override
   public Float cast(Object value) throws MismatchedDataTypeException { // TODO: Implement this class
-    return null;
+    throw new UnsupportedOperationException("This data type is not yet implemented");
   }
 
   @Override

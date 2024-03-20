@@ -58,6 +58,14 @@ public class Column {
 
   @Override
   public String toString() {
-    return "Column: " + this.name + "\nData Type: " + this.dataType;
+    if (this.valueGenerator == null) {
+      return "Column: " + this.name + "\nData Type: " + this.dataType + "\nGenerator: null";
+    }
+    return "Column: "
+        + this.name
+        + "\nData Type: "
+        + this.dataType
+        + "\nGenerator: "
+        + this.valueGenerator;
   }
 }

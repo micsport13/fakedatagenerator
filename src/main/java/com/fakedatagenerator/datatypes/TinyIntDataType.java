@@ -9,7 +9,9 @@ public class TinyIntDataType implements DataType<Short> {
   @Override
   public Short cast(Object value) throws MismatchedDataTypeException { // TODO: Implement this class
     try {
-      return Short.parseShort(value.toString());
+      return Short.parseShort(
+          value
+              .toString()); // TODO: This should return a value that is between 0 and 255, not Short
     } catch (NumberFormatException e) {
       throw new MismatchedDataTypeException("Invalid tinyint format for value: " + value);
     }

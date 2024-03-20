@@ -29,7 +29,26 @@ public class FakerMethodGenerator implements ValueGenerator {
     this.methodArgs = methodArgs;
   }
 
+  @Override
   public Object nextValue() {
     return FakerMethodFactory.invokeMethod(faker, providerName, methodName, methodArgs);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Method ");
+    sb.append(providerName);
+    sb.append(".");
+    sb.append(methodName);
+    if (methodArgs.length > 0) {
+      sb.append(" Arguments { ");
+      for (Object object : this.methodArgs) {
+        sb.append(object);
+        sb.append(",");
+      }
+      sb.append("}");
+    }
+    return sb.toString();
   }
 }

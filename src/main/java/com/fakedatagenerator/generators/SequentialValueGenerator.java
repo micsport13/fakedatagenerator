@@ -32,4 +32,9 @@ public class SequentialValueGenerator implements ValueGenerator, StateValueGener
   public void reset() {
     this.counter = 0;
   }
+
+  @Override
+  public String toString() {
+    return String.format("Sequence, Start: %d, Increment: %d", this.startingValue, this.increment);
+  }
 }

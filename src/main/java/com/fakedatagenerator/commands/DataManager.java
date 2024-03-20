@@ -4,8 +4,8 @@ import com.fakedatagenerator.column.Column;
 import com.fakedatagenerator.exceptions.TableNotFoundException;
 import com.fakedatagenerator.row.Row;
 import com.fakedatagenerator.table.Table;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class DataManager {
 
-  private final Map<String, Table> tables = new HashMap<>();
+  private final Map<String, Table> tables = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
   public void generateData(Integer numEntities, String tableName) {
     if (numEntities == null || numEntities <= 0) {

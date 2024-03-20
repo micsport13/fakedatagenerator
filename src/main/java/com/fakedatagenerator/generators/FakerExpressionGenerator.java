@@ -28,4 +28,9 @@ public class FakerExpressionGenerator implements ValueGenerator {
     sb.append("}");
     return sb.toString();
   }
+
+  @Override
+  public String toString() {
+    return String.format("Expression: %s", this.expressionString);
+  }
 }

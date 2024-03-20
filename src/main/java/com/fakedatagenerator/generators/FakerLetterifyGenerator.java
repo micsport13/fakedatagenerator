@@ -25,4 +25,9 @@ public class FakerLetterifyGenerator implements ValueGenerator {
     }
     return letterifyString;
   }
+
+  @Override
+  public String toString() {
+    return String.format("Letterify: %s", this.letterifyString);
+  }
 }

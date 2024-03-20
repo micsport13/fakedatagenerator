@@ -27,7 +27,7 @@ public class CharDataType implements DataType<String> {
       }
     } catch (Exception e) {
       log.error(e);
-      throw new MismatchedDataTypeException("CharDataType: Cannot cast " + value + " to char[]");
+      throw new MismatchedDataTypeException("CharDataType: Cannot cast " + value + " to String");
     }
   }
 
