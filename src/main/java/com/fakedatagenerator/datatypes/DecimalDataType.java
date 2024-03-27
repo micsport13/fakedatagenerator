@@ -10,6 +10,10 @@ import lombok.Getter;
 
 @Getter
 public class DecimalDataType implements DataType<BigDecimal> {
+  public static Integer DEFAULT_PRECISION = 18;
+  public static Integer DEFAULT_SCALE = 0;
+  public static RoundingMode DEFAULT_ROUNDING_MODE = RoundingMode.HALF_UP;
+
   @JsonProperty("precision")
   private final Integer precision;
 
@@ -19,9 +23,9 @@ public class DecimalDataType implements DataType<BigDecimal> {
   @JsonIgnore private RoundingMode roundingMode;
 
   public DecimalDataType() {
-    this.precision = 18;
-    this.scale = 0;
-    this.roundingMode = RoundingMode.HALF_UP;
+    this.precision = DEFAULT_PRECISION;
+    this.scale = DEFAULT_SCALE;
+    this.roundingMode = DEFAULT_ROUNDING_MODE;
   }
 
   public DecimalDataType(Integer precision, Integer scale) {
@@ -30,7 +34,7 @@ public class DecimalDataType implements DataType<BigDecimal> {
     }
     this.precision = precision;
     this.scale = scale;
-    this.roundingMode = RoundingMode.HALF_UP;
+    this.roundingMode = DEFAULT_ROUNDING_MODE;
   }
 
   public DecimalDataType(Integer precision, Integer scale, RoundingMode roundingMode) {

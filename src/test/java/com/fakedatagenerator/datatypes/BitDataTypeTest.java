@@ -2,6 +2,7 @@ package com.fakedatagenerator.datatypes;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.fakedatagenerator.exceptions.MismatchedDataTypeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,5 +30,10 @@ class BitDataTypeTest {
     assertDoesNotThrow(() -> bitDataType.cast("no"));
     assertDoesNotThrow(() -> bitDataType.cast("false"));
     assertDoesNotThrow(() -> bitDataType.cast("off"));
+  }
+
+  @Test
+  public void cast_invalidValues_throwsException() {
+    assertThrows(MismatchedDataTypeException.class, () -> bitDataType.cast("test"));
   }
 }

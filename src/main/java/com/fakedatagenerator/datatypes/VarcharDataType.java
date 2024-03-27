@@ -9,12 +9,14 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class VarcharDataType implements DataType<String> {
 
+  public static Integer DEFAULT_MAX_LENGTH = 1;
+
   @JsonProperty("max_length")
   @JsonAlias("maxLength")
   private final Integer maxLength;
 
   public VarcharDataType() {
-    this.maxLength = 1;
+    this.maxLength = DEFAULT_MAX_LENGTH;
   }
 
   public VarcharDataType(Integer maxLength) {

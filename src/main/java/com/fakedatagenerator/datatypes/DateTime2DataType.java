@@ -8,7 +8,8 @@ import java.time.format.DateTimeParseException;
 
 public class DateTime2DataType implements DataType<LocalDateTime> {
 
-  private final ZoneOffset zoneOffset;
+  private final ZoneOffset
+      zoneOffset; // TODO: Does this need an offset since DateTime2 has no offset?
 
   public DateTime2DataType() {
     this.zoneOffset = ZoneOffset.UTC;

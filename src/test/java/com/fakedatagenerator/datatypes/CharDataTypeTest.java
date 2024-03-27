@@ -38,4 +38,5 @@ class CharDataTypeTest {
     assertEquals("123", charDataType.cast("1234"));
     assertEquals("123", charDataType.cast("12345"));
   }
+
 }

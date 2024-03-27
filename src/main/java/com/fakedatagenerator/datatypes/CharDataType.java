@@ -5,11 +5,11 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class CharDataType implements DataType<String> {
-
+  public static Integer DEFAULT_MAX_LENGTH = 1;
   private final int maxLength;
 
   public CharDataType() {
-    this.maxLength = 1;
+    this.maxLength = DEFAULT_MAX_LENGTH;
   }
 
   public CharDataType(int maxLength) {

@@ -7,7 +7,7 @@ public class SmallIntDataType implements DataType<Short> {
   // SmallInt covers from -32768 to 32767
   @Override
   public Short cast(Object value) throws MismatchedDataTypeException { // TODO: Implement this class
-    throw new UnsupportedOperationException("This data type is not yet implemented");
+    throw new UnsupportedOperationException();
   }
 
   @Override
